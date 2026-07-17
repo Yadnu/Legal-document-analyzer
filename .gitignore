@@ -1,0 +1,52 @@
+# ── Python / Backend ─────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.uv/
+
+# ── Node / Frontend ──────────────────────────────────────────────────────────
+node_modules/
+.next/
+out/
+.pnpm-store/
+
+# ── Environment & secrets ────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── Editors & OS ─────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ── Testing & coverage ───────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# ── Linting & type checking ──────────────────────────────────────────────────
+.ruff_cache/
+.mypy_cache/
+.pyright/
+
+# ── Docker ───────────────────────────────────────────────────────────────────
+*.log
+
+# ── LocalStack ───────────────────────────────────────────────────────────────
+.localstack/
+
+# ── Alembic ──────────────────────────────────────────────────────────────────
+# keep versions/ tracked, only ignore generated temp files
+alembic/versions/__pycache__/

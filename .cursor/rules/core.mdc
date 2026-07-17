@@ -1,0 +1,23 @@
+---
+description: Core mission, architecture boundaries, and working rules for the Legal Document Navigator.
+alwaysApply: true
+---
+
+# Mission
+Build the Legal Document Navigator: a multi-tenant platform where users upload their own
+legal documents and get grounded, clause-cited answers. It is a document COMPREHENSION
+tool, never legal advice. Keep a visible "understand your documents, not legal advice"
+disclaimer in the UI.
+
+# Architecture boundaries
+- Next.js is a thin frontend and BFF: UI, Clerk sessions, presigned upload requests, simple
+  reads. No business logic. It never writes to the database directly.
+- FastAPI is the single backend brain: all ingestion, retrieval, AI calls, and business logic.
+- Postgres is the single source of truth. FastAPI owns the schema and all writes.
+- Heavy work (parse, chunk, embed) runs only in the async worker, never inline in a request.
+
+# How to work
+- Follow docs/BUILD_PLAN.md phase by phase. Do not skip phases or add unrequested features.
+- Keep the app runnable and tested at every step. Make small, focused changes.
+- Never hardcode secrets or model names. Never weaken tenant isolation for convenience.
+- When unsure, follow existing patterns and ask before deviating from these rules.

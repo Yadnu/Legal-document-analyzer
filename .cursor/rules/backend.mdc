@@ -1,0 +1,25 @@
+---
+description: FastAPI backend conventions and patterns.
+globs: backend/**
+alwaysApply: false
+---
+
+# Layering (strict)
+- routers (thin, HTTP only) -> services (business logic) -> repositories (data access).
+  Routers never touch the database directly.
+- Separate Pydantic request/response DTOs from SQLModel table models. Never return a table
+  model from an endpoint.
+- Use FastAPI Depends for the db session, current user, current tenant, and settings.
+
+# Standards
+- Async everywhere (async def, asyncpg).
+- Configuration via pydantic-settings from env. No hardcoded secrets, URLs, or model names.
+- Central error handling: custom exception types, registered handlers, one consistent error
+  response shape.
+- Structured JSON logging with a request id. Never log secrets, tokens, or full document text.
+- Alembic for all schema changes. Never auto-create tables in production.
+
+# Testing
+- pytest with an async httpx client and a disposable test database.
+- Cover the chunking module, the retrieval fusion logic, tenant isolation, and each service.
+- ruff and black must pass before a task is done.

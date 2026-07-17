@@ -1,0 +1,13 @@
+---
+description: Next.js frontend conventions.
+globs: frontend/**
+alwaysApply: false
+---
+
+- TypeScript strict mode, no any. Share contract types with the backend.
+- Server Components by default; Client Components only when interactivity requires it.
+- Use TanStack Query for all server state. No ad hoc fetching inside useEffect.
+- Validate all forms with Zod.
+- Use shadcn/ui components; keep them small and accessible (labels, keyboard nav, focus states).
+- Uploads go directly to S3 via a presigned URL requested from the backend.
+- No secrets in client code; only expose public environment variables.

@@ -1,0 +1,29 @@
+---
+description: RAG pipeline rules: chunking, embeddings, retrieval, generation, ingestion.
+globs: backend/app/rag/**,backend/app/workers/**
+alwaysApply: false
+---
+
+# Chunking
+- Structure-aware, clause-level chunking as an isolated, unit-tested module.
+- Preserve section number, heading, page, and cross-references as metadata. No naive
+  fixed-size chunking.
+
+# Embeddings
+- One embedding function and version for BOTH documents and queries. Store the model name and
+  version with each vector. Never mix embedding models across documents and queries.
+
+# Retrieval
+- Hybrid: dense (pgvector) plus sparse (BM25 via pg_search, or tsvector), fused with
+  Reciprocal Rank Fusion, then reranked. Always tenant-scoped.
+
+# Generation
+- Send only reranked, tenant-scoped clauses to Claude via Bedrock with a strict grounding
+  system prompt.
+- Every claim cites a clause. If no retrieved clause supports the answer, respond that it was
+  not found in the user's documents. Never fabricate a citation.
+- Return structured citations (document id, chunk id, section) so the viewer can highlight them.
+
+# Ingestion
+- Idempotent, keyed by document id, retryable. Failures go to the dead-letter queue and set
+  status to failed with a reason. Status flow: processing -> ready -> failed.
