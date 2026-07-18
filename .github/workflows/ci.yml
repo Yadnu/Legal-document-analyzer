@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  backend-lint:
+    name: Backend — lint & format
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - name: Install dependencies
+        run: uv sync --dev
+      - name: Ruff lint
+        run: uv run ruff check .
+      - name: Black format check
+        run: uv run black --check .
+
+  backend-typecheck:
+    name: Backend — type check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - name: Install dependencies
+        run: uv sync --dev
+      - name: Pyright
+        run: uv run pyright app
+
+  backend-test:
+    name: Backend — tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_DB: legaldb_test
+          POSTGRES_USER: legaluser
+          POSTGRES_PASSWORD: legalpass
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      DATABASE_URL: postgresql+asyncpg://legaluser:legalpass@localhost:5432/legaldb_test
+      TEST_DATABASE_URL: postgresql+asyncpg://legaluser:legalpass@localhost:5432/legaldb_test
+      CORS_ORIGINS: '["http://localhost:3000"]'
+      AWS_ENDPOINT_URL: ""
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_DEFAULT_REGION: us-east-1
+      S3_BUCKET_NAME: legal-documents
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - name: Install dependencies
+        run: uv sync --dev
+      - name: Run tests
+        run: uv run pytest -v
+
+  frontend-lint-typecheck:
+    name: Frontend — lint & type check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install
+      - name: ESLint
+        run: pnpm lint
+      - name: TypeScript type check
+        run: pnpm type-check
