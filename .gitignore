@@ -36,6 +36,9 @@ Thumbs.db
 htmlcov/
 coverage.xml
 
+# ── TypeScript ───────────────────────────────────────────────────────────────
+tsconfig.tsbuildinfo
+
 # ── Linting & type checking ──────────────────────────────────────────────────
 .ruff_cache/
 .mypy_cache/
