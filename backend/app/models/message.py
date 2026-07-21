@@ -31,7 +31,7 @@ class Message(TenantModel, table=True):
         foreign_key="conversations.id",
     )
     role: str = Field(nullable=False, description="'user' or 'assistant'")
-    content: str = Field(nullable=False, sa_column=Column(Text, nullable=False))
+    content: str = Field(sa_column=Column(Text, nullable=False))
     # JSON array of citation objects; null for user messages
     citations: Optional[str] = Field(default=None, sa_column=Column(Text))
     # Token count of this message for quota tracking
