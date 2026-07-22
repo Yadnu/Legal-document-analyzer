@@ -1,10 +1,15 @@
 import asyncio
 from logging.config import fileConfig
 
-from sqlalchemy.ext.asyncio import create_async_engine
-
 from alembic import context
+from sqlalchemy.ext.asyncio import create_async_engine
+from sqlmodel import SQLModel
+
 from app.core.config import settings
+
+# Import every model so SQLModel.metadata is fully populated before Alembic
+# generates or applies migrations.
+import app.models  # noqa: F401
 
 alembic_config = context.config
 alembic_config.set_main_option("sqlalchemy.url", settings.database_url)
@@ -12,9 +17,7 @@ alembic_config.set_main_option("sqlalchemy.url", settings.database_url)
 if alembic_config.config_file_name is not None:
     fileConfig(alembic_config.config_file_name)
 
-# Import all SQLModel table models here so Alembic can detect them.
-# Example: from app.models.document import Document  # noqa: F401
-target_metadata = None
+target_metadata = SQLModel.metadata
 
 
 def run_migrations_offline() -> None:
@@ -24,13 +27,18 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        compare_type=True,
     )
     with context.begin_transaction():
         context.run_migrations()
 
 
 def do_run_migrations(connection):  # type: ignore[no-untyped-def]
-    context.configure(connection=connection, target_metadata=target_metadata)
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        compare_type=True,
+    )
     with context.begin_transaction():
         context.run_migrations()
 

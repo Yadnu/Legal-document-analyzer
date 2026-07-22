@@ -34,7 +34,7 @@ class Chunk(TenantModel, table=True):
     page: Optional[int] = Field(default=None)
     # JSON array of section references found in this chunk, e.g. ["Section 2.1", "Exhibit B"]
     cross_refs: Optional[str] = Field(default=None, sa_column=Column(Text))
-    content: str = Field(nullable=False, sa_column=Column(Text, nullable=False))
+    content: str = Field(sa_column=Column(Text, nullable=False))
     # Token count for context-window budgeting at generation time
     token_count: Optional[int] = Field(default=None)
     # Embedding provenance — must never be mixed across chunks or queries
