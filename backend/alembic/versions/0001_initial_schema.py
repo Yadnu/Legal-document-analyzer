@@ -3,6 +3,25 @@
 Revision ID: 0001
 Revises:
 Create Date: 2026-07-20
+
+Design notes
+────────────
+* pgvector extension is created before any table so the Vector(1024) column
+  type is available.
+
+* Row-Level Security strategy:
+  - Every tenant table: ENABLE + FORCE ROW LEVEL SECURITY.
+  - Standard tables:    one permissive policy (ALL commands) keyed on the
+                        per-connection session variable app.current_tenant_id.
+  - audit_events:       append-only — two separate policies (FOR SELECT and
+                        FOR INSERT only).  No UPDATE or DELETE policy is
+                        created, so Postgres denies those operations outright.
+  - Superusers bypass RLS regardless; the app DB user (legaluser) must never
+    be a superuser.
+
+* HNSW / GIN indexes are created via raw op.execute() because SQLAlchemy's
+  create_index helper does not support the HNSW access method or
+  postgresql_ops on TSVECTOR columns.
 """
 
 from alembic import op
@@ -16,8 +35,8 @@ down_revision = None
 branch_labels = None
 depends_on = None
 
-# Tables that hold tenant data and must be protected by RLS.
-_TENANT_TABLES = [
+# Standard tenant tables: all-command RLS policy.
+_STANDARD_TENANT_TABLES = [
     "organizations",
     "users",
     "documents",
@@ -25,8 +44,13 @@ _TENANT_TABLES = [
     "conversations",
     "messages",
     "obligations",
-    "audit_events",
 ]
+
+# audit_events gets append-only policies (SELECT + INSERT only).
+_AUDIT_TABLE = "audit_events"
+
+# Full ordered list used by downgrade (parent tables last).
+_ALL_TENANT_TABLES = _STANDARD_TENANT_TABLES + [_AUDIT_TABLE]
 
 
 def upgrade() -> None:
@@ -219,12 +243,15 @@ def upgrade() -> None:
     op.create_index("ix_audit_events_resource_id", "audit_events", ["resource_id"])
 
     # ── Row-Level Security ────────────────────────────────────────────────────
-    # Every tenant table gets RLS enabled and a single SELECT/INSERT/UPDATE/DELETE
-    # policy that checks the per-connection session variable set by get_rls_db.
+    # FORCE ROW LEVEL SECURITY makes policies apply even to the table owner
+    # (legaluser).  Superusers are always exempt — keep legaluser non-superuser.
     #
-    # FORCE ROW LEVEL SECURITY applies the policy even to table owners (the DB
-    # superuser is exempted only for maintenance tasks performed outside the app).
-    for table in _TENANT_TABLES:
+    # When app.current_tenant_id is not set, current_setting(..., true) returns
+    # NULL, so the predicate `tenant_id = NULL` is NULL (unknown) → zero rows.
+    # This is intentional fail-closed behaviour.
+
+    # Standard tables: one permissive ALL-commands policy.
+    for table in _STANDARD_TENANT_TABLES:
         op.execute(f"ALTER TABLE {table} ENABLE ROW LEVEL SECURITY")
         op.execute(f"ALTER TABLE {table} FORCE ROW LEVEL SECURITY")
         op.execute(
@@ -239,13 +266,48 @@ def upgrade() -> None:
             """
         )
 
+    # audit_events: append-only.
+    # Two separate policies (SELECT and INSERT) are created; no UPDATE or
+    # DELETE policy exists, so Postgres rejects those commands outright.
+    # This enforces the immutable audit trail at the database layer.
+    op.execute(f"ALTER TABLE {_AUDIT_TABLE} ENABLE ROW LEVEL SECURITY")
+    op.execute(f"ALTER TABLE {_AUDIT_TABLE} FORCE ROW LEVEL SECURITY")
+    op.execute(
+        f"""
+        CREATE POLICY tenant_isolation_select ON {_AUDIT_TABLE}
+        FOR SELECT
+        USING (
+            tenant_id = current_setting('app.current_tenant_id', true)
+        )
+        """
+    )
+    op.execute(
+        f"""
+        CREATE POLICY tenant_isolation_insert ON {_AUDIT_TABLE}
+        FOR INSERT
+        WITH CHECK (
+            tenant_id = current_setting('app.current_tenant_id', true)
+        )
+        """
+    )
+
 
 def downgrade() -> None:
-    # Remove RLS policies first, then drop tables in reverse dependency order.
-    for table in reversed(_TENANT_TABLES):
+    # 1. Remove RLS policies (drop policy before disabling RLS).
+    for table in _STANDARD_TENANT_TABLES:
         op.execute(f"DROP POLICY IF EXISTS tenant_isolation ON {table}")
         op.execute(f"ALTER TABLE {table} DISABLE ROW LEVEL SECURITY")
 
+    op.execute(f"DROP POLICY IF EXISTS tenant_isolation_select ON {_AUDIT_TABLE}")
+    op.execute(f"DROP POLICY IF EXISTS tenant_isolation_insert ON {_AUDIT_TABLE}")
+    op.execute(f"ALTER TABLE {_AUDIT_TABLE} DISABLE ROW LEVEL SECURITY")
+
+    # 2. Drop special indexes created with raw SQL (dropped with table anyway,
+    #    but explicit drops keep future autogenerate diffs clean).
+    op.execute("DROP INDEX IF EXISTS ix_chunks_embedding_hnsw")
+    op.execute("DROP INDEX IF EXISTS ix_chunks_search_vector_gin")
+
+    # 3. Drop tables in reverse dependency order.
     op.drop_table("audit_events")
     op.drop_table("obligations")
     op.drop_table("messages")
@@ -254,3 +316,6 @@ def downgrade() -> None:
     op.drop_table("documents")
     op.drop_table("users")
     op.drop_table("organizations")
+
+    # 4. Drop extension last (only after all Vector columns are gone).
+    op.execute("DROP EXTENSION IF EXISTS vector")
