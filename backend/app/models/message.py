@@ -14,7 +14,13 @@ class MessageRole:
 
 class Message(TenantModel, table=True):
     """
-    
+    A single turn in a Conversation.
+
+    citations stores a JSON array of structured citation objects:
+    [{"document_id": "...", "chunk_id": "...", "section": "Section 3.2", "quote": "..."}]
+
+    This structure lets the viewer highlight the exact source passage when the
+    user clicks a citation in the chat UI.
     """
 
     __tablename__ = "messages"
