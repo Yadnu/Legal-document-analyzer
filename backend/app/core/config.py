@@ -4,19 +4,43 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
+    # ── Database ──────────────────────────────────────────────────────────────
     database_url: str = (
         "postgresql+asyncpg://legaluser:legalpass@localhost:5432/legaldb"
     )
     test_database_url: str = ""
 
+    # ── CORS ──────────────────────────────────────────────────────────────────
     cors_origins: list[str] = ["http://localhost:3000"]
 
+    # ── AWS / S3 ──────────────────────────────────────────────────────────────
     aws_endpoint_url: str = ""
     aws_access_key_id: str = "test"
     aws_secret_access_key: str = "test"
     aws_default_region: str = "us-east-1"
     s3_bucket_name: str = "legal-documents"
 
+    # ── SQS ───────────────────────────────────────────────────────────────────
+    # Main ingestion queue URL.  Set via SQS_QUEUE_URL env var.
+    sqs_queue_url: str = ""
+    # Dead-letter queue URL.  Set via SQS_DLQ_URL env var.
+    sqs_dlq_url: str = ""
+
+    # ── Upload policy ─────────────────────────────────────────────────────────
+    # Maximum file size accepted before issuing a presigned URL (bytes).
+    # Default: 50 MB.
+    upload_max_size_bytes: int = 52_428_800
+    # MIME types the backend will accept.  Validated before the presigned URL
+    # is issued so the S3 ContentType condition matches exactly.
+    upload_allowed_content_types: list[str] = [
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ]
+    # How long (seconds) the presigned PUT URL remains valid.
+    presigned_url_expires_seconds: int = 300
+
+    # ── Clerk ─────────────────────────────────────────────────────────────────
     clerk_secret_key: str = ""
     clerk_jwks_url: str = ""
     # Optional: set to your Clerk issuer URL (e.g. https://<clerk-domain>) to
