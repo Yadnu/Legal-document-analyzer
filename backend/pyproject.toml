@@ -12,6 +12,7 @@ dependencies = [
     "httpx>=0.28",
     "python-jose[cryptography]>=3.3",
     "pgvector>=0.3",
+    "aioboto3>=13.0",
 ]
 
 [dependency-groups]
