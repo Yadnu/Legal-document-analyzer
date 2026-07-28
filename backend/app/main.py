@@ -4,13 +4,19 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.v1 import health, me
+from app.api.v1 import documents, health, me
 from app.core.config import settings
 from app.core.exceptions import (
     AuthError,
+    AwsError,
+    NotFoundError,
     TenantMissingError,
+    ValidationError,
     auth_error_handler,
+    aws_error_handler,
+    not_found_error_handler,
     tenant_missing_error_handler,
+    validation_error_handler,
 )
 from app.core.logging import configure_logging
 
@@ -38,9 +44,13 @@ def create_app() -> FastAPI:
 
     app.add_exception_handler(AuthError, auth_error_handler)  # type: ignore[arg-type]
     app.add_exception_handler(TenantMissingError, tenant_missing_error_handler)  # type: ignore[arg-type]
+    app.add_exception_handler(ValidationError, validation_error_handler)  # type: ignore[arg-type]
+    app.add_exception_handler(NotFoundError, not_found_error_handler)  # type: ignore[arg-type]
+    app.add_exception_handler(AwsError, aws_error_handler)  # type: ignore[arg-type]
 
     app.include_router(health.router, prefix="/api/v1")
     app.include_router(me.router, prefix="/api/v1")
+    app.include_router(documents.router, prefix="/api/v1")
 
     return app
 
