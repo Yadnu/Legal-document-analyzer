@@ -10,7 +10,7 @@ Usage in dependencies:
     await set_tenant_context(session, tenant_id)
 
 Usage in tests (direct SQL):
-    await session.execute(text("SET LOCAL app.current_tenant_id = :tid"), {"tid": tenant_id})
+    # SET LOCAL app.current_tenant_id = :tid
 """
 
 from sqlalchemy import text
