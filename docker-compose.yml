@@ -28,6 +28,30 @@ services:
       timeout: 5s
       retries: 10
 
+  # Creates the S3 bucket and SQS queues (with DLQ) once LocalStack is healthy.
+  localstack-init:
+    image: amazon/aws-cli:2.22.0
+    environment:
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_DEFAULT_REGION: us-east-1
+    entrypoint: >
+      /bin/sh -c "
+        aws --endpoint-url=http://localstack:4566 s3 mb s3://legal-documents --region us-east-1 || true;
+        aws --endpoint-url=http://localstack:4566 sqs create-queue
+          --queue-name legal-ingest-dlq --region us-east-1;
+        DLQ_ARN=$$(aws --endpoint-url=http://localstack:4566 sqs get-queue-attributes
+          --queue-url http://localstack:4566/000000000000/legal-ingest-dlq
+          --attribute-names QueueArn --query Attributes.QueueArn --output text);
+        aws --endpoint-url=http://localstack:4566 sqs create-queue
+          --queue-name legal-ingest --region us-east-1
+          --attributes '{\"RedrivePolicy\":\"{\\\"deadLetterTargetArn\\\":\\\"'$$DLQ_ARN'\\\",\\\"maxReceiveCount\\\":\\\"3\\\"}\"}';
+        echo 'LocalStack resources created.';
+      "
+    depends_on:
+      localstack:
+        condition: service_healthy
+
   backend:
     build:
       context: ./backend
@@ -39,6 +63,8 @@ services:
       AWS_SECRET_ACCESS_KEY: test
       AWS_DEFAULT_REGION: us-east-1
       S3_BUCKET_NAME: legal-documents
+      SQS_QUEUE_URL: http://localstack:4566/000000000000/legal-ingest
+      SQS_DLQ_URL: http://localstack:4566/000000000000/legal-ingest-dlq
     ports:
       - "8000:8000"
     volumes:
@@ -54,6 +80,29 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+
+  worker:
+    build:
+      context: ./backend
+    command: ["python", "-m", "worker.main"]
+    environment:
+      DATABASE_URL: postgresql+asyncpg://legaluser:legalpass@db:5432/legaldb
+      AWS_ENDPOINT_URL: http://localstack:4566
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_DEFAULT_REGION: us-east-1
+      S3_BUCKET_NAME: legal-documents
+      SQS_QUEUE_URL: http://localstack:4566/000000000000/legal-ingest
+      SQS_DLQ_URL: http://localstack:4566/000000000000/legal-ingest-dlq
+    volumes:
+      - ./backend:/app
+    depends_on:
+      db:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+      localstack-init:
+        condition: service_completed_successfully
 
   frontend:
     build:
