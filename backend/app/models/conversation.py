@@ -1,5 +1,4 @@
 import uuid
-from typing import Optional
 
 from sqlmodel import Field
 
@@ -18,10 +17,10 @@ class Conversation(TenantModel, table=True):
 
     user_id: str = Field(nullable=False, index=True, description="Clerk user_id")
     # None = tenant-wide; a UUID = scoped to a single document
-    document_id: Optional[uuid.UUID] = Field(
+    document_id: uuid.UUID | None = Field(
         default=None,
         foreign_key="documents.id",
         index=True,
     )
-    title: Optional[str] = Field(default=None)
+    title: str | None = Field(default=None)
     is_archived: bool = Field(default=False, nullable=False)
