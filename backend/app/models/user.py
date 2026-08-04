@@ -1,6 +1,3 @@
-import uuid
-from typing import Optional
-
 from sqlmodel import Field
 
 from app.models.base import TenantModel
@@ -18,8 +15,8 @@ class User(TenantModel, table=True):
 
     clerk_user_id: str = Field(nullable=False, index=True)
     email: str = Field(nullable=False, index=True)
-    full_name: Optional[str] = Field(default=None)
+    full_name: str | None = Field(default=None)
     # Role within the organization: "admin" | "member"
     role: str = Field(default="member", nullable=False)
     is_active: bool = Field(default=True, nullable=False)
-    last_seen_at: Optional[str] = Field(default=None)
+    last_seen_at: str | None = Field(default=None)

@@ -1,6 +1,5 @@
 import uuid
 from datetime import datetime
-from typing import Optional
 
 from sqlmodel import Field
 
@@ -18,22 +17,24 @@ class Obligation(TenantModel, table=True):
 
     __tablename__ = "obligations"
 
-    document_id: uuid.UUID = Field(nullable=False, index=True, foreign_key="documents.id")
-    chunk_id: Optional[uuid.UUID] = Field(
+    document_id: uuid.UUID = Field(
+        nullable=False, index=True, foreign_key="documents.id"
+    )
+    chunk_id: uuid.UUID | None = Field(
         default=None,
         index=True,
         foreign_key="chunks.id",
     )
     description: str = Field(nullable=False)
-    obligation_type: Optional[str] = Field(
+    obligation_type: str | None = Field(
         default=None,
         description="e.g. 'payment', 'notice', 'renewal', 'termination'",
     )
-    deadline: Optional[datetime] = Field(default=None, index=True)
+    deadline: datetime | None = Field(default=None, index=True)
     reminder_days_before: int = Field(default=7, nullable=False)
-    reminder_sent_at: Optional[datetime] = Field(default=None)
+    reminder_sent_at: datetime | None = Field(default=None)
     is_resolved: bool = Field(default=False, nullable=False)
-    assigned_to: Optional[str] = Field(
+    assigned_to: str | None = Field(
         default=None,
         description="Clerk user_id of the responsible party",
     )
