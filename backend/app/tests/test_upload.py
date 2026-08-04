@@ -146,9 +146,7 @@ async def test_request_upload_returns_presigned_url(
     _patch_aws: Any,
 ) -> None:
     """Valid request → 201, presigned URL present, document created processing."""
-    resp = await authed_client.post(
-        "/api/v1/documents/upload-url", json=_upload_body()
-    )
+    resp = await authed_client.post("/api/v1/documents/upload-url", json=_upload_body())
 
     assert resp.status_code == 201, resp.text
     data = resp.json()
@@ -230,9 +228,9 @@ async def test_upload_is_idempotent(
     assert resp2.status_code == 201
     doc_id_2 = resp2.json()["document_id"]
 
-    assert doc_id_1 == doc_id_2, (
-        "Second upload with same params must return the same document_id"
-    )
+    assert (
+        doc_id_1 == doc_id_2
+    ), "Second upload with same params must return the same document_id"
 
 
 async def test_get_document_returns_status(
@@ -259,12 +257,8 @@ async def test_tenant_cannot_read_other_tenant_document(
     db_engine,
 ) -> None:
     """Tenant B cannot GET tenant A's document → 404."""
-    tenant_a = TenantContext(
-        tenant_id=f"org_a_{uuid.uuid4().hex[:8]}", slug="a"
-    )
-    tenant_b = TenantContext(
-        tenant_id=f"org_b_{uuid.uuid4().hex[:8]}", slug="b"
-    )
+    tenant_a = TenantContext(tenant_id=f"org_a_{uuid.uuid4().hex[:8]}", slug="a")
+    tenant_b = TenantContext(tenant_id=f"org_b_{uuid.uuid4().hex[:8]}", slug="b")
     fake_user = UserContext(user_id="user_isolation")
 
     # Insert a document as tenant A directly via repo
@@ -276,9 +270,7 @@ async def test_tenant_cannot_read_other_tenant_document(
             original_filename="secret.pdf",
             content_type="application/pdf",
             size_bytes=1024,
-            s3_key=(
-                f"{tenant_a.tenant_id}/{uuid.uuid4()}/secret.pdf"
-            ),
+            s3_key=(f"{tenant_a.tenant_id}/{uuid.uuid4()}/secret.pdf"),
             idempotency_key=f"isolation_key_{uuid.uuid4().hex}",
             uploaded_by=fake_user.user_id,
         )
@@ -305,6 +297,5 @@ async def test_tenant_cannot_read_other_tenant_document(
             resp = await client_b.get(f"/api/v1/documents/{doc_id}")
 
         assert resp.status_code == 404, (
-            "RLS FAILURE: tenant B read tenant A's document. "
-            f"Response: {resp.text}"
+            "RLS FAILURE: tenant B read tenant A's document. " f"Response: {resp.text}"
         )

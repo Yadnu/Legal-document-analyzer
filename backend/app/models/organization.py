@@ -1,5 +1,3 @@
-from typing import Optional
-
 from sqlmodel import Field
 
 from app.models.base import TenantModel
@@ -23,4 +21,4 @@ class Organization(TenantModel, table=True):
     is_active: bool = Field(default=True, nullable=False)
     max_documents: int = Field(default=50, nullable=False)
     max_members: int = Field(default=5, nullable=False)
-    logo_url: Optional[str] = Field(default=None)
+    logo_url: str | None = Field(default=None)

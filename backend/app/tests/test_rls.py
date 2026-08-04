@@ -25,7 +25,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.core.config import settings
-from app.db.rls import clear_tenant_context, set_tenant_context
+from app.db.rls import set_tenant_context
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -71,20 +71,19 @@ async def tenant_b_session(rls_engine) -> AsyncGenerator[AsyncSession, None]:
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 async def _insert_org(session: AsyncSession, tenant_id: str) -> uuid.UUID:
     """Insert a minimal organization row and return its id."""
     org_id = uuid.uuid4()
     await session.execute(
-        text(
-            """
+        text("""
             INSERT INTO organizations
                 (id, tenant_id, created_at, name, slug, clerk_org_id, plan,
                  is_active, max_documents, max_members)
             VALUES
                 (:id, :tenant_id, now(), :name, :slug, :clerk_org_id,
                  'free', true, 50, 5)
-            """
-        ),
+            """),
         {
             "id": org_id,
             "tenant_id": tenant_id,
@@ -109,6 +108,7 @@ async def _count_orgs(session: AsyncSession, org_id: uuid.UUID) -> int:
 # ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
+
 
 async def test_rls_blocks_cross_tenant_read(
     tenant_a_session: AsyncSession,
@@ -147,8 +147,7 @@ async def test_rls_blocks_cross_tenant_read_documents(
     """
     doc_id = uuid.uuid4()
     await tenant_a_session.execute(
-        text(
-            """
+        text("""
             INSERT INTO documents
                 (id, tenant_id, created_at, title, original_filename,
                  content_type, size_bytes, s3_key, idempotency_key,
@@ -157,8 +156,7 @@ async def test_rls_blocks_cross_tenant_read_documents(
                 (:id, :tenant_id, now(), 'Secret Contract', 'secret.pdf',
                  'application/pdf', 12345, :s3_key, :idem_key,
                  'processing', 'user_aaa')
-            """
-        ),
+            """),
         {
             "id": doc_id,
             "tenant_id": TENANT_A,
@@ -173,9 +171,9 @@ async def test_rls_blocks_cross_tenant_read_documents(
         {"id": doc_id},
     )
     count = result.scalar_one()
-    assert count == 0, (
-        f"RLS FAILURE on documents: tenant B read {count} row(s) belonging to tenant A."
-    )
+    assert (
+        count == 0
+    ), f"RLS FAILURE on documents: tenant B read {count} row(s) belonging to tenant A."
 
 
 async def test_no_tenant_context_reads_nothing() -> None:
@@ -197,7 +195,8 @@ async def test_no_tenant_context_reads_nothing() -> None:
     await engine.dispose()
 
     assert count == 0, (
-        f"RLS FAILURE: a session with no tenant context read {count} organization row(s). "
+        f"RLS FAILURE: a session with no tenant context read "
+        f"{count} organization row(s). "
         "Ensure FORCE ROW LEVEL SECURITY is set and the policy uses the 'true' "
         "missing-ok flag on current_setting."
     )

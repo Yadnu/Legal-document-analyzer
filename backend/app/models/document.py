@@ -1,6 +1,3 @@
-import uuid
-from typing import Optional
-
 from sqlmodel import Field
 
 from app.models.base import TenantModel
@@ -36,6 +33,8 @@ class Document(TenantModel, table=True):
         index=True,
     )
     # Populated by the worker on failure; never logged or returned in API responses.
-    error_reason: Optional[str] = Field(default=None)
-    uploaded_by: str = Field(nullable=False, description="Clerk user_id of the uploader")
-    page_count: Optional[int] = Field(default=None)
+    error_reason: str | None = Field(default=None)
+    uploaded_by: str = Field(
+        nullable=False, description="Clerk user_id of the uploader"
+    )
+    page_count: int | None = Field(default=None)

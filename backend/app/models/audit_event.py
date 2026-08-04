@@ -1,5 +1,4 @@
 import uuid
-from typing import Optional
 
 from sqlalchemy import Column, Text
 from sqlmodel import Field
@@ -26,13 +25,15 @@ class AuditEvent(TenantModel, table=True):
         index=True,
         description="Clerk user_id; 'system' for worker-initiated events",
     )
-    action: str = Field(nullable=False, index=True, description="e.g. 'document.upload'")
-    resource_type: Optional[str] = Field(
+    action: str = Field(
+        nullable=False, index=True, description="e.g. 'document.upload'"
+    )
+    resource_type: str | None = Field(
         default=None,
         description="e.g. 'document', 'conversation', 'message'",
     )
-    resource_id: Optional[uuid.UUID] = Field(default=None, index=True)
-    ip_address: Optional[str] = Field(default=None)
-    user_agent: Optional[str] = Field(default=None)
+    resource_id: uuid.UUID | None = Field(default=None, index=True)
+    ip_address: str | None = Field(default=None)
+    user_agent: str | None = Field(default=None)
     # JSON object with action-specific context; never contains secrets or document text
-    metadata_json: Optional[str] = Field(default=None, sa_column=Column(Text))
+    metadata_json: str | None = Field(default=None, sa_column=Column(Text))

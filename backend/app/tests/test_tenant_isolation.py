@@ -21,6 +21,7 @@ from collections.abc import AsyncGenerator
 
 import pytest
 from sqlalchemy import text
+from sqlalchemy.exc import DBAPIError
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.core.config import settings
@@ -50,6 +51,7 @@ async def _clear_tenant(session: AsyncSession) -> None:
 
 # ── fixtures ──────────────────────────────────────────────────────────────────
 
+
 @pytest.fixture()
 async def sessions() -> AsyncGenerator[tuple[AsyncSession, AsyncSession], None]:
     """Yield (session_a, session_b) backed by a shared engine."""
@@ -60,20 +62,19 @@ async def sessions() -> AsyncGenerator[tuple[AsyncSession, AsyncSession], None]:
 
 # ── seed helper ───────────────────────────────────────────────────────────────
 
+
 async def _insert_org(session: AsyncSession, tenant_id: str, name: str) -> uuid.UUID:
     """Insert an organization row as its own tenant and return its id."""
     org_id = uuid.uuid4()
     await _set_tenant(session, tenant_id)
     await session.execute(
-        text(
-            """
+        text("""
             INSERT INTO organizations
                 (id, tenant_id, created_at, name, slug, clerk_org_id, plan,
                  is_active, max_documents, max_members)
             VALUES
                 (:id, :tid, now(), :name, :slug, :coid, 'free', true, 50, 5)
-            """
-        ),
+            """),
         {
             "id": org_id,
             "tid": tenant_id,
@@ -87,6 +88,7 @@ async def _insert_org(session: AsyncSession, tenant_id: str, name: str) -> uuid.
 
 
 # ── tests ─────────────────────────────────────────────────────────────────────
+
 
 class TestCrossTenantSelect:
     """Tenant A must never see tenant B's rows."""
@@ -148,19 +150,17 @@ class TestCrossTenantWrite:
         # Activate session as tenant A, but attempt to insert a row for tenant B.
         await _set_tenant(sa, tid_a)
 
-        with pytest.raises(Exception):
+        with pytest.raises(DBAPIError):
             # WITH CHECK on the policy should reject tenant_id != current setting.
             await sa.execute(
-                text(
-                    """
+                text("""
                     INSERT INTO organizations
                         (id, tenant_id, created_at, name, slug, clerk_org_id,
                          plan, is_active, max_documents, max_members)
                     VALUES
                         (:id, :tid_b, now(), 'Evil Row', 'evil-row-1', :tid_b,
                          'free', true, 50, 5)
-                    """
-                ),
+                    """),
                 {"id": uuid.uuid4(), "tid_b": tid_b},
             )
             await sa.commit()
@@ -210,14 +210,12 @@ class TestAuditEventAppendOnly:
         await _set_tenant(sa, tid)
         # Should succeed — INSERT is allowed.
         await sa.execute(
-            text(
-                """
+            text("""
                 INSERT INTO audit_events
                     (id, tenant_id, created_at, user_id, action)
                 VALUES
                     (:id, :tid, now(), 'user_test', 'test.event')
-                """
-            ),
+                """),
             {"id": event_id, "tid": tid},
         )
         await sa.commit()
@@ -240,25 +238,21 @@ class TestAuditEventAppendOnly:
 
         await _set_tenant(sa, tid)
         await sa.execute(
-            text(
-                """
+            text("""
                 INSERT INTO audit_events
                     (id, tenant_id, created_at, user_id, action)
                 VALUES
                     (:id, :tid, now(), 'user_test', 'original.action')
-                """
-            ),
+                """),
             {"id": event_id, "tid": tid},
         )
         await sa.commit()
 
         # UPDATE should be rejected (no FOR UPDATE policy on audit_events).
-        with pytest.raises(Exception):
+        with pytest.raises(DBAPIError):
             await _set_tenant(sa, tid)
             await sa.execute(
-                text(
-                    "UPDATE audit_events SET action = 'tampered' WHERE id = :id"
-                ),
+                text("UPDATE audit_events SET action = 'tampered' WHERE id = :id"),
                 {"id": event_id},
             )
             await sa.commit()
@@ -274,20 +268,18 @@ class TestAuditEventAppendOnly:
 
         await _set_tenant(sa, tid)
         await sa.execute(
-            text(
-                """
+            text("""
                 INSERT INTO audit_events
                     (id, tenant_id, created_at, user_id, action)
                 VALUES
                     (:id, :tid, now(), 'user_test', 'original.action')
-                """
-            ),
+                """),
             {"id": event_id, "tid": tid},
         )
         await sa.commit()
 
         # DELETE should be rejected (no FOR DELETE policy on audit_events).
-        with pytest.raises(Exception):
+        with pytest.raises(DBAPIError):
             await _set_tenant(sa, tid)
             await sa.execute(
                 text("DELETE FROM audit_events WHERE id = :id"),

@@ -1,5 +1,4 @@
 import uuid
-from typing import Optional
 
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import Column, Index, Text
@@ -27,26 +26,29 @@ class Chunk(TenantModel, table=True):
 
     __tablename__ = "chunks"
 
-    document_id: uuid.UUID = Field(nullable=False, index=True, foreign_key="documents.id")
+    document_id: uuid.UUID = Field(
+        nullable=False, index=True, foreign_key="documents.id"
+    )
     # Structural metadata preserved from the source document
-    section_number: Optional[str] = Field(default=None)
-    heading: Optional[str] = Field(default=None)
-    page: Optional[int] = Field(default=None)
-    # JSON array of section references found in this chunk, e.g. ["Section 2.1", "Exhibit B"]
-    cross_refs: Optional[str] = Field(default=None, sa_column=Column(Text))
+    section_number: str | None = Field(default=None)
+    heading: str | None = Field(default=None)
+    page: int | None = Field(default=None)
+    # JSON array of section references found in this chunk,
+    # e.g. ["Section 2.1", "Exhibit B"]
+    cross_refs: str | None = Field(default=None, sa_column=Column(Text))
     content: str = Field(sa_column=Column(Text, nullable=False))
     # Token count for context-window budgeting at generation time
-    token_count: Optional[int] = Field(default=None)
+    token_count: int | None = Field(default=None)
     # Embedding provenance — must never be mixed across chunks or queries
     embedding_model: str = Field(nullable=False)
     embedding_model_version: str = Field(nullable=False)
     # Dense retrieval vector (dimension set to 1024 for voyage-law-2 / Bedrock Titan)
-    embedding: Optional[list[float]] = Field(
+    embedding: list[float] | None = Field(
         default=None,
         sa_column=Column(Vector(1024)),
     )
     # Sparse retrieval — populated by a Postgres trigger or the worker after insert
-    search_vector: Optional[str] = Field(
+    search_vector: str | None = Field(
         default=None,
         sa_column=Column(TSVECTOR),
     )
