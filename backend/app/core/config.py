@@ -47,5 +47,25 @@ class Settings(BaseSettings):
     # enforce the `iss` claim. Leave empty to skip issuer verification.
     clerk_issuer: str = ""
 
+    # ── Ingestion — Parsing ───────────────────────────────────────────────────
+    # Optional LlamaParse API key. When set the worker uses LlamaParse instead
+    # of the local PyMuPDF parser.
+    llama_parse_api_key: str = ""
+
+    # ── Ingestion — Embeddings ────────────────────────────────────────────────
+    # Voyage AI API key. When set the worker calls the Voyage AI endpoint.
+    # Leave empty to use the deterministic local fallback (dev/CI only).
+    voyage_api_key: str = ""
+    # Model identifier stored with every Chunk row. Changing this value
+    # requires re-embedding all existing chunks.
+    embedding_model: str = "voyage-law-2"
+    embedding_model_version: str = "1"
+    # Must match the vector dimension in the Chunk.embedding column (1024).
+    embedding_dimensions: int = 1024
+
+    # ── Ingestion — Chunking ──────────────────────────────────────────────────
+    chunk_max_tokens: int = 512
+    chunk_overlap_tokens: int = 64
+
 
 settings = Settings()
