@@ -1,4 +1,4 @@
-"""Phase 3 worker tests.
+"""Phase 3/4 worker tests.
 
 Tests exercise ``worker.main.process_message`` directly (not via the SQS
 polling loop) so they're fast and don't require a running SQS endpoint.
@@ -8,10 +8,9 @@ A live test database is required — the same pattern as test_rls.py.
 
 from __future__ import annotations
 
-import asyncio
 import uuid
 from collections.abc import AsyncGenerator
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
@@ -90,7 +89,11 @@ async def test_worker_sets_status_ready(db_session: AsyncSession) -> None:
         "idempotency_key": "any_key",
     }
 
-    await process_message(msg, db_session)
+    with patch(
+        "app.services.ingestion_service.ingest",
+        new=AsyncMock(return_value=3),
+    ):
+        await process_message(msg, db_session)
 
     # Re-fetch to check status
     await set_tenant_context(db_session, tenant_id)
@@ -111,12 +114,14 @@ async def test_worker_sets_status_failed_on_error(db_session: AsyncSession) -> N
         "idempotency_key": "fail_key",
     }
 
-    # Patch asyncio.sleep to raise so the stub "ingestion" work fails.
     async def _boom(*_args, **_kwargs):  # noqa: ANN002, ANN003
         raise RuntimeError("simulated ingestion failure")
 
     with (
-        patch.object(asyncio, "sleep", _boom),
+        patch(
+            "app.services.ingestion_service.ingest",
+            new=AsyncMock(side_effect=_boom),
+        ),
         pytest.raises(RuntimeError, match="simulated ingestion failure"),
     ):
         await process_message(msg, db_session)
@@ -142,8 +147,12 @@ async def test_worker_is_idempotent(db_session: AsyncSession) -> None:
         "idempotency_key": "idem_key_2",
     }
 
-    # First delivery — should set status to ready.
-    await process_message(msg, db_session)
+    with patch(
+        "app.services.ingestion_service.ingest",
+        new=AsyncMock(return_value=2),
+    ):
+        # First delivery — should set status to ready.
+        await process_message(msg, db_session)
 
     await set_tenant_context(db_session, tenant_id)
     doc = await document_repo.get_by_id(db_session, tenant_id, doc_id)

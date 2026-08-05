@@ -8,10 +8,6 @@ deleted from the queue.  On failure the message is NOT deleted so SQS retries
 it up to ``maxReceiveCount`` times before moving it to the DLQ.
 
 Status flow: processing -> ready | failed
-
-Phase 4 stub: actual parsing/chunking/embedding is replaced by a 1-second
-sleep so the full infrastructure path (DB, SQS, status transitions) can be
-validated before the heavy pipeline is wired in.
 """
 
 from __future__ import annotations
@@ -78,11 +74,15 @@ async def process_message(body: dict, session: AsyncSession) -> None:
     bound_log.info("worker_processing_start", status=doc.status)
 
     try:
-        # ── Phase 4 stub ─────────────────────────────────────────────────
-        # Replace this block with real parse/chunk/embed logic in Phase 4.
-        bound_log.info("ingestion_stub", document_id=raw_doc_id, tenant_id=tenant_id)
-        await asyncio.sleep(1)
-        # ── End stub ─────────────────────────────────────────────────────
+        from app.services.ingestion_service import ingest
+
+        chunk_count = await ingest(
+            session=session,
+            tenant_id=tenant_id,
+            document_id=doc_id,
+            s3_key=body["s3_key"],
+        )
+        bound_log.info("worker_ingested", chunk_count=chunk_count)
 
         await document_repo.set_status(session, tenant_id, doc_id, DocumentStatus.READY)
         await session.commit()
