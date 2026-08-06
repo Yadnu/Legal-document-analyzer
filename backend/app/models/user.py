@@ -11,7 +11,7 @@ class User(TenantModel, table=True):
     A user may exist in multiple tenants (one row per tenant membership).
     """
 
-    __tablename__ = "users"
+    __tablename__ = "users"  # type: ignore[assignment]
 
     clerk_user_id: str = Field(nullable=False, index=True)
     email: str = Field(nullable=False, index=True)
