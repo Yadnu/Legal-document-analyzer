@@ -20,6 +20,7 @@ from __future__ import annotations
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from typing import Any
 
 import aioboto3
 
@@ -43,7 +44,7 @@ def _client_kwargs() -> dict:
 
 
 @asynccontextmanager
-async def get_s3_client() -> AsyncIterator:
+async def get_s3_client() -> AsyncIterator[Any]:
     """Async context manager that yields an aioboto3 S3 client.
 
     Example::
@@ -55,12 +56,13 @@ async def get_s3_client() -> AsyncIterator:
                 ExpiresIn=settings.presigned_url_expires_seconds,
             )
     """
-    async with _session.client("s3", **_client_kwargs()) as client:
+    # aioboto3 stubs type client() as `_`; ignore keeps pyright happy.
+    async with _session.client("s3", **_client_kwargs()) as client:  # type: ignore
         yield client
 
 
 @asynccontextmanager
-async def get_sqs_client() -> AsyncIterator:
+async def get_sqs_client() -> AsyncIterator[Any]:
     """Async context manager that yields an aioboto3 SQS client.
 
     Example::
@@ -71,5 +73,5 @@ async def get_sqs_client() -> AsyncIterator:
                 MessageBody=json.dumps(payload),
             )
     """
-    async with _session.client("sqs", **_client_kwargs()) as client:
+    async with _session.client("sqs", **_client_kwargs()) as client:  # type: ignore
         yield client
