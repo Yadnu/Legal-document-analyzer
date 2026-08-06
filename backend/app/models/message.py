@@ -22,7 +22,7 @@ class Message(TenantModel, table=True):
     user clicks a citation in the chat UI.
     """
 
-    __tablename__ = "messages"
+    __tablename__ = "messages"  # type: ignore[assignment]
 
     conversation_id: uuid.UUID = Field(
         nullable=False,
