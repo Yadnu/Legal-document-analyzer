@@ -13,8 +13,9 @@ from __future__ import annotations
 import re
 import statistics
 from dataclasses import dataclass
+from typing import Any
 
-import fitz  # PyMuPDF
+import fitz  # type: ignore  # PyMuPDF
 
 
 class ParseError(Exception):
@@ -76,7 +77,7 @@ def parse_pdf(data: bytes) -> list[ParsedElement]:
     text (likely scanned), or is otherwise unreadable.
     """
     try:
-        doc = fitz.open(stream=data, filetype="pdf")
+        doc: Any = fitz.open(stream=data, filetype="pdf")
     except Exception as exc:
         raise ParseError(f"Cannot open PDF: {exc}") from exc
 
@@ -87,9 +88,7 @@ def parse_pdf(data: bytes) -> list[ParsedElement]:
     raw_blocks: list[tuple[int, float, str]] = []  # (page, font_size, text)
 
     for page_num, page in enumerate(doc, start=1):
-        blocks = page.get_text("dict", flags=fitz.TEXT_PRESERVE_WHITESPACE)[
-            "blocks"
-        ]
+        blocks = page.get_text("dict", flags=fitz.TEXT_PRESERVE_WHITESPACE)["blocks"]
         for block in blocks:
             if block.get("type") != 0:  # 0 = text block
                 continue
@@ -116,9 +115,7 @@ def parse_pdf(data: bytes) -> list[ParsedElement]:
     current_section: str | None = None
 
     for page_num, font_size, text in raw_blocks:
-        is_heading = font_size >= heading_threshold or bool(
-            _SECTION_RE.match(text)
-        )
+        is_heading = font_size >= heading_threshold or bool(_SECTION_RE.match(text))
 
         if is_heading:
             element_type = "heading"
