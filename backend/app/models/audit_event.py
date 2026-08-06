@@ -18,7 +18,7 @@ class AuditEvent(TenantModel, table=True):
     upload event, or old/new values on a settings change.
     """
 
-    __tablename__ = "audit_events"
+    __tablename__ = "audit_events"  # type: ignore[assignment]
 
     user_id: str = Field(
         nullable=False,

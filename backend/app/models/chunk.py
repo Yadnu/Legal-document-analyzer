@@ -24,7 +24,7 @@ class Chunk(TenantModel, table=True):
     The embedding column (vector) powers the dense retrieval path.
     """
 
-    __tablename__ = "chunks"
+    __tablename__ = "chunks"  # type: ignore[assignment]
 
     document_id: uuid.UUID = Field(
         nullable=False, index=True, foreign_key="documents.id"
