@@ -13,7 +13,7 @@ class Conversation(TenantModel, table=True):
     the tenant (multi-document mode, introduced in Phase 9).
     """
 
-    __tablename__ = "conversations"
+    __tablename__ = "conversations"  # type: ignore[assignment]
 
     user_id: str = Field(nullable=False, index=True, description="Clerk user_id")
     # None = tenant-wide; a UUID = scoped to a single document

@@ -11,7 +11,7 @@ class Organization(TenantModel, table=True):
     that keeps RLS consistent across all tables.
     """
 
-    __tablename__ = "organizations"
+    __tablename__ = "organizations"  # type: ignore[assignment]
 
     name: str = Field(nullable=False)
     slug: str = Field(nullable=False, unique=True, index=True)

@@ -1,6 +1,7 @@
 import uuid
 from datetime import UTC, datetime
 
+from sqlalchemy import DateTime
 from sqlmodel import Field, SQLModel
 
 
@@ -31,4 +32,5 @@ class TenantModel(SQLModel):
     created_at: datetime = Field(
         default_factory=_utcnow,
         nullable=False,
+        sa_type=DateTime(timezone=True),  # type: ignore[arg-type]
     )

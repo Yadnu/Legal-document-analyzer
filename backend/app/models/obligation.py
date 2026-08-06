@@ -15,7 +15,7 @@ class Obligation(TenantModel, table=True):
     during Phase 10 (obligation extraction).
     """
 
-    __tablename__ = "obligations"
+    __tablename__ = "obligations"  # type: ignore[assignment]
 
     document_id: uuid.UUID = Field(
         nullable=False, index=True, foreign_key="documents.id"

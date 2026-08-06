@@ -18,7 +18,7 @@ class Document(TenantModel, table=True):
     The ingestion worker owns all status transitions.
     """
 
-    __tablename__ = "documents"
+    __tablename__ = "documents"  # type: ignore[assignment]
 
     title: str = Field(nullable=False)
     original_filename: str = Field(nullable=False)
