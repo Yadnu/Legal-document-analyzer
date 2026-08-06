@@ -24,11 +24,12 @@ Design notes
   postgresql_ops on TSVECTOR columns.
 """
 
-from alembic import op
 import sqlalchemy as sa
 import sqlmodel
 from pgvector.sqlalchemy import Vector
 from sqlalchemy.dialects.postgresql import TSVECTOR
+
+from alembic import op
 
 revision = "0001"
 down_revision = None
@@ -55,7 +56,21 @@ _ALL_TENANT_TABLES = _STANDARD_TENANT_TABLES + [_AUDIT_TABLE]
 
 def upgrade() -> None:
     # ── Extensions ────────────────────────────────────────────────────────────
-    op.execute("CREATE EXTENSION IF NOT EXISTS vector")
+    # Prefer creating the extension in docker/CI bootstrap (requires superuser).
+    # Tolerate re-runs when the app role is non-superuser and the extension
+    # already exists.
+    op.execute("""
+        DO $$
+        BEGIN
+            CREATE EXTENSION IF NOT EXISTS vector;
+        EXCEPTION
+            WHEN insufficient_privilege THEN
+                NULL;
+            WHEN duplicate_object THEN
+                NULL;
+        END
+        $$;
+        """)
 
     # ── organizations ─────────────────────────────────────────────────────────
     op.create_table(
@@ -88,7 +103,9 @@ def upgrade() -> None:
         sa.Column("clerk_user_id", sqlmodel.AutoString(), nullable=False),
         sa.Column("email", sqlmodel.AutoString(), nullable=False),
         sa.Column("full_name", sqlmodel.AutoString(), nullable=True),
-        sa.Column("role", sqlmodel.AutoString(), nullable=False, server_default="member"),
+        sa.Column(
+            "role", sqlmodel.AutoString(), nullable=False, server_default="member"
+        ),
         sa.Column("is_active", sa.Boolean(), nullable=False, server_default="true"),
         sa.Column("last_seen_at", sqlmodel.AutoString(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
@@ -151,13 +168,11 @@ def upgrade() -> None:
     op.create_index("ix_chunks_tenant_id", "chunks", ["tenant_id"])
     op.create_index("ix_chunks_document_id", "chunks", ["document_id"])
     # HNSW index for approximate nearest-neighbour dense retrieval (cosine distance)
-    op.execute(
-        """
+    op.execute("""
         CREATE INDEX ix_chunks_embedding_hnsw ON chunks
         USING hnsw (embedding vector_cosine_ops)
         WITH (m = 16, ef_construction = 64)
-        """
-    )
+        """)
     # GIN index for sparse tsvector full-text search
     op.execute(
         "CREATE INDEX ix_chunks_search_vector_gin ON chunks USING gin (search_vector)"
@@ -209,7 +224,9 @@ def upgrade() -> None:
         sa.Column("description", sqlmodel.AutoString(), nullable=False),
         sa.Column("obligation_type", sqlmodel.AutoString(), nullable=True),
         sa.Column("deadline", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("reminder_days_before", sa.Integer(), nullable=False, server_default="7"),
+        sa.Column(
+            "reminder_days_before", sa.Integer(), nullable=False, server_default="7"
+        ),
         sa.Column("reminder_sent_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("is_resolved", sa.Boolean(), nullable=False, server_default="false"),
         sa.Column("assigned_to", sqlmodel.AutoString(), nullable=True),
@@ -254,8 +271,7 @@ def upgrade() -> None:
     for table in _STANDARD_TENANT_TABLES:
         op.execute(f"ALTER TABLE {table} ENABLE ROW LEVEL SECURITY")
         op.execute(f"ALTER TABLE {table} FORCE ROW LEVEL SECURITY")
-        op.execute(
-            f"""
+        op.execute(f"""
             CREATE POLICY tenant_isolation ON {table}
             USING (
                 tenant_id = current_setting('app.current_tenant_id', true)
@@ -263,8 +279,7 @@ def upgrade() -> None:
             WITH CHECK (
                 tenant_id = current_setting('app.current_tenant_id', true)
             )
-            """
-        )
+            """)
 
     # audit_events: append-only.
     # Two separate policies (SELECT and INSERT) are created; no UPDATE or
@@ -272,24 +287,20 @@ def upgrade() -> None:
     # This enforces the immutable audit trail at the database layer.
     op.execute(f"ALTER TABLE {_AUDIT_TABLE} ENABLE ROW LEVEL SECURITY")
     op.execute(f"ALTER TABLE {_AUDIT_TABLE} FORCE ROW LEVEL SECURITY")
-    op.execute(
-        f"""
+    op.execute(f"""
         CREATE POLICY tenant_isolation_select ON {_AUDIT_TABLE}
         FOR SELECT
         USING (
             tenant_id = current_setting('app.current_tenant_id', true)
         )
-        """
-    )
-    op.execute(
-        f"""
+        """)
+    op.execute(f"""
         CREATE POLICY tenant_isolation_insert ON {_AUDIT_TABLE}
         FOR INSERT
         WITH CHECK (
             tenant_id = current_setting('app.current_tenant_id', true)
         )
-        """
-    )
+        """)
 
 
 def downgrade() -> None:

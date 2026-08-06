@@ -44,8 +44,8 @@ jobs:
         image: pgvector/pgvector:pg16
         env:
           POSTGRES_DB: legaldb_test
-          POSTGRES_USER: legaluser
-          POSTGRES_PASSWORD: legalpass
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
         options: >-
@@ -70,6 +70,25 @@ jobs:
       - uses: astral-sh/setup-uv@v4
       - name: Install dependencies
         run: uv sync --dev
+      - name: Bootstrap non-superuser app role
+        # Bootstrap POSTGRES_USER is always a superuser (bypasses RLS).
+        # Create legaluser without SUPERUSER/BYPASSRLS so FORCE RLS applies.
+        env:
+          PGPASSWORD: postgres
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-client
+          psql -h localhost -U postgres -d legaldb_test <<'SQL'
+          CREATE EXTENSION IF NOT EXISTS vector;
+          CREATE ROLE legaluser LOGIN PASSWORD 'legalpass'
+            NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE;
+          GRANT ALL ON SCHEMA public TO legaluser;
+          GRANT CREATE ON SCHEMA public TO legaluser;
+          ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO legaluser;
+          ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO legaluser;
+          SQL
+      - name: Apply migrations
+        run: uv run alembic upgrade head
       - name: Run tests
         run: uv run pytest -v
 
