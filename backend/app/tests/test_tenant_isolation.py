@@ -18,11 +18,13 @@ attacker would attempt, bypassing ORM helpers.
 
 import uuid
 from collections.abc import AsyncGenerator
+from typing import Any
 
 import pytest
 from sqlalchemy import text
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
 
@@ -31,22 +33,25 @@ from app.core.config import settings
 _DB_URL = settings.test_database_url or settings.database_url
 
 
-async def _make_session() -> async_sessionmaker:
-    engine = create_async_engine(_DB_URL, echo=False)
-    return async_sessionmaker(engine, expire_on_commit=False)
+async def _make_engine_and_factory() -> tuple[Any, async_sessionmaker]:
+    engine = create_async_engine(_DB_URL, echo=False, poolclass=NullPool)
+    return engine, async_sessionmaker(engine, expire_on_commit=False)
 
 
 async def _set_tenant(session: AsyncSession, tenant_id: str) -> None:
-    """Activate RLS for the current transaction."""
+    """Activate RLS for the current connection."""
+    # Keep session.info in sync so after_begin re-applies across commits.
+    session.info["tenant_id"] = tenant_id
     await session.execute(
-        text("SET LOCAL app.current_tenant_id = :tid"),
+        text("SELECT set_config('app.current_tenant_id', :tid, false)"),
         {"tid": tenant_id},
     )
 
 
 async def _clear_tenant(session: AsyncSession) -> None:
     """Remove tenant context (simulates an unauthenticated connection)."""
-    await session.execute(text("SET LOCAL app.current_tenant_id = ''"))
+    session.info.pop("tenant_id", None)
+    await session.execute(text("SELECT set_config('app.current_tenant_id', '', false)"))
 
 
 # ── fixtures ──────────────────────────────────────────────────────────────────
@@ -55,9 +60,10 @@ async def _clear_tenant(session: AsyncSession) -> None:
 @pytest.fixture()
 async def sessions() -> AsyncGenerator[tuple[AsyncSession, AsyncSession], None]:
     """Yield (session_a, session_b) backed by a shared engine."""
-    factory = await _make_session()
+    engine, factory = await _make_engine_and_factory()
     async with factory() as sa, factory() as sb:
         yield sa, sb
+    await engine.dispose()
 
 
 # ── seed helper ───────────────────────────────────────────────────────────────
@@ -124,11 +130,17 @@ class TestCrossTenantSelect:
         assert len(rows) == 0, "Tenant A must not see tenant B's organization (RLS)"
 
         # Cleanup
-        await sb.execute(text("SET LOCAL app.current_tenant_id = :t"), {"t": tid_b})
+        await sb.execute(
+            text("SELECT set_config('app.current_tenant_id', :t, false)"),
+            {"t": tid_b},
+        )
         await sb.execute(
             text("DELETE FROM organizations WHERE tenant_id = :t"), {"t": tid_b}
         )
-        await sa.execute(text("SET LOCAL app.current_tenant_id = :t"), {"t": tid_a})
+        await sa.execute(
+            text("SELECT set_config('app.current_tenant_id', :t, false)"),
+            {"t": tid_a},
+        )
         await sa.execute(
             text("DELETE FROM organizations WHERE tenant_id = :t"), {"t": tid_a}
         )
@@ -190,7 +202,10 @@ class TestUnauthenticatedConnection:
         assert len(rows) == 0, "No tenant context must return zero rows (fail-closed)"
 
         # Cleanup
-        await sa.execute(text("SET LOCAL app.current_tenant_id = :t"), {"t": tid_a})
+        await sa.execute(
+            text("SELECT set_config('app.current_tenant_id', :t, false)"),
+            {"t": tid_a},
+        )
         await sa.execute(
             text("DELETE FROM organizations WHERE tenant_id = :t"), {"t": tid_a}
         )
@@ -220,7 +235,7 @@ class TestAuditEventAppendOnly:
         )
         await sa.commit()
 
-        # Verify the row exists.
+        # set_config survives commits (is_local=false); verify the row exists.
         rows = (
             await sa.execute(
                 text("SELECT id FROM audit_events WHERE id = :id"),
@@ -248,16 +263,23 @@ class TestAuditEventAppendOnly:
         )
         await sa.commit()
 
-        # UPDATE should be rejected (no FOR UPDATE policy on audit_events).
-        with pytest.raises(DBAPIError):
-            await _set_tenant(sa, tid)
+        # No FOR UPDATE policy → RLS default-deny (0 rows affected, no error).
+        await _set_tenant(sa, tid)
+        result = await sa.execute(
+            text("UPDATE audit_events SET action = 'tampered' WHERE id = :id"),
+            {"id": event_id},
+        )
+        await sa.commit()
+        assert result.rowcount == 0  # type: ignore[attr-defined]
+
+        await _set_tenant(sa, tid)
+        action = (
             await sa.execute(
-                text("UPDATE audit_events SET action = 'tampered' WHERE id = :id"),
+                text("SELECT action FROM audit_events WHERE id = :id"),
                 {"id": event_id},
             )
-            await sa.commit()
-
-        await sa.rollback()
+        ).scalar_one()
+        assert action == "original.action"
 
     async def test_delete_rejected(
         self, sessions: tuple[AsyncSession, AsyncSession]
@@ -278,13 +300,22 @@ class TestAuditEventAppendOnly:
         )
         await sa.commit()
 
-        # DELETE should be rejected (no FOR DELETE policy on audit_events).
-        with pytest.raises(DBAPIError):
-            await _set_tenant(sa, tid)
+        # No FOR DELETE policy → RLS default-deny (0 rows affected, no error).
+        await _set_tenant(sa, tid)
+        result = await sa.execute(
+            text("DELETE FROM audit_events WHERE id = :id"),
+            {"id": event_id},
+        )
+        await sa.commit()
+        assert result.rowcount == 0  # type: ignore[attr-defined]
+
+        await _set_tenant(sa, tid)
+        rows = (
             await sa.execute(
-                text("DELETE FROM audit_events WHERE id = :id"),
+                text("SELECT id FROM audit_events WHERE id = :id"),
                 {"id": event_id},
             )
-            await sa.commit()
+        ).fetchall()
+        assert len(rows) == 1
 
         await sa.rollback()

@@ -14,6 +14,7 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
 from app.db.rls import set_tenant_context
@@ -29,14 +30,9 @@ from worker.main import process_message
 _DB_URL = settings.test_database_url or settings.database_url
 
 
-@pytest.fixture(scope="module")
-def anyio_backend() -> str:
-    return "asyncio"
-
-
-@pytest.fixture(scope="module")
+@pytest.fixture()
 async def db_engine():
-    engine = create_async_engine(_DB_URL, echo=False)
+    engine = create_async_engine(_DB_URL, echo=False, poolclass=NullPool)
     yield engine
     await engine.dispose()
 
