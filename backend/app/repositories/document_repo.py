@@ -20,6 +20,7 @@ from dataclasses import dataclass
 
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import col
 
 from app.models.document import Document, DocumentStatus
 
@@ -89,8 +90,8 @@ async def get_by_id(
     """
     result = await session.execute(
         select(Document).where(
-            Document.id == doc_id,
-            Document.tenant_id == tenant_id,
+            col(Document.id) == doc_id,
+            col(Document.tenant_id) == tenant_id,
         )
     )
     return result.scalar_one_or_none()
@@ -108,8 +109,8 @@ async def get_by_idempotency_key(
     """
     result = await session.execute(
         select(Document).where(
-            Document.idempotency_key == key,
-            Document.tenant_id == tenant_id,
+            col(Document.idempotency_key) == key,
+            col(Document.tenant_id) == tenant_id,
         )
     )
     return result.scalar_one_or_none()
@@ -122,8 +123,8 @@ async def list_for_tenant(
     """Return all documents for the given tenant, ordered newest-first."""
     result = await session.execute(
         select(Document)
-        .where(Document.tenant_id == tenant_id)
-        .order_by(Document.created_at.desc())
+        .where(col(Document.tenant_id) == tenant_id)
+        .order_by(col(Document.created_at).desc())
     )
     return list(result.scalars().all())
 
@@ -143,8 +144,8 @@ async def set_status(
     await session.execute(
         update(Document)
         .where(
-            Document.id == doc_id,
-            Document.tenant_id == tenant_id,
+            col(Document.id) == doc_id,
+            col(Document.tenant_id) == tenant_id,
         )
         .values(status=status, error_reason=error_reason)
     )
