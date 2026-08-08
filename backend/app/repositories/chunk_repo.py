@@ -17,6 +17,7 @@ import uuid
 import structlog
 from sqlalchemy import delete, text
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import col
 
 from app.ingestion.chunker import ChunkData, cross_refs_to_json
 from app.models.chunk import Chunk
@@ -64,8 +65,8 @@ async def upsert_chunks(
     # ── 1. Delete existing chunks ────────────────────────────────────────────
     await session.execute(
         delete(Chunk).where(
-            Chunk.document_id == document_id,
-            Chunk.tenant_id == tenant_id,
+            col(Chunk.document_id) == document_id,
+            col(Chunk.tenant_id) == tenant_id,
         )
     )
 
@@ -95,8 +96,7 @@ async def upsert_chunks(
         )
 
     await session.execute(
-        text(
-            """
+        text("""
             INSERT INTO chunks (
                 id, tenant_id, document_id,
                 section_number, heading, page,
@@ -105,15 +105,14 @@ async def upsert_chunks(
                 embedding, search_vector,
                 created_at
             ) VALUES (
-                :id::uuid, :tenant_id, :document_id::uuid,
+                CAST(:id AS uuid), :tenant_id, CAST(:document_id AS uuid),
                 :section_number, :heading, :page,
                 :cross_refs, :content, :token_count,
                 :embedding_model, :embedding_model_version,
-                :embedding::vector, to_tsvector('english', :content),
+                CAST(:embedding AS vector), to_tsvector('english', :content),
                 now()
             )
-            """
-        ),
+            """),
         rows,
     )
 

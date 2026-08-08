@@ -19,6 +19,8 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.pool import NullPool
+from sqlmodel import col
 
 from app.core.config import settings
 from app.db.rls import set_tenant_context
@@ -95,14 +97,9 @@ _FAKE_ELEMENTS = [
 # ---------------------------------------------------------------------------
 
 
-@pytest.fixture(scope="module")
-def anyio_backend() -> str:
-    return "asyncio"
-
-
-@pytest.fixture(scope="module")
+@pytest.fixture()
 async def db_engine():
-    engine = create_async_engine(_DB_URL, echo=False)
+    engine = create_async_engine(_DB_URL, echo=False, poolclass=NullPool)
     yield engine
     await engine.dispose()
 
@@ -184,8 +181,8 @@ async def test_ingest_creates_chunks(db_session: AsyncSession) -> None:
     await set_tenant_context(db_session, tenant_id)
     result = await db_session.execute(
         select(Chunk).where(
-            Chunk.document_id == doc.id,
-            Chunk.tenant_id == tenant_id,
+            col(Chunk.document_id) == doc.id,
+            col(Chunk.tenant_id) == tenant_id,
         )
     )
     db_chunks = result.scalars().all()
@@ -271,14 +268,14 @@ async def test_ingest_is_idempotent(db_session: AsyncSession) -> None:
     await set_tenant_context(db_session, tenant_id)
     result = await db_session.execute(
         select(Chunk).where(
-            Chunk.document_id == doc.id,
-            Chunk.tenant_id == tenant_id,
+            col(Chunk.document_id) == doc.id,
+            col(Chunk.tenant_id) == tenant_id,
         )
     )
     db_count = len(result.scalars().all())
-    assert db_count == first, (
-        f"DB has {db_count} rows but expected {first} after idempotent re-ingest"
-    )
+    assert (
+        db_count == first
+    ), f"DB has {db_count} rows but expected {first} after idempotent re-ingest"
 
 
 async def test_ingest_tenant_isolation(db_session: AsyncSession) -> None:
@@ -314,9 +311,9 @@ async def test_ingest_tenant_isolation(db_session: AsyncSession) -> None:
     # Querying with tenant B's RLS context must return nothing
     await set_tenant_context(db_session, tenant_b)
     result = await db_session.execute(
-        select(Chunk).where(Chunk.tenant_id == tenant_b)
+        select(Chunk).where(col(Chunk.tenant_id) == tenant_b)
     )
     chunks_b = result.scalars().all()
-    assert chunks_b == [], (
-        f"Tenant B unexpectedly sees {len(chunks_b)} chunks belonging to tenant A"
-    )
+    assert (
+        chunks_b == []
+    ), f"Tenant B unexpectedly sees {len(chunks_b)} chunks belonging to tenant A"

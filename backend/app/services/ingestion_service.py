@@ -15,6 +15,7 @@ import uuid
 import structlog
 from sqlalchemy import update
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import col
 
 from app.core.config import settings
 from app.infra.storage import download_document
@@ -109,7 +110,10 @@ async def ingest(
     if page_count:
         await session.execute(
             update(Document)
-            .where(Document.id == document_id, Document.tenant_id == tenant_id)
+            .where(
+                col(Document.id) == document_id,
+                col(Document.tenant_id) == tenant_id,
+            )
             .values(page_count=page_count)
         )
 

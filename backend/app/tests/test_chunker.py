@@ -66,15 +66,13 @@ def test_chunk_respects_max_tokens() -> None:
     """No chunk content exceeds max_tokens words."""
     words_per_elem = 20
     word = "contract"
-    many_elements = [
-        _elem(" ".join([word] * words_per_elem)) for _ in range(30)
-    ]
+    many_elements = [_elem(" ".join([word] * words_per_elem)) for _ in range(30)]
     max_tokens = 50
     chunks = chunk_elements(many_elements, max_tokens=max_tokens)
     for chunk in chunks:
-        assert chunk.token_count <= max_tokens + words_per_elem, (
-            f"Chunk exceeds max: {chunk.token_count} words"
-        )
+        assert (
+            chunk.token_count <= max_tokens + words_per_elem
+        ), f"Chunk exceeds max: {chunk.token_count} words"
 
 
 def test_chunk_preserves_section_metadata() -> None:
@@ -98,12 +96,12 @@ def test_chunk_preserves_section_metadata() -> None:
     body_chunks = [c for c in chunks if "Invoices" in c.content or "Late" in c.content]
     assert body_chunks, "Expected at least one body chunk"
     for chunk in body_chunks:
-        assert chunk.section_number == "3.2", (
-            f"Expected section 3.2, got {chunk.section_number}"
-        )
-        assert chunk.heading == "3.2 Payment Terms", (
-            f"Unexpected heading: {chunk.heading}"
-        )
+        assert (
+            chunk.section_number == "3.2"
+        ), f"Expected section 3.2, got {chunk.section_number}"
+        assert (
+            chunk.heading == "3.2 Payment Terms"
+        ), f"Unexpected heading: {chunk.heading}"
 
 
 def test_chunk_extracts_cross_refs() -> None:
