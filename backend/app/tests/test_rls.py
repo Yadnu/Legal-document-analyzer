@@ -23,6 +23,7 @@ from collections.abc import AsyncGenerator
 import pytest
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
 from app.db.rls import set_tenant_context
@@ -31,39 +32,46 @@ from app.db.rls import set_tenant_context
 # Fixtures
 # ---------------------------------------------------------------------------
 
-TENANT_A = "org_tenant_aaa"
-TENANT_B = "org_tenant_bbb"
 
-
-@pytest.fixture(scope="module")
-def anyio_backend():
-    return "asyncio"
-
-
-@pytest.fixture(scope="module")
+@pytest.fixture()
 async def rls_engine():
     """Async engine pointed at the test database."""
     url = settings.test_database_url or settings.database_url
-    engine = create_async_engine(url, echo=False)
+    engine = create_async_engine(url, echo=False, poolclass=NullPool)
     yield engine
     await engine.dispose()
 
 
 @pytest.fixture()
-async def tenant_a_session(rls_engine) -> AsyncGenerator[AsyncSession, None]:
+async def tenant_ids() -> tuple[str, str]:
+    """Fresh tenant pair per test so unique constraints never collide."""
+    return (
+        f"org_tenant_aaa_{uuid.uuid4().hex[:8]}",
+        f"org_tenant_bbb_{uuid.uuid4().hex[:8]}",
+    )
+
+
+@pytest.fixture()
+async def tenant_a_session(
+    rls_engine, tenant_ids: tuple[str, str]
+) -> AsyncGenerator[AsyncSession, None]:
     """Session with tenant A context active."""
+    tenant_a, _ = tenant_ids
     async_session = async_sessionmaker(rls_engine, expire_on_commit=False)
     async with async_session() as session:
-        await set_tenant_context(session, TENANT_A)
+        await set_tenant_context(session, tenant_a)
         yield session
 
 
 @pytest.fixture()
-async def tenant_b_session(rls_engine) -> AsyncGenerator[AsyncSession, None]:
+async def tenant_b_session(
+    rls_engine, tenant_ids: tuple[str, str]
+) -> AsyncGenerator[AsyncSession, None]:
     """Session with tenant B context active."""
+    _, tenant_b = tenant_ids
     async_session = async_sessionmaker(rls_engine, expire_on_commit=False)
     async with async_session() as session:
-        await set_tenant_context(session, TENANT_B)
+        await set_tenant_context(session, tenant_b)
         yield session
 
 
@@ -88,7 +96,7 @@ async def _insert_org(session: AsyncSession, tenant_id: str) -> uuid.UUID:
             "id": org_id,
             "tenant_id": tenant_id,
             "name": f"Org {tenant_id}",
-            "slug": f"org-{tenant_id[:8]}",
+            "slug": f"org-{tenant_id}",
             "clerk_org_id": tenant_id,
         },
     )
@@ -113,9 +121,11 @@ async def _count_orgs(session: AsyncSession, org_id: uuid.UUID) -> int:
 async def test_rls_blocks_cross_tenant_read(
     tenant_a_session: AsyncSession,
     tenant_b_session: AsyncSession,
+    tenant_ids: tuple[str, str],
 ) -> None:
     """Tenant B must not see tenant A's organization row."""
-    org_id = await _insert_org(tenant_a_session, TENANT_A)
+    tenant_a, _ = tenant_ids
+    org_id = await _insert_org(tenant_a_session, tenant_a)
 
     count_as_b = await _count_orgs(tenant_b_session, org_id)
     assert count_as_b == 0, (
@@ -126,9 +136,11 @@ async def test_rls_blocks_cross_tenant_read(
 
 async def test_rls_allows_same_tenant_read(
     tenant_a_session: AsyncSession,
+    tenant_ids: tuple[str, str],
 ) -> None:
     """Tenant A must see its own organization row."""
-    org_id = await _insert_org(tenant_a_session, TENANT_A)
+    tenant_a, _ = tenant_ids
+    org_id = await _insert_org(tenant_a_session, tenant_a)
 
     count_as_a = await _count_orgs(tenant_a_session, org_id)
     assert count_as_a == 1, (
@@ -140,11 +152,13 @@ async def test_rls_allows_same_tenant_read(
 async def test_rls_blocks_cross_tenant_read_documents(
     tenant_a_session: AsyncSession,
     tenant_b_session: AsyncSession,
+    tenant_ids: tuple[str, str],
 ) -> None:
     """
     RLS applies to every tenant table.
     Spot-check documents — a second table beyond organizations.
     """
+    tenant_a, _ = tenant_ids
     doc_id = uuid.uuid4()
     await tenant_a_session.execute(
         text("""
@@ -159,7 +173,7 @@ async def test_rls_blocks_cross_tenant_read_documents(
             """),
         {
             "id": doc_id,
-            "tenant_id": TENANT_A,
+            "tenant_id": tenant_a,
             "s3_key": f"tenant-a/{doc_id}/secret.pdf",
             "idem_key": str(doc_id),
         },
@@ -184,7 +198,7 @@ async def test_no_tenant_context_reads_nothing() -> None:
     variable is not set, so tenant_id = NULL is always false — RLS blocks all rows.
     """
     url = settings.test_database_url or settings.database_url
-    engine = create_async_engine(url, echo=False)
+    engine = create_async_engine(url, echo=False, poolclass=NullPool)
     async_session = async_sessionmaker(engine, expire_on_commit=False)
 
     async with async_session() as session:

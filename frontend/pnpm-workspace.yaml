@@ -1,3 +1,6 @@
+packages:
+  - "."
+
 allowBuilds:
-  '@clerk/shared': true
+  "@clerk/shared": true
   unrs-resolver: true

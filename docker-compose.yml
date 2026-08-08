@@ -2,15 +2,17 @@ services:
   db:
     image: pgvector/pgvector:pg16
     environment:
+      # Bootstrap superuser for admin / extensions. App traffic uses legaluser.
       POSTGRES_DB: legaldb
-      POSTGRES_USER: legaluser
-      POSTGRES_PASSWORD: legalpass
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./infra/db/init:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U legaluser -d legaldb"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d legaldb"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -22,6 +24,8 @@ services:
       DEFAULT_REGION: us-east-1
     ports:
       - "4566:4566"
+    volumes:
+      - localstackdata:/var/lib/localstack
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
       interval: 5s
@@ -35,19 +39,20 @@ services:
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_ACCESS_KEY: test
       AWS_DEFAULT_REGION: us-east-1
-    entrypoint: >
-      /bin/sh -c "
-        aws --endpoint-url=http://localstack:4566 s3 mb s3://legal-documents --region us-east-1 || true;
-        aws --endpoint-url=http://localstack:4566 sqs create-queue
-          --queue-name legal-ingest-dlq --region us-east-1;
-        DLQ_ARN=$$(aws --endpoint-url=http://localstack:4566 sqs get-queue-attributes
-          --queue-url http://localstack:4566/000000000000/legal-ingest-dlq
-          --attribute-names QueueArn --query Attributes.QueueArn --output text);
-        aws --endpoint-url=http://localstack:4566 sqs create-queue
-          --queue-name legal-ingest --region us-east-1
-          --attributes '{\"RedrivePolicy\":\"{\\\"deadLetterTargetArn\\\":\\\"'$$DLQ_ARN'\\\",\\\"maxReceiveCount\\\":\\\"3\\\"}\"}';
-        echo 'LocalStack resources created.';
-      "
+    # Use exec-form + literal block so each aws flag stays on the same
+    # logical command (YAML `>` folding was splitting flags onto new lines,
+    # so create-queue never ran and the worker saw QueueDoesNotExist).
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        set -eu
+        ENDPOINT=http://localstack:4566
+        aws --endpoint-url=$$ENDPOINT s3 mb s3://legal-documents --region us-east-1 || true
+        aws --endpoint-url=$$ENDPOINT sqs create-queue --queue-name legal-ingest-dlq --region us-east-1 || true
+        DLQ_ARN=$$(aws --endpoint-url=$$ENDPOINT sqs get-queue-attributes --queue-url $$ENDPOINT/000000000000/legal-ingest-dlq --attribute-names QueueArn --query Attributes.QueueArn --output text)
+        aws --endpoint-url=$$ENDPOINT sqs create-queue --queue-name legal-ingest --region us-east-1 --attributes "{\"RedrivePolicy\":\"{\\\"deadLetterTargetArn\\\":\\\"$$DLQ_ARN\\\",\\\"maxReceiveCount\\\":\\\"3\\\"}\"}" || true
+        echo "LocalStack resources:"
+        aws --endpoint-url=$$ENDPOINT sqs list-queues --region us-east-1
     depends_on:
       localstack:
         condition: service_healthy
@@ -55,6 +60,10 @@ services:
   backend:
     build:
       context: ./backend
+    # Root .env supplies Clerk / Voyage / etc. Compose `environment` overrides
+    # host URLs with Docker-network hosts (db, localstack).
+    env_file:
+      - .env
     environment:
       DATABASE_URL: postgresql+asyncpg://legaluser:legalpass@db:5432/legaldb
       CORS_ORIGINS: '["http://localhost:3000"]'
@@ -74,6 +83,8 @@ services:
         condition: service_healthy
       localstack:
         condition: service_healthy
+      localstack-init:
+        condition: service_completed_successfully
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')"]
       interval: 10s
@@ -85,6 +96,8 @@ services:
     build:
       context: ./backend
     command: ["python", "-m", "worker.main"]
+    env_file:
+      - .env
     environment:
       DATABASE_URL: postgresql+asyncpg://legaluser:legalpass@db:5432/legaldb
       AWS_ENDPOINT_URL: http://localstack:4566
@@ -107,6 +120,8 @@ services:
   frontend:
     build:
       context: ./frontend
+    env_file:
+      - .env
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:8000
     ports:
@@ -121,3 +136,4 @@ services:
 
 volumes:
   pgdata:
+  localstackdata:

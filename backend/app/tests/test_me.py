@@ -10,8 +10,10 @@ Strategy:
   the real get_current_tenant raises TenantMissingError -> 403.
 """
 
+from collections.abc import AsyncGenerator
+
 import pytest
-from httpx import AsyncClient
+from httpx import ASGITransport, AsyncClient
 
 from app.core.deps import get_current_tenant, get_current_user, get_verified_claims
 from app.main import create_app
@@ -22,10 +24,8 @@ FAKE_TENANT = TenantContext(tenant_id="org_test456", slug="acme-legal")
 
 
 @pytest.fixture()
-async def authed_client() -> AsyncClient:
+async def authed_client() -> AsyncGenerator[AsyncClient, None]:
     """Client whose auth dependencies are stubbed with known values."""
-    from httpx import ASGITransport
-
     app = create_app()
     app.dependency_overrides[get_current_user] = lambda: FAKE_USER
     app.dependency_overrides[get_current_tenant] = lambda: FAKE_TENANT
@@ -37,10 +37,8 @@ async def authed_client() -> AsyncClient:
 
 
 @pytest.fixture()
-async def unauthed_client() -> AsyncClient:
+async def unauthed_client() -> AsyncGenerator[AsyncClient, None]:
     """Vanilla client with no dependency overrides."""
-    from httpx import ASGITransport
-
     app = create_app()
 
     async with AsyncClient(
@@ -50,10 +48,8 @@ async def unauthed_client() -> AsyncClient:
 
 
 @pytest.fixture()
-async def no_org_client() -> AsyncClient:
+async def no_org_client() -> AsyncGenerator[AsyncClient, None]:
     """Client whose JWT claims have no org_id (user has no active org)."""
-    from httpx import ASGITransport
-
     app = create_app()
     app.dependency_overrides[get_verified_claims] = lambda: {"sub": "user_test123"}
 
