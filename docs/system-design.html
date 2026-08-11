@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Legal Document Navigator — System Architecture</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+      background: #f6f8fa;
+      color: #1f2328;
+      padding: 36px 40px 48px;
+    }
+    h1  { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .subtitle { font-size: 13px; color: #636c76; margin-bottom: 14px; }
+    .pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+    .pill {
+      display: inline-block;
+      padding: 3px 11px;
+      border-radius: 20px;
+      border: 1px solid #d0d7de;
+      font-size: 11px;
+      color: #636c76;
+      background: #ffffff;
+    }
+    #diagram {
+      display: block;
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      background: #ffffff;
+    }
+    .summary {
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr 1px 1fr;
+      gap: 0 20px;
+      margin-top: 20px;
+    }
+    .divider { background: #d0d7de; }
+    .col h3  { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+    .col p   { font-size: 11px; color: #636c76; line-height: 1.55; }
+    .btn {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 8px 18px;
+      background: #0969da;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      letter-spacing: 0.2px;
+    }
+    .btn:hover { background: #0860ca; }
+  </style>
+</head>
+<body>
+
+<h1>Legal Document Navigator</h1>
+<p class="subtitle">Complete system architecture — 10 phases, all components</p>
+
+<div class="pills">
+  <span class="pill">Multi-tenant · Postgres RLS</span>
+  <span class="pill">pgvector HNSW + BM25 hybrid</span>
+  <span class="pill">Voyage voyage-law-2</span>
+  <span class="pill">LLM Gateway · routing + fallback</span>
+  <span class="pill">Claude 3·5 via Bedrock</span>
+  <span class="pill">Groq Llama 3.3 70B</span>
+  <span class="pill">Cohere cross-encoder rerank</span>
+  <span class="pill">Clause-cited grounded answers</span>
+</div>
+
+<svg id="diagram"></svg>
+
+<div class="summary">
+  <div class="col">
+    <h3>Upload Pipeline (Phases 3–4)</h3>
+    <p>Browser → FastAPI presigns S3 URL → direct PUT → confirm →
+    SQS → Worker: parse PDF (PyMuPDF / LlamaParse / Textract),
+    clause-aware chunking, Voyage embeddings, pgvector + tsvector storage.
+    Idempotent, DLQ-backed.</p>
+  </div>
+  <div class="divider"></div>
+  <div class="col">
+    <h3>Q&amp;A Pipeline (Phase 5)</h3>
+    <p>Browser → FastAPI → LLM Gateway → hybrid retrieval (pgvector HNSW +
+    BM25 tsvector, RRF fusion) → Cohere reranking → Claude 3·5 via Bedrock
+    (strict grounding) → clause-cited answer. Groq Llama 3.3 handles cheap
+    supporting steps. "Not in your documents" when nothing supports the claim.</p>
+  </div>
+  <div class="divider"></div>
+  <div class="col">
+    <h3>LLM Gateway + Platform (Phases 7–10)</h3>
+    <p>Gateway enforces per-tenant rate limits, tracks token costs, caches
+    semantically similar queries, and fails over between providers.
+    Audit log on every action. Shared workspaces, obligation tracker,
+    and RAG eval harness measuring faithfulness and retrieval precision in CI.</p>
+  </div>
+</div>
+
+<button class="btn" onclick="downloadPNG()">⬇ Download PNG (2×)</button>
+
+<script>
+// ── Theme ─────────────────────────────────────────────────────────────────
+const th = {
+  bgEditor:       "#ffffff",
+  bgElevated:     "#f6f8fa",
+  fillQuaternary: "#f0f2f5",
+  fillTertiary:   "#e8ecf0",
+  fillSecondary:  "#dde1e7",
+  strokePrimary:  "#d0d7de",
+  strokeSecondary:"#636c76",
+  textPrimary:    "#1f2328",
+  textSecondary:  "#636c76",
+  textTertiary:   "#8c959f",
+  textQuaternary: "#adb5bd",
+  accentPrimary:  "#0969da",
+  textOnAccent:   "#ffffff",
+};
+
+// ── Layout ────────────────────────────────────────────────────────────────
+const NH = 54, NR = 7;
+const DW = 950, DH = 690;
+const ZY = [28, 146, 264, 376, 462, 580];
+
+// ── Zones ─────────────────────────────────────────────────────────────────
+const ZONES = [
+  { label: "CLIENT",          y: 8,   h: 110 },
+  { label: "BACKEND API",     y: 126, h: 110 },
+  { label: "INFRASTRUCTURE",  y: 244, h: 110 },
+  { label: "LLM GATEWAY",     y: 362, h: 78  },
+  { label: "AI & PARSING",    y: 448, h: 110 },
+  { label: "PLATFORM LAYER",  y: 566, h: 110 },
+];
+
+// ── Nodes ─────────────────────────────────────────────────────────────────
+const NODES = [
+  // Zone 1 — Client
+  { id:"nextjs",     x:30,  y:ZY[0], w:215, label:"Next.js App",       sub:"React · Tailwind · shadcn/ui · TanStack Query" },
+  { id:"docviewer",  x:275, y:ZY[0], w:200, label:"Document Viewer",   sub:"react-pdf · Citation highlighting" },
+  { id:"clerk",      x:745, y:ZY[0], w:185, label:"Clerk Auth",         sub:"JWT · JWKS · Organizations" },
+  // Zone 2 — Backend
+  { id:"fastapi",    x:320, y:ZY[1], w:280, label:"FastAPI Backend",   sub:"Uvicorn · Pydantic v2 · SQLModel · Alembic", accent:true },
+  // Zone 3 — Infrastructure
+  { id:"postgres",   x:15,  y:ZY[2], w:195, label:"PostgreSQL",        sub:"pgvector HNSW · RLS · tsvector BM25" },
+  { id:"s3",         x:230, y:ZY[2], w:155, label:"Amazon S3",          sub:"Presigned PUT uploads" },
+  { id:"sqs",        x:405, y:ZY[2], w:165, label:"Amazon SQS",         sub:"Ingest queue + DLQ" },
+  { id:"worker",     x:590, y:ZY[2], w:185, label:"Ingestion Worker",   sub:"Async long-poll · Retry · DLQ" },
+  // Zone 4 — LLM Gateway
+  { id:"llm_gw",    x:245, y:ZY[3], w:420, label:"LLM Gateway",
+    sub:"Routing · Rate limits · Cost tracking · Fallback · Semantic cache", gateway:true },
+  // Zone 5 — AI & Parsing
+  { id:"parser",     x:10,  y:ZY[4], w:188, label:"PDF Parser",         sub:"PyMuPDF · LlamaParse · Textract OCR" },
+  { id:"voyage",     x:205, y:ZY[4], w:168, label:"Voyage AI",           sub:"voyage-law-2 · 1024-dim embeddings" },
+  { id:"cohere",     x:378, y:ZY[4], w:170, label:"Cohere Rerank",       sub:"Cross-encoder · clause reranking" },
+  { id:"bedrock",    x:555, y:ZY[4], w:198, label:"Amazon Bedrock",      sub:"Claude 3·5 · grounded generation" },
+  { id:"groq",       x:760, y:ZY[4], w:140, label:"Groq",                sub:"Llama 3.3 70B · fast steps" },
+  // Zone 6 — Platform
+  { id:"audit",      x:15,  y:ZY[5], w:200, label:"Audit Log",           sub:"Tamper-proof event trail" },
+  { id:"collab",     x:230, y:ZY[5], w:200, label:"Collab & Workspaces", sub:"Invites · Roles · Clause comments" },
+  { id:"obligation", x:450, y:ZY[5], w:200, label:"Obligation Tracker",  sub:"Deadlines · Scheduler reminders" },
+  { id:"rageval",    x:665, y:ZY[5], w:215, label:"RAG Eval Harness",    sub:"Faithfulness · Retrieval metrics" },
+];
+
+// ── Helpers ───────────────────────────────────────────────────────────────
+const byId = id => NODES.find(n => n.id === id);
+
+function anc(id, side) {
+  const n = byId(id);
+  switch (side) {
+    case "top":    return [n.x + n.w / 2,   n.y];
+    case "bottom": return [n.x + n.w / 2,   n.y + NH];
+    case "left":   return [n.x,              n.y + NH / 2];
+    case "right":  return [n.x + n.w,        n.y + NH / 2];
+  }
+}
+
+function bezier([fx,fy], fs, [tx,ty], ts) {
+  const dist = Math.sqrt((tx-fx)**2 + (ty-fy)**2);
+  const g = Math.min(dist * 0.38, 80);
+  let [c1x,c1y] = [fx,fy], [c2x,c2y] = [tx,ty];
+  if (fs==="bottom") c1y+=g; else if (fs==="top") c1y-=g;
+  else if (fs==="right") c1x+=g; else c1x-=g;
+  if (ts==="top") c2y-=g; else if (ts==="bottom") c2y+=g;
+  else if (ts==="right") c2x+=g; else c2x-=g;
+  return `M ${fx} ${fy} C ${c1x} ${c1y} ${c2x} ${c2y} ${tx} ${ty}`;
+}
+
+function edgePath(e) {
+  const from = anc(e.from, e.fs);
+  const to   = anc(e.to,   e.ts);
+  if (e.poly !== undefined) {
+    const pts = [from, ...e.poly, to];
+    return pts.map(([x,y],i) => `${i===0?"M":"L"} ${x} ${y}`).join(" ");
+  }
+  return bezier(from, e.fs, to, e.ts);
+}
+
+function edgeMid(e) {
+  const from = anc(e.from, e.fs);
+  const to   = anc(e.to,   e.ts);
+  return [
+    e.lx ?? (from[0]+to[0])/2,
+    e.ly ?? (from[1]+to[1])/2,
+  ];
+}
+
+// ── Edges ─────────────────────────────────────────────────────────────────
+const wTop  = anc("worker",   "top");
+const pgTop = anc("postgres", "top");
+
+const EDGES = [
+  { from:"nextjs",   fs:"bottom", to:"fastapi",  ts:"top",   label:"API requests",  lx:295, ly:110 },
+  { from:"docviewer",fs:"bottom", to:"fastapi",  ts:"top",   label:"fetch chunks",  lx:440, ly:110 },
+  { from:"clerk",    fs:"bottom", to:"fastapi",  ts:"right", label:"JWT verify",    lx:718, ly:158 },
+  { from:"nextjs",   fs:"right",  to:"s3",       ts:"top",   label:"PUT upload",    dashed:true, lx:195, ly:174 },
+  { from:"fastapi",  fs:"left",   to:"postgres", ts:"top",   label:"query / write", lx:195, ly:238 },
+  { from:"fastapi",  fs:"bottom", to:"sqs",      ts:"top",   label:"enqueue job",   lx:424, ly:232 },
+  { from:"sqs",      fs:"right",  to:"worker",   ts:"left" },
+  {
+    from:"worker", fs:"top", to:"postgres", ts:"top",
+    label:"store vectors",
+    poly:[[wTop[0],252],[pgTop[0],252]],
+    lx:Math.round((wTop[0]+pgTop[0])/2), ly:249,
+  },
+  { from:"worker",   fs:"bottom", to:"parser",   ts:"top",   label:"parse doc",     lx:360, ly:388 },
+  { from:"worker",   fs:"bottom", to:"voyage",   ts:"top",   label:"embed chunks",  lx:476, ly:398 },
+  {
+    from:"fastapi", fs:"right",
+    to:"llm_gw",   ts:"right",
+    label:"LLM calls",
+    poly:[[826,173],[826,403]],
+    lx:831, ly:290,
+  },
+  { from:"llm_gw",  fs:"bottom", to:"cohere",   ts:"top",  poly:[] },
+  { from:"llm_gw",  fs:"bottom", to:"bedrock",  ts:"top",  poly:[], label:"Claude", lx:575, ly:449 },
+  { from:"llm_gw",  fs:"bottom", to:"groq",     ts:"top",  poly:[], label:"Llama",  lx:668, ly:449 },
+];
+
+// ── Render ────────────────────────────────────────────────────────────────
+const SVG_NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs={}, parent) {
+  const e = document.createElementNS(SVG_NS, tag);
+  for (const [k,v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function txt(content, attrs={}, parent) {
+  const e = el("text", attrs, parent);
+  e.textContent = content;
+  return e;
+}
+
+const svg = document.getElementById("diagram");
+svg.setAttribute("width",  DW);
+svg.setAttribute("height", DH);
+svg.setAttribute("viewBox", `0 0 ${DW} ${DH}`);
+
+// Arrowhead markers
+const defs = el("defs", {}, svg);
+function makeMarker(id, fill) {
+  const m = el("marker", { id, markerWidth:"9", markerHeight:"9", refX:"8", refY:"4.5", orient:"auto" }, defs);
+  el("path", { d:"M 0 0 L 8 4.5 L 0 9 Z", fill }, m);
+}
+makeMarker("arr",  th.strokeSecondary);
+makeMarker("arrd", th.textTertiary);
+
+// Zones
+const zoneFills = [th.fillQuaternary, th.fillTertiary];
+ZONES.forEach((z,i) => {
+  const g = el("g", {}, svg);
+  el("rect", { x:4, y:z.y, width:DW-8, height:z.h, rx:6,
+    fill:zoneFills[i%2], opacity:0.7 }, g);
+  txt(z.label, {
+    x:DW-12, y:z.y+z.h-9, "text-anchor":"end",
+    "font-size":8, "letter-spacing":0.7, fill:th.textQuaternary,
+    "font-family":"system-ui, -apple-system, sans-serif",
+  }, g);
+});
+
+// Edges
+EDGES.forEach(e => {
+  const g   = el("g", {}, svg);
+  const col = e.dashed ? th.textTertiary : th.strokeSecondary;
+  const attrs = {
+    d: edgePath(e), fill:"none", stroke:col,
+    "stroke-width": e.dashed ? 1.2 : 1.5,
+    "marker-end": `url(#${e.dashed ? "arrd" : "arr"})`,
+  };
+  if (e.dashed) attrs["stroke-dasharray"] = "4 3";
+  el("path", attrs, g);
+  if (e.label) {
+    const [mx,my] = edgeMid(e);
+    txt(e.label, {
+      x:mx+4, y:my, "font-size":9, fill:th.textTertiary,
+      "font-family":"system-ui, -apple-system, sans-serif",
+    }, g);
+  }
+});
+
+// Nodes
+NODES.forEach(n => {
+  const bg = n.accent  ? th.accentPrimary
+           : n.gateway ? th.fillSecondary
+           : th.bgElevated;
+  const fg  = n.accent ? th.textOnAccent : th.textPrimary;
+  const sub = n.accent ? th.textOnAccent : th.textSecondary;
+  const strokeCol = n.accent  ? "none"
+                  : n.gateway ? th.strokeSecondary
+                  : th.strokePrimary;
+  const strokeW = n.gateway ? 1.5 : 1;
+
+  const g = el("g", {}, svg);
+  el("rect", {
+    x:n.x, y:n.y, width:n.w, height:NH, rx:NR,
+    fill:bg, stroke:strokeCol, "stroke-width":strokeW,
+  }, g);
+  txt(n.label, {
+    x:n.x+n.w/2, y:n.y+21, "text-anchor":"middle",
+    "font-size":11.5, "font-weight":600, fill:fg,
+    "font-family":"system-ui, -apple-system, sans-serif",
+  }, g);
+  txt(n.sub, {
+    x:n.x+n.w/2, y:n.y+37, "text-anchor":"middle",
+    "font-size":9, fill:sub, opacity: n.accent ? 0.88 : 1,
+    "font-family":"system-ui, -apple-system, sans-serif",
+  }, g);
+});
+
+// Legend
+const lg = el("g", { transform:`translate(12,${DH-14})` }, svg);
+el("line", { x1:0, y1:-5, x2:22, y2:-5, stroke:th.textTertiary,
+  "stroke-width":1.2, "stroke-dasharray":"4 3" }, lg);
+txt("direct browser → S3 (presigned PUT)", {
+  x:27, y:0, "font-size":9, fill:th.textTertiary,
+  "font-family":"system-ui, -apple-system, sans-serif",
+}, lg);
+
+// ── PNG download ──────────────────────────────────────────────────────────
+function downloadPNG() {
+  const scale = 2;
+  const svgEl = document.getElementById("diagram");
+  const data  = new XMLSerializer().serializeToString(svgEl);
+  const blob  = new Blob([data], { type:"image/svg+xml;charset=utf-8" });
+  const url   = URL.createObjectURL(blob);
+  const img   = new Image();
+  img.onload = () => {
+    const c = document.createElement("canvas");
+    c.width  = DW * scale;
+    c.height = DH * scale;
+    const ctx = c.getContext("2d");
+    ctx.scale(scale, scale);
+    // White background
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, DW, DH);
+    ctx.drawImage(img, 0, 0);
+    URL.revokeObjectURL(url);
+    const a = document.createElement("a");
+    a.download = "legal-doc-navigator-architecture.png";
+    a.href = c.toDataURL("image/png");
+    a.click();
+  };
+  img.src = url;
+}
+</script>
+</body>
+</html>
