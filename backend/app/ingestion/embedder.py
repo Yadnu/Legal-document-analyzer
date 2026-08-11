@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import hashlib
 import math
+from typing import Literal
 
 import httpx
 import structlog
@@ -36,16 +37,26 @@ log = structlog.get_logger(__name__)
 _VOYAGE_URL = "https://api.voyageai.com/v1/embeddings"
 _VOYAGE_BATCH = 128  # max texts per Voyage request
 
+InputType = Literal["document", "query"]
+
 
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
 
 
-async def embed_texts(texts: list[str]) -> list[list[float]]:
+async def embed_texts(
+    texts: list[str],
+    *,
+    input_type: InputType = "document",
+) -> list[list[float]]:
     """Return one embedding vector per text string.
 
     The order of the returned list matches the order of ``texts``.
+    Use ``input_type="query"`` for retrieval queries and ``"document"`` for
+    chunk ingestion so Voyage applies the matching specialization while the
+    underlying model stays the same.
+
     Raises ``RuntimeError`` on provider errors (caller should let the worker
     mark the document as failed and retry).
     """
@@ -53,14 +64,21 @@ async def embed_texts(texts: list[str]) -> list[list[float]]:
         return []
 
     if settings.voyage_api_key:
-        return await _voyage_embed(texts)
+        return await _voyage_embed(texts, input_type=input_type)
 
     log.warning(
         "embedder_using_local_fallback",
         reason="VOYAGE_API_KEY not set",
         text_count=len(texts),
+        input_type=input_type,
     )
     return _local_fallback(texts, settings.embedding_dimensions)
+
+
+async def embed_query(text: str) -> list[float]:
+    """Embed a single retrieval query with the shared embedding model."""
+    vectors = await embed_texts([text], input_type="query")
+    return vectors[0]
 
 
 # ---------------------------------------------------------------------------
@@ -68,7 +86,11 @@ async def embed_texts(texts: list[str]) -> list[list[float]]:
 # ---------------------------------------------------------------------------
 
 
-async def _voyage_embed(texts: list[str]) -> list[list[float]]:
+async def _voyage_embed(
+    texts: list[str],
+    *,
+    input_type: InputType,
+) -> list[list[float]]:
     """Call the Voyage AI embeddings endpoint in batches of _VOYAGE_BATCH."""
     all_vectors: list[list[float]] = []
 
@@ -84,7 +106,7 @@ async def _voyage_embed(texts: list[str]) -> list[list[float]]:
                 json={
                     "model": settings.embedding_model,
                     "input": batch,
-                    "input_type": "document",
+                    "input_type": input_type,
                 },
             )
             if response.status_code != 200:
