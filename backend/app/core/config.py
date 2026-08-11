@@ -67,5 +67,23 @@ class Settings(BaseSettings):
     chunk_max_tokens: int = 512
     chunk_overlap_tokens: int = 64
 
+    # ── Retrieval ─────────────────────────────────────────────────────────────
+    retrieval_dense_top_k: int = 40
+    retrieval_sparse_top_k: int = 40
+    retrieval_rrf_k: int = 60
+    retrieval_rerank_top_n: int = 8
+
+    # ── Cohere Rerank ─────────────────────────────────────────────────────────
+    # Leave empty to use the deterministic local lexical fallback (dev/CI).
+    cohere_api_key: str = ""
+    cohere_rerank_model: str = "rerank-english-v3.0"
+
+    # ── Generation (Bedrock Claude) ───────────────────────────────────────────
+    # Model id for bedrock-runtime Converse. When AWS credentials / the model
+    # are unavailable, generation_service falls back to a local stub for CI.
+    bedrock_model_id: str = "anthropic.claude-3-5-sonnet-20241022-v2:0"
+    generation_max_tokens: int = 1024
+    generation_temperature: float = 0.0
+
 
 settings = Settings()
