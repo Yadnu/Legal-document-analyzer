@@ -75,3 +75,13 @@ async def get_sqs_client() -> AsyncIterator[Any]:
     """
     async with _session.client("sqs", **_client_kwargs()) as client:  # type: ignore
         yield client
+
+
+@asynccontextmanager
+async def get_bedrock_runtime_client() -> AsyncIterator[Any]:
+    """Async context manager that yields an aioboto3 Bedrock Runtime client."""
+    async with _session.client(  # type: ignore
+        "bedrock-runtime",
+        **_client_kwargs(),
+    ) as client:
+        yield client
