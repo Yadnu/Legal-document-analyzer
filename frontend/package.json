@@ -8,14 +8,26 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "postinstall": "node -e \"const fs=require('fs');const src='./node_modules/pdfjs-dist/build/pdf.worker.min.mjs';const dst='./public/pdf.worker.min.mjs';if(fs.existsSync(src)){fs.mkdirSync('./public',{recursive:true});fs.copyFileSync(src,dst);}\" "
   },
   "dependencies": {
     "@clerk/nextjs": "^6",
+    "@tailwindcss/typography": "^0.5.20",
     "@tanstack/react-query": "^5",
+    "@tanstack/react-query-devtools": "^5.101.4",
+    "autoprefixer": "^10.5.4",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.31.0",
     "next": "14.2.18",
+    "pdfjs-dist": "^6.2.108",
+    "postcss": "^8.5.26",
     "react": "^18",
     "react-dom": "^18",
+    "react-pdf": "^10.4.1",
+    "tailwind-merge": "^3.6.0",
+    "tailwindcss": "^3.4.19",
     "zod": "^3"
   },
   "devDependencies": {
