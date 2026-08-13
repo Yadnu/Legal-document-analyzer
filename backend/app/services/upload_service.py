@@ -203,6 +203,40 @@ class UploadService:
         # ── 3. Return DTO ────────────────────────────────────────────────────
         return DocumentResponse.model_validate(doc)
 
+    async def get_view_url(
+        self,
+        *,
+        session: AsyncSession,
+        tenant_id: str,
+        document_id: uuid.UUID,
+    ) -> str:
+        """Return a short-lived presigned S3 GET URL for viewing the document.
+
+        Only issued for documents owned by the requesting tenant.
+        """
+        doc = await document_repo.get_by_id(session, tenant_id, document_id)
+        if doc is None:
+            raise NotFoundError(f"Document {document_id} not found.")
+        try:
+            async with get_s3_client() as s3:
+                url: str = await s3.generate_presigned_url(
+                    "get_object",
+                    Params={
+                        "Bucket": settings.s3_bucket_name,
+                        "Key": doc.s3_key,
+                    },
+                    ExpiresIn=300,
+                )
+        except ClientError as exc:
+            error_code = exc.response.get("Error", {}).get("Code", "unknown")
+            log.error(
+                "s3_view_presign_failed",
+                document_id=str(document_id),
+                error_code=error_code,
+            )
+            raise AwsError("Failed to generate view URL. Please retry.") from exc
+        return url
+
     # ------------------------------------------------------------------
     # Private helpers
     # ------------------------------------------------------------------
