@@ -1,0 +1,93 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-surface-deep text-ink font-sans antialiased;
+    background-image: radial-gradient(
+      ellipse at 20% 0%,
+      rgba(212, 168, 67, 0.04) 0%,
+      transparent 60%
+    );
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-surface-deep;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-ink-faint rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-ink-muted;
+  }
+
+  ::selection {
+    @apply bg-gold/30 text-ink;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gold text-surface-deep
+           font-sans font-medium text-sm transition-all duration-150
+           hover:bg-gold-bright active:scale-95 focus-visible:outline-none
+           focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2
+           focus-visible:ring-offset-surface-deep disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg text-ink-muted
+           font-sans font-medium text-sm transition-all duration-150
+           hover:text-ink hover:bg-surface-hover active:scale-95 focus-visible:outline-none
+           focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-offset-2
+           focus-visible:ring-offset-surface-deep disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  .card {
+    @apply rounded-xl bg-surface-card border border-ink-faint/20 shadow-card;
+  }
+
+  .status-badge {
+    @apply inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-mono font-medium;
+  }
+
+  .disclaimer-bar {
+    @apply text-xs text-ink-muted bg-gold/5 border border-gold/20 rounded-lg px-3 py-2
+           flex items-center gap-2;
+  }
+
+  .citation-chip {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-mono
+           bg-gold/10 text-gold border border-gold/25 cursor-pointer
+           transition-all duration-150 hover:bg-gold/20 hover:border-gold/50
+           hover:shadow-gold;
+  }
+
+  .citation-chip-active {
+    @apply bg-gold/25 border-gold/60 shadow-gold;
+  }
+
+  .highlight-mark {
+    @apply bg-gold/30 rounded px-0.5;
+    box-shadow: 0 0 0 2px rgba(212, 168, 67, 0.2);
+  }
+}
