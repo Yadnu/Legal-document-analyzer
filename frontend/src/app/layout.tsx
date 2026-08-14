@@ -1,5 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
+import { Providers } from "@/components/providers";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Legal Document Navigator",
@@ -13,8 +15,10 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body>{children}</body>
+      <html lang="en" className="dark">
+        <body>
+          <Providers>{children}</Providers>
+        </body>
       </html>
     </ClerkProvider>
   );
