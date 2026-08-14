@@ -28,6 +28,7 @@ from app.schemas.document import (
     DocumentSummary,
     PresignedUploadResponse,
     UploadRequestBody,
+    ViewUrlResponse,
 )
 from app.services.upload_service import upload_service
 
@@ -90,6 +91,21 @@ async def get_document(
     if doc is None:
         raise NotFoundError(f"Document {document_id} not found.")
     return DocumentResponse.model_validate(doc)
+
+
+@router.get("/{document_id}/view-url", response_model=ViewUrlResponse)
+async def get_view_url(
+    document_id: uuid.UUID,
+    tenant: TenantContext = Depends(get_current_tenant),
+    session: AsyncSession = Depends(get_rls_db),
+) -> ViewUrlResponse:
+    """Return a short-lived presigned S3 GET URL for viewing the document in-browser."""
+    url = await upload_service.get_view_url(
+        session=session,
+        tenant_id=tenant.tenant_id,
+        document_id=document_id,
+    )
+    return ViewUrlResponse(document_id=document_id, url=url)
 
 
 @router.get("", response_model=list[DocumentSummary])

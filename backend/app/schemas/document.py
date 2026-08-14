@@ -45,6 +45,14 @@ class DocumentResponse(BaseModel):
     # error_reason is intentionally omitted — never exposed to API consumers
 
 
+class ViewUrlResponse(BaseModel):
+    """Returned by the view-url endpoint."""
+
+    document_id: UUID
+    url: str
+    expires_in: int = 300
+
+
 class DocumentSummary(BaseModel):
     """Lightweight representation used in the list endpoint."""
 
