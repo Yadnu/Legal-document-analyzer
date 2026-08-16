@@ -103,9 +103,16 @@ function MessageBubble({
 interface ChatPanelProps {
   documentId: string;
   onCitationClick: (citation: CitationOut) => void;
+  pendingQuestion?: string | null;
+  onQuestionConsumed?: () => void;
 }
 
-export function ChatPanel({ documentId, onCitationClick }: ChatPanelProps) {
+export function ChatPanel({
+  documentId,
+  onCitationClick,
+  pendingQuestion,
+  onQuestionConsumed,
+}: ChatPanelProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [conversationId, setConversationId] = useState<string | undefined>();
@@ -145,6 +152,19 @@ export function ChatPanel({ documentId, onCitationClick }: ChatPanelProps) {
       ]);
     },
   });
+
+  // Auto-submit questions injected from the PDF viewer ("Explain clause")
+  useEffect(() => {
+    if (!pendingQuestion || query.isPending) return;
+    setMessages((prev) => [
+      ...prev,
+      { id: crypto.randomUUID(), role: "user", content: pendingQuestion },
+    ]);
+    query.mutate(pendingQuestion);
+    onQuestionConsumed?.();
+    // query.mutate and onQuestionConsumed are stable — omitting from deps intentionally
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pendingQuestion]);
 
   function handleCitationClick(c: CitationOut) {
     setActiveCitation((prev) => (prev?.chunk_id === c.chunk_id ? null : c));
