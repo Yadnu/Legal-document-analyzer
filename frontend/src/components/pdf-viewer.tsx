@@ -1,24 +1,34 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
-import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Loader2, Sparkles } from "lucide-react";
 import { getViewUrl } from "@/lib/api";
 import type { CitationOut } from "@/lib/types";
 
 // Inner renderer — dynamically loaded (no SSR) to avoid Next.js canvas issues
 const PdfRenderer = dynamic(() => import("./pdf-renderer"), { ssr: false });
 
+const MAX_EXPLAIN_CHARS = 2000;
+
+interface SelectionInfo {
+  text: string;
+  x: number;
+  y: number;
+}
+
 interface PdfViewerProps {
   documentId: string;
   activeCitation: CitationOut | null;
+  onExplainClause?: (text: string) => void;
 }
 
-export function PdfViewer({ documentId, activeCitation }: PdfViewerProps) {
+export function PdfViewer({ documentId, activeCitation, onExplainClause }: PdfViewerProps) {
   const [numPages, setNumPages] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const [scale, setScale] = useState(1.0);
+  const [selectionInfo, setSelectionInfo] = useState<SelectionInfo | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { data: viewData, isLoading: urlLoading } = useQuery({
@@ -33,6 +43,51 @@ export function PdfViewer({ documentId, activeCitation }: PdfViewerProps) {
       containerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [activeCitation]);
+
+  // Detect text selection in the PDF text layer
+  const handleMouseUp = useCallback(() => {
+    const selection = window.getSelection();
+    const text = selection?.toString().trim() ?? "";
+
+    if (!text || !selection || selection.rangeCount === 0) {
+      setSelectionInfo(null);
+      return;
+    }
+
+    // Only respond to selections inside our container
+    const range = selection.getRangeAt(0);
+    const container = containerRef.current;
+    if (!container || !container.contains(range.commonAncestorContainer)) {
+      setSelectionInfo(null);
+      return;
+    }
+
+    const rect = range.getBoundingClientRect();
+    setSelectionInfo({
+      text: text.slice(0, MAX_EXPLAIN_CHARS),
+      // Position the button centred above the selection
+      x: rect.left + rect.width / 2,
+      y: rect.top - 8,
+    });
+  }, []);
+
+  // Clear selection tooltip when clicking outside
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      const explainBtn = document.getElementById("explain-clause-btn");
+      if (explainBtn && explainBtn.contains(e.target as Node)) return;
+      setSelectionInfo(null);
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  function handleExplain() {
+    if (!selectionInfo || !onExplainClause) return;
+    onExplainClause(selectionInfo.text);
+    window.getSelection()?.removeAllRanges();
+    setSelectionInfo(null);
+  }
 
   return (
     <div className="flex flex-col h-full bg-surface-deep">
@@ -92,9 +147,37 @@ export function PdfViewer({ documentId, activeCitation }: PdfViewerProps) {
         )}
       </div>
 
+      {/* Floating "Explain" tooltip — fixed position so it escapes overflow:hidden */}
+      {selectionInfo && onExplainClause && (
+        <div
+          id="explain-clause-btn"
+          style={{
+            position: "fixed",
+            left: selectionInfo.x,
+            top: selectionInfo.y,
+            transform: "translate(-50%, -100%)",
+            zIndex: 50,
+          }}
+          className="flex flex-col items-center gap-1 pointer-events-auto"
+        >
+          <button
+            onClick={handleExplain}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+                       bg-surface-card border border-gold/40 text-gold text-xs font-sans font-medium
+                       shadow-gold hover:bg-gold/10 transition-all duration-150 whitespace-nowrap"
+          >
+            <Sparkles size={12} />
+            Explain in plain English
+          </button>
+          {/* small arrow */}
+          <div className="w-2 h-2 bg-surface-card border-r border-b border-gold/40 rotate-45 -mt-1.5" />
+        </div>
+      )}
+
       {/* Canvas area */}
       <div
         ref={containerRef}
+        onMouseUp={handleMouseUp}
         className="flex-1 overflow-auto flex justify-center items-start p-6"
         style={{
           background:

@@ -15,6 +15,7 @@ interface DocLayoutProps {
 
 export function DocLayout({ documentId }: DocLayoutProps) {
   const [activeCitation, setActiveCitation] = useState<CitationOut | null>(null);
+  const [pendingQuestion, setPendingQuestion] = useState<string | null>(null);
 
   const { data: doc } = useQuery({
     queryKey: ["document", documentId],
@@ -61,12 +62,22 @@ export function DocLayout({ documentId }: DocLayoutProps) {
       {/* Split view */}
       <div className="flex-1 min-h-0 grid grid-cols-[1fr_420px]">
         {/* PDF viewer — left panel */}
-        <PdfViewer documentId={documentId} activeCitation={activeCitation} />
+        <PdfViewer
+          documentId={documentId}
+          activeCitation={activeCitation}
+          onExplainClause={(text) =>
+            setPendingQuestion(
+              `Explain this clause in plain English:\n\n"${text}"`
+            )
+          }
+        />
 
         {/* Chat panel — right panel */}
         <ChatPanel
           documentId={documentId}
           onCitationClick={handleCitationClick}
+          pendingQuestion={pendingQuestion}
+          onQuestionConsumed={() => setPendingQuestion(null)}
         />
       </div>
     </div>
