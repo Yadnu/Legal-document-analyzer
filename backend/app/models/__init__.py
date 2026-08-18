@@ -8,6 +8,7 @@ from app.models.document import Document, DocumentStatus
 from app.models.message import Message, MessageRole
 from app.models.obligation import Obligation
 from app.models.organization import Organization
+from app.models.summary import DocumentSummaryCard
 from app.models.user import User
 
 __all__ = [
@@ -16,6 +17,7 @@ __all__ = [
     "Conversation",
     "Document",
     "DocumentStatus",
+    "DocumentSummaryCard",
     "Message",
     "MessageRole",
     "Obligation",
