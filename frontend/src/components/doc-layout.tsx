@@ -8,6 +8,7 @@ import { getDocument } from "@/lib/api";
 import type { CitationOut } from "@/lib/types";
 import { PdfViewer } from "./pdf-viewer";
 import { ChatPanel } from "./chat-panel";
+import { SummaryCard } from "./summary-card";
 
 interface DocLayoutProps {
   documentId: string;
@@ -72,13 +73,30 @@ export function DocLayout({ documentId }: DocLayoutProps) {
           }
         />
 
-        {/* Chat panel — right panel */}
-        <ChatPanel
-          documentId={documentId}
-          onCitationClick={handleCitationClick}
-          pendingQuestion={pendingQuestion}
-          onQuestionConsumed={() => setPendingQuestion(null)}
-        />
+        {/* Right panel: summary card + chat */}
+        <div className="flex flex-col overflow-hidden border-l border-surface-card">
+          {/* Summary card — collapsible strip at the top */}
+          <div className="shrink-0 overflow-y-auto max-h-[45%] border-b border-surface-card">
+            <SummaryCard
+              documentId={documentId}
+              onJumpToChunk={(_chunkId, quote) => {
+                if (quote) {
+                  setPendingQuestion(
+                    `Explain this clause in plain English:\n\n"${quote}"`
+                  );
+                }
+              }}
+            />
+          </div>
+
+          {/* Chat panel */}
+          <ChatPanel
+            documentId={documentId}
+            onCitationClick={handleCitationClick}
+            pendingQuestion={pendingQuestion}
+            onQuestionConsumed={() => setPendingQuestion(null)}
+          />
+        </div>
       </div>
     </div>
   );

@@ -185,7 +185,7 @@ export function ChatPanel({
   }
 
   return (
-    <div className="flex flex-col h-full bg-surface border-l border-ink-faint/20">
+    <div className="flex flex-col h-full bg-surface flex-1 min-h-0">
       {/* Panel header */}
       <div className="px-4 py-3 border-b border-ink-faint/20 shrink-0">
         <h3 className="font-display text-base text-ink">Ask a question</h3>
