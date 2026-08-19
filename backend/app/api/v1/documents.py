@@ -30,6 +30,8 @@ from app.schemas.document import (
     UploadRequestBody,
     ViewUrlResponse,
 )
+from app.schemas.summary import DocumentSummaryCardResponse
+from app.services import extraction_service
 from app.services.upload_service import upload_service
 
 router = APIRouter(prefix="/documents", tags=["documents"])
@@ -106,6 +108,29 @@ async def get_view_url(
         document_id=document_id,
     )
     return ViewUrlResponse(document_id=document_id, url=url)
+
+
+@router.get("/{document_id}/summary", response_model=DocumentSummaryCardResponse)
+async def get_summary(
+    document_id: uuid.UUID,
+    tenant: TenantContext = Depends(get_current_tenant),
+    session: AsyncSession = Depends(get_rls_db),
+) -> DocumentSummaryCardResponse:
+    """Return the structured summary card for a document.
+
+    If no cached extraction exists (or it is older than 24 h), extraction
+    runs inline — expect ~10 s on first call.  Subsequent calls return
+    immediately from the cache.
+
+    Returns 404 if the document does not exist for this tenant.
+    Returns 422 if the document status is not ``ready``.
+    """
+    card = await extraction_service.get_or_extract(
+        session=session,
+        tenant_id=tenant.tenant_id,
+        document_id=document_id,
+    )
+    return DocumentSummaryCardResponse.from_card(card)
 
 
 @router.get("", response_model=list[DocumentSummary])
