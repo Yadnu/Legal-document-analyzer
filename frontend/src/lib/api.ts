@@ -5,6 +5,7 @@
 import type {
   DocumentResponse,
   DocumentSummary,
+  DocumentSummaryCard,
   PresignedUploadResponse,
   QueryRequest,
   QueryResponse,
@@ -74,6 +75,12 @@ export async function confirmUpload(
   return apiFetch<DocumentResponse>(`/api/upload/confirm/${documentId}`, {
     method: "POST",
   });
+}
+
+export async function getDocumentSummary(
+  id: string
+): Promise<DocumentSummaryCard> {
+  return apiFetch<DocumentSummaryCard>(`/api/documents/${id}/summary`);
 }
 
 // ── Query ──────────────────────────────────────────────────────────────────

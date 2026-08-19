@@ -50,6 +50,25 @@ export interface QueryResponse {
   citations: CitationOut[];
 }
 
+export interface SummaryField {
+  value: string | null;
+  chunk_id: string | null;
+  section: string | null;
+  quote: string | null;
+}
+
+export interface DocumentSummaryCard {
+  document_id: string;
+  parties: SummaryField;
+  effective_date: SummaryField;
+  term_length: SummaryField;
+  payment_terms: SummaryField;
+  termination_rights: SummaryField;
+  liability_caps: SummaryField;
+  governing_law: SummaryField;
+  extracted_at: string;
+}
+
 export interface ChatMessage {
   id: string;
   role: "user" | "assistant";
