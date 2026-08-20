@@ -79,12 +79,14 @@ export function DocLayout({ documentId }: DocLayoutProps) {
           <div className="shrink-0 overflow-y-auto max-h-[45%] border-b border-surface-card">
             <SummaryCard
               documentId={documentId}
-              onJumpToChunk={(_chunkId, quote) => {
-                if (quote) {
-                  setPendingQuestion(
-                    `Explain this clause in plain English:\n\n"${quote}"`
-                  );
-                }
+              onJumpToChunk={(chunkId, quote) => {
+                // Highlight the clause in the PDF viewer
+                setActiveCitation({
+                  document_id: documentId,
+                  chunk_id: chunkId,
+                  section: null,
+                  quote: quote ?? "",
+                });
               }}
             />
           </div>
