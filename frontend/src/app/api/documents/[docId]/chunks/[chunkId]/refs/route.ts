@@ -1,0 +1,18 @@
+import { NextRequest, NextResponse } from "next/server";
+import { backendFetch } from "@/lib/backend";
+
+interface Params {
+  params: Promise<{ docId: string; chunkId: string }>;
+}
+
+export async function GET(
+  _req: NextRequest,
+  { params }: Params
+): Promise<NextResponse> {
+  const { docId, chunkId } = await params;
+  const res = await backendFetch(
+    `/api/v1/documents/${docId}/chunks/${chunkId}/refs`
+  );
+  const data: unknown = await res.json();
+  return NextResponse.json(data, { status: res.status });
+}

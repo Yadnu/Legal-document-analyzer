@@ -9,6 +9,7 @@ import type { CitationOut } from "@/lib/types";
 import { PdfViewer } from "./pdf-viewer";
 import { ChatPanel } from "./chat-panel";
 import { SummaryCard } from "./summary-card";
+import { CrossRefPanel } from "./cross-ref-panel";
 
 interface DocLayoutProps {
   documentId: string;
@@ -90,6 +91,17 @@ export function DocLayout({ documentId }: DocLayoutProps) {
               }}
             />
           </div>
+
+          {/* Cross-reference panel — visible only when a citation is active */}
+          {activeCitation && (
+            <div className="shrink-0 overflow-y-auto max-h-[35%] border-b border-surface-card">
+              <CrossRefPanel
+                documentId={documentId}
+                citation={activeCitation}
+                onJumpToRef={(ref) => setActiveCitation(ref)}
+              />
+            </div>
+          )}
 
           {/* Chat panel */}
           <ChatPanel
