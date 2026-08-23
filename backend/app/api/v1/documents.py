@@ -23,6 +23,7 @@ from app.core.exceptions import NotFoundError
 from app.db.session import get_rls_db
 from app.repositories import document_repo
 from app.schemas.auth import TenantContext, UserContext
+from app.schemas.cross_ref import ChunkRefsResponse
 from app.schemas.document import (
     DocumentResponse,
     DocumentSummary,
@@ -31,7 +32,7 @@ from app.schemas.document import (
     ViewUrlResponse,
 )
 from app.schemas.summary import DocumentSummaryCardResponse
-from app.services import extraction_service
+from app.services import cross_ref_service, extraction_service
 from app.services.upload_service import upload_service
 
 router = APIRouter(prefix="/documents", tags=["documents"])
@@ -131,6 +132,30 @@ async def get_summary(
         document_id=document_id,
     )
     return DocumentSummaryCardResponse.from_card(card)
+
+
+@router.get(
+    "/{document_id}/chunks/{chunk_id}/refs",
+    response_model=ChunkRefsResponse,
+)
+async def get_chunk_refs(
+    document_id: uuid.UUID,
+    chunk_id: uuid.UUID,
+    tenant: TenantContext = Depends(get_current_tenant),
+    session: AsyncSession = Depends(get_rls_db),
+) -> ChunkRefsResponse:
+    """Resolve all cross-references stored on a chunk.
+
+    Returns an empty ``refs`` list when the chunk contains no cross-references.
+    Unresolvable references are included with ``target_chunk_id: null``.
+    Returns 404 if the chunk does not exist for this tenant + document.
+    """
+    return await cross_ref_service.get_resolved_refs(
+        session=session,
+        tenant_id=tenant.tenant_id,
+        document_id=document_id,
+        chunk_id=chunk_id,
+    )
 
 
 @router.get("", response_model=list[DocumentSummary])

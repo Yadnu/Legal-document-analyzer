@@ -10,6 +10,7 @@ Transaction ownership stays with the caller (ingestion service).
 
 from __future__ import annotations
 
+import re
 import uuid
 from dataclasses import dataclass
 
@@ -220,6 +221,114 @@ async def sparse_search(
     )
     rows = result.mappings().all()
     return [_row_to_ranked(row, score=float(row["rank"])) for row in rows]
+
+
+async def get_by_id(
+    session: AsyncSession,
+    tenant_id: str,
+    chunk_id: uuid.UUID,
+) -> Chunk | None:
+    """Fetch a single chunk by id, always filtered by tenant."""
+    result = await session.execute(
+        select(Chunk).where(
+            col(Chunk.tenant_id) == tenant_id,
+            col(Chunk.id) == chunk_id,
+        )
+    )
+    return result.scalar_one_or_none()
+
+
+async def resolve_refs(
+    session: AsyncSession,
+    tenant_id: str,
+    document_id: uuid.UUID,
+    refs: list[str],
+) -> dict[str, Chunk | None]:
+    """Resolve raw cross-ref strings to their target chunks in the same document.
+
+    Resolution order per ref:
+    1. Exact ``section_number`` match on the normalised key (e.g. "3.2").
+    2. Prefix ``section_number LIKE '<key>.%'`` (e.g. "3" → "3.1", "3.2").
+    3. Case-insensitive ``heading ILIKE '%<raw>%'`` (catches Exhibit B, Schedule 1).
+    4. ``None`` if nothing matches.
+
+    Returns a dict keyed by the *original* raw ref string.
+    """
+    if not refs:
+        return {}
+
+    # Deduplicate while preserving order
+    unique_refs: list[str] = []
+    seen: set[str] = set()
+    for r in refs:
+        if r not in seen:
+            seen.add(r)
+            unique_refs.append(r)
+
+    results: dict[str, Chunk | None] = {}
+
+    for raw in unique_refs:
+        normalised = _normalise_ref(raw)
+        chunk = await _resolve_single(
+            session, tenant_id, document_id, raw, normalised
+        )
+        results[raw] = chunk
+
+    return results
+
+
+_REF_PREFIX_RE = re.compile(
+    r"^\s*(?:section|article|clause|schedule|exhibit|appendix|annex|part)\s+",
+    re.IGNORECASE,
+)
+
+
+def _normalise_ref(raw: str) -> str:
+    """Strip keyword prefix; return just the identifier (e.g. '3.2', 'B')."""
+    return _REF_PREFIX_RE.sub("", raw).strip().rstrip(".,;:")
+
+
+async def _resolve_single(
+    session: AsyncSession,
+    tenant_id: str,
+    document_id: uuid.UUID,
+    raw: str,
+    normalised: str,
+) -> Chunk | None:
+    # 1. Exact section_number match
+    row = await session.execute(
+        select(Chunk).where(
+            col(Chunk.tenant_id) == tenant_id,
+            col(Chunk.document_id) == document_id,
+            col(Chunk.section_number) == normalised,
+        ).limit(1)
+    )
+    chunk = row.scalar_one_or_none()
+    if chunk:
+        return chunk
+
+    # 2. Prefix match: section_number LIKE '<normalised>.%'
+    prefix = normalised + ".%"
+    row = await session.execute(
+        select(Chunk).where(
+            col(Chunk.tenant_id) == tenant_id,
+            col(Chunk.document_id) == document_id,
+            col(Chunk.section_number).like(prefix),
+        ).order_by(col(Chunk.section_number)).limit(1)
+    )
+    chunk = row.scalar_one_or_none()
+    if chunk:
+        return chunk
+
+    # 3. Heading ILIKE '%<raw>%'
+    row = await session.execute(
+        select(Chunk).where(
+            col(Chunk.tenant_id) == tenant_id,
+            col(Chunk.document_id) == document_id,
+            col(Chunk.heading).ilike(f"%{raw}%"),
+        ).limit(1)
+    )
+    return row.scalar_one_or_none()
 
 
 async def get_by_ids(
