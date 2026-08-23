@@ -50,6 +50,22 @@ export interface QueryResponse {
   citations: CitationOut[];
 }
 
+export interface ResolvedRef {
+  raw: string;
+  normalised: string;
+  target_chunk_id: string | null;
+  target_section: string | null;
+  target_heading: string | null;
+  target_page: number | null;
+  target_content: string | null;
+}
+
+export interface ChunkRefsResponse {
+  chunk_id: string;
+  document_id: string;
+  refs: ResolvedRef[];
+}
+
 export interface SummaryField {
   value: string | null;
   chunk_id: string | null;

@@ -3,6 +3,7 @@
  * These never talk directly to FastAPI — auth is handled server-side.
  */
 import type {
+  ChunkRefsResponse,
   DocumentResponse,
   DocumentSummary,
   DocumentSummaryCard,
@@ -75,6 +76,15 @@ export async function confirmUpload(
   return apiFetch<DocumentResponse>(`/api/upload/confirm/${documentId}`, {
     method: "POST",
   });
+}
+
+export async function getChunkRefs(
+  docId: string,
+  chunkId: string
+): Promise<ChunkRefsResponse> {
+  return apiFetch<ChunkRefsResponse>(
+    `/api/documents/${docId}/chunks/${chunkId}/refs`
+  );
 }
 
 export async function getDocumentSummary(
