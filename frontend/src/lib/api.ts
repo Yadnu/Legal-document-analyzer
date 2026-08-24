@@ -93,6 +93,10 @@ export async function getDocumentSummary(
   return apiFetch<DocumentSummaryCard>(`/api/documents/${id}/summary`);
 }
 
+export async function listConversations(): Promise<import("./types").ConversationSummary[]> {
+  return apiFetch("/api/conversations");
+}
+
 // ── Query ──────────────────────────────────────────────────────────────────
 
 export async function askQuestion(body: QueryRequest): Promise<QueryResponse> {
