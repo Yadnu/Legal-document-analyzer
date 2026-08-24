@@ -13,10 +13,13 @@ import { CrossRefPanel } from "./cross-ref-panel";
 
 interface DocLayoutProps {
   documentId: string;
+  initialCitation?: CitationOut;
 }
 
-export function DocLayout({ documentId }: DocLayoutProps) {
-  const [activeCitation, setActiveCitation] = useState<CitationOut | null>(null);
+export function DocLayout({ documentId, initialCitation }: DocLayoutProps) {
+  const [activeCitation, setActiveCitation] = useState<CitationOut | null>(
+    initialCitation ?? null
+  );
   const [pendingQuestion, setPendingQuestion] = useState<string | null>(null);
 
   const { data: doc } = useQuery({
