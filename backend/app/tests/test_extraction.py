@@ -20,6 +20,7 @@ from httpx import ASGITransport, AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import NullPool
+from sqlmodel import col
 
 from app.core.config import settings
 from app.core.deps import get_current_tenant, get_current_user
@@ -195,9 +196,9 @@ async def test_extraction_citations_are_valid(
 
     # Collect all chunk IDs for the document from the DB
     result = await tenant_session.execute(
-        select(Chunk.id).where(
-            Chunk.tenant_id == FAKE_TENANT.tenant_id,
-            Chunk.document_id == doc_id,
+        select(col(Chunk.id)).where(
+            col(Chunk.tenant_id) == FAKE_TENANT.tenant_id,
+            col(Chunk.document_id) == doc_id,
         )
     )
     valid_chunk_ids = {str(row[0]) for row in result}
@@ -275,6 +276,7 @@ async def test_extraction_tenant_isolation(
 
     # Trigger extraction for FAKE_TENANT to populate the cache
     from app.services.extraction_service import get_or_extract
+
     card = await get_or_extract(tenant_session, FAKE_TENANT.tenant_id, doc_id)
     assert card is not None
 

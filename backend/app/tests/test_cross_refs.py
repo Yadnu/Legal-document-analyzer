@@ -19,6 +19,7 @@ from httpx import ASGITransport, AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import NullPool
+from sqlmodel import col
 
 from app.core.config import settings
 from app.core.deps import get_current_tenant, get_current_user
@@ -175,8 +176,8 @@ async def _seed_doc_with_chunks(
     # Retrieve inserted chunks to get their IDs
     result = await session.execute(
         select(Chunk).where(
-            Chunk.tenant_id == tenant_id,
-            Chunk.document_id == doc.id,
+            col(Chunk.tenant_id) == tenant_id,
+            col(Chunk.document_id) == doc.id,
         )
     )
     db_chunks = result.scalars().all()
@@ -206,9 +207,7 @@ async def test_resolve_exact_section(
     doc_id, ids = await _seed_doc_with_chunks(tenant_session, FAKE_TENANT.tenant_id)
     chunk_id = ids["payment"]  # has cross_refs=["Section 2.1"]
 
-    resp = await authed_client.get(
-        f"/api/v1/documents/{doc_id}/chunks/{chunk_id}/refs"
-    )
+    resp = await authed_client.get(f"/api/v1/documents/{doc_id}/chunks/{chunk_id}/refs")
     assert resp.status_code == 200
     body = resp.json()
     assert body["chunk_id"] == str(chunk_id)
@@ -228,9 +227,7 @@ async def test_resolve_exhibit(
     doc_id, ids = await _seed_doc_with_chunks(tenant_session, FAKE_TENANT.tenant_id)
     chunk_id = ids["termination"]  # has cross_refs=["Exhibit B", "Section 2.1"]
 
-    resp = await authed_client.get(
-        f"/api/v1/documents/{doc_id}/chunks/{chunk_id}/refs"
-    )
+    resp = await authed_client.get(f"/api/v1/documents/{doc_id}/chunks/{chunk_id}/refs")
     assert resp.status_code == 200
     body = resp.json()
     ref_raws = [r["raw"] for r in body["refs"]]
@@ -249,6 +246,7 @@ async def test_resolve_unresolvable(
 
     # Manually insert a chunk with an unresolvable ref
     from sqlalchemy import text as sqla_text
+
     await set_tenant_context(tenant_session, FAKE_TENANT.tenant_id)
     bad_chunk_id = uuid.uuid4()
     # section_number="5" so it won't match "Section 99" in its own cross_ref
@@ -300,9 +298,7 @@ async def test_resolve_empty_refs(
     doc_id, ids = await _seed_doc_with_chunks(tenant_session, FAKE_TENANT.tenant_id)
     chunk_id = ids["definitions"]  # cross_refs=[]
 
-    resp = await authed_client.get(
-        f"/api/v1/documents/{doc_id}/chunks/{chunk_id}/refs"
-    )
+    resp = await authed_client.get(f"/api/v1/documents/{doc_id}/chunks/{chunk_id}/refs")
     assert resp.status_code == 200
     assert resp.json()["refs"] == []
 
@@ -315,9 +311,7 @@ async def test_resolve_requires_auth(unauthed_client: AsyncClient):
     assert resp.status_code == 401
 
 
-async def test_resolve_tenant_isolation(
-    tenant_session: AsyncSession, db_engine
-):
+async def test_resolve_tenant_isolation(tenant_session: AsyncSession, db_engine):
     """Tenant B cannot resolve refs from Tenant A's document."""
     doc_id, ids = await _seed_doc_with_chunks(tenant_session, FAKE_TENANT.tenant_id)
     chunk_id = ids["payment"]

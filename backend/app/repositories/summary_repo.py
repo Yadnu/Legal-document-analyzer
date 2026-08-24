@@ -11,6 +11,7 @@ from datetime import UTC, datetime
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import col
 
 from app.models.summary import DocumentSummaryCard
 
@@ -34,10 +35,10 @@ async def get_for_document(
     result = await session.execute(
         select(DocumentSummaryCard)
         .where(
-            DocumentSummaryCard.tenant_id == tenant_id,
-            DocumentSummaryCard.document_id == document_id,
+            col(DocumentSummaryCard.tenant_id) == tenant_id,
+            col(DocumentSummaryCard.document_id) == document_id,
         )
-        .order_by(DocumentSummaryCard.extracted_at.desc())
+        .order_by(col(DocumentSummaryCard.extracted_at).desc())
         .limit(1)
     )
     return result.scalar_one_or_none()

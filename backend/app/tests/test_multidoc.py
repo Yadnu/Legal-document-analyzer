@@ -21,6 +21,7 @@ from httpx import ASGITransport, AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import NullPool
+from sqlmodel import col
 
 from app.core.config import settings
 from app.core.deps import get_current_tenant, get_current_user
@@ -200,9 +201,9 @@ async def test_cross_doc_citations_include_document_title(
     body = resp.json()
     assert len(body["citations"]) >= 1
     for cit in body["citations"]:
-        assert cit["document_title"] is not None, (
-            f"Expected document_title on citation {cit}"
-        )
+        assert (
+            cit["document_title"] is not None
+        ), f"Expected document_title on citation {cit}"
         assert cit["document_title"] == "NDA Agreement"
 
 
@@ -230,7 +231,7 @@ async def test_workspace_conversation_has_null_document_id(
 
     # Fetch conversation directly from DB and verify document_id is NULL
     result = await tenant_session.execute(
-        select(Conversation).where(Conversation.id == uuid.UUID(conv_id))
+        select(Conversation).where(col(Conversation.id) == uuid.UUID(conv_id))
     )
     conv = result.scalar_one_or_none()
     assert conv is not None

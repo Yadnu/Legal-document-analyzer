@@ -125,9 +125,7 @@ async def get_or_extract(
             val["section"] = None
 
     # ── 6. Persist and return ─────────────────────────────────────────────────
-    card = await summary_repo.upsert(
-        session, tenant_id, document_id, fields
-    )
+    card = await summary_repo.upsert(session, tenant_id, document_id, fields)
     await session.commit()
 
     log.info(

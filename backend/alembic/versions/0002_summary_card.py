@@ -60,12 +60,8 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.execute(
-        "DROP POLICY IF EXISTS tenant_isolation ON document_summary_cards"
-    )
-    op.execute(
-        "ALTER TABLE document_summary_cards DISABLE ROW LEVEL SECURITY"
-    )
+    op.execute("DROP POLICY IF EXISTS tenant_isolation ON document_summary_cards")
+    op.execute("ALTER TABLE document_summary_cards DISABLE ROW LEVEL SECURITY")
     op.drop_index(
         "ix_document_summary_cards_document_id",
         table_name="document_summary_cards",

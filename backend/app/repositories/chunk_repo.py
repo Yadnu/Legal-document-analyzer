@@ -269,9 +269,7 @@ async def resolve_refs(
 
     for raw in unique_refs:
         normalised = _normalise_ref(raw)
-        chunk = await _resolve_single(
-            session, tenant_id, document_id, raw, normalised
-        )
+        chunk = await _resolve_single(session, tenant_id, document_id, raw, normalised)
         results[raw] = chunk
 
     return results
@@ -297,11 +295,13 @@ async def _resolve_single(
 ) -> Chunk | None:
     # 1. Exact section_number match
     row = await session.execute(
-        select(Chunk).where(
+        select(Chunk)
+        .where(
             col(Chunk.tenant_id) == tenant_id,
             col(Chunk.document_id) == document_id,
             col(Chunk.section_number) == normalised,
-        ).limit(1)
+        )
+        .limit(1)
     )
     chunk = row.scalar_one_or_none()
     if chunk:
@@ -310,11 +310,14 @@ async def _resolve_single(
     # 2. Prefix match: section_number LIKE '<normalised>.%'
     prefix = normalised + ".%"
     row = await session.execute(
-        select(Chunk).where(
+        select(Chunk)
+        .where(
             col(Chunk.tenant_id) == tenant_id,
             col(Chunk.document_id) == document_id,
             col(Chunk.section_number).like(prefix),
-        ).order_by(col(Chunk.section_number)).limit(1)
+        )
+        .order_by(col(Chunk.section_number))
+        .limit(1)
     )
     chunk = row.scalar_one_or_none()
     if chunk:
@@ -322,11 +325,13 @@ async def _resolve_single(
 
     # 3. Heading ILIKE '%<raw>%'
     row = await session.execute(
-        select(Chunk).where(
+        select(Chunk)
+        .where(
             col(Chunk.tenant_id) == tenant_id,
             col(Chunk.document_id) == document_id,
             col(Chunk.heading).ilike(f"%{raw}%"),
-        ).limit(1)
+        )
+        .limit(1)
     )
     return row.scalar_one_or_none()
 

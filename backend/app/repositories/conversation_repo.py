@@ -48,9 +48,9 @@ async def list_workspace_conversations(
     Returns a list of (Conversation, message_count) tuples.
     """
     msg_count = (
-        select(func.count(Message.id))
+        select(func.count(col(Message.id)))
         .where(
-            col(Message.conversation_id) == Conversation.id,
+            col(Message.conversation_id) == col(Conversation.id),
             col(Message.tenant_id) == tenant_id,
         )
         .correlate(Conversation)
