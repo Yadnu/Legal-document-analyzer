@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -21,6 +22,7 @@ class CitationOut(BaseModel):
     chunk_id: UUID
     section: str | None = None
     quote: str
+    document_title: str | None = None
 
 
 class QueryResponse(BaseModel):
@@ -29,3 +31,12 @@ class QueryResponse(BaseModel):
     answer: str
     not_found: bool
     citations: list[CitationOut]
+
+
+class ConversationSummary(BaseModel):
+    """Lightweight DTO for listing workspace conversations."""
+
+    id: UUID
+    title: str | None = None
+    created_at: datetime
+    message_count: int = 0

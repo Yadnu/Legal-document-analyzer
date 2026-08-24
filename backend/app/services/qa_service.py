@@ -97,6 +97,11 @@ async def ask(
         latency_ms=latency_ms,
     )
 
+    # Enrich citations with document titles (single batch fetch)
+    cited_doc_ids = list({c.document_id for c in result.citations})
+    docs = await document_repo.get_many_by_ids(session, tenant_id, cited_doc_ids)
+    title_map: dict[uuid.UUID, str] = {d.id: d.title for d in docs}
+
     return QueryResponse(
         conversation_id=conversation.id,
         message_id=assistant.id,
@@ -108,6 +113,7 @@ async def ask(
                 chunk_id=c.chunk_id,
                 section=c.section,
                 quote=c.quote,
+                document_title=title_map.get(c.document_id),
             )
             for c in result.citations
         ],

@@ -129,6 +129,26 @@ async def list_for_tenant(
     return list(result.scalars().all())
 
 
+async def get_many_by_ids(
+    session: AsyncSession,
+    tenant_id: str,
+    doc_ids: list[uuid.UUID],
+) -> list[Document]:
+    """Return documents matching any of ``doc_ids`` for the given tenant.
+
+    Missing IDs are silently skipped (e.g. deleted docs).
+    """
+    if not doc_ids:
+        return []
+    result = await session.execute(
+        select(Document).where(
+            col(Document.tenant_id) == tenant_id,
+            col(Document.id).in_(doc_ids),
+        )
+    )
+    return list(result.scalars().all())
+
+
 async def set_status(
     session: AsyncSession,
     tenant_id: str,
