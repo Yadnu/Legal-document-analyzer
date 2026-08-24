@@ -34,6 +34,14 @@ export interface CitationOut {
   chunk_id: string;
   section: string | null;
   quote: string;
+  document_title?: string | null;
+}
+
+export interface ConversationSummary {
+  id: string;
+  title: string | null;
+  created_at: string;
+  message_count: number;
 }
 
 export interface QueryRequest {
