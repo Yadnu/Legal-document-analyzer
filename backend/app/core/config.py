@@ -85,5 +85,15 @@ class Settings(BaseSettings):
     generation_max_tokens: int = 1024
     generation_temperature: float = 0.0
 
+    # ── SES (deadline reminders) ──────────────────────────────────────────────
+    # Set SES_ENABLED=true in production. In dev / CI the reminder service
+    # logs the email instead of sending it so no real emails are fired.
+    ses_enabled: bool = False
+    ses_from_address: str = "reminders@example.com"
+
+    # ── Reminder scheduler ────────────────────────────────────────────────────
+    # How often (minutes) the worker checks for due obligation reminders.
+    reminder_check_interval_minutes: int = 60
+
 
 settings = Settings()

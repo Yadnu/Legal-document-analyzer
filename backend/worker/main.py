@@ -26,6 +26,7 @@ from app.db.rls import set_tenant_context
 from app.infra.aws import get_sqs_client
 from app.models.document import DocumentStatus
 from app.repositories import document_repo
+from app.worker.scheduler import build_scheduler
 
 log = structlog.get_logger(__name__)
 
@@ -162,7 +163,7 @@ async def _delete_message(sqs, receipt: str) -> None:  # type: ignore[no-untyped
 
 
 async def run() -> None:
-    """Start the long-polling worker loop.
+    """Start the long-polling worker loop with the reminder scheduler.
 
     Runs indefinitely until the process is killed (SIGTERM / Ctrl-C).
     """
@@ -173,9 +174,21 @@ async def run() -> None:
         log.error("worker_no_queue_url_configured")
         raise RuntimeError("SQS_QUEUE_URL is not configured — cannot start worker.")
 
-    async with get_sqs_client() as sqs:
-        while True:
-            await _poll_once(sqs)
+    # Start the APScheduler deadline reminder job.
+    scheduler = build_scheduler(_AsyncSession)
+    scheduler.start()
+    log.info(
+        "scheduler_started",
+        interval_minutes=settings.reminder_check_interval_minutes,
+    )
+
+    try:
+        async with get_sqs_client() as sqs:
+            while True:
+                await _poll_once(sqs)
+    finally:
+        scheduler.shutdown(wait=False)
+        log.info("scheduler_stopped")
 
 
 if __name__ == "__main__":
