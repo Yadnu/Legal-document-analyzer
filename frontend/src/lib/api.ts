@@ -97,6 +97,19 @@ export async function listConversations(): Promise<import("./types").Conversatio
   return apiFetch("/api/conversations");
 }
 
+export async function getAuditLog(params?: {
+  action?: string;
+  limit?: number;
+  offset?: number;
+}): Promise<import("./types").AuditLogResponse> {
+  const qs = new URLSearchParams();
+  if (params?.action) qs.set("action", params.action);
+  if (params?.limit != null) qs.set("limit", String(params.limit));
+  if (params?.offset != null) qs.set("offset", String(params.offset));
+  const query = qs.toString() ? `?${qs.toString()}` : "";
+  return apiFetch(`/api/audit-log${query}`);
+}
+
 // ── Query ──────────────────────────────────────────────────────────────────
 
 export async function askQuestion(body: QueryRequest): Promise<QueryResponse> {

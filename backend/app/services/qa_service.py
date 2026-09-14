@@ -12,7 +12,7 @@ from app.core.exceptions import NotFoundError, ValidationError
 from app.models.document import DocumentStatus
 from app.repositories import conversation_repo, document_repo, message_repo
 from app.schemas.query import CitationOut, QueryResponse
-from app.services import generation_service, retrieval_service
+from app.services import audit_service, generation_service, retrieval_service
 
 log = structlog.get_logger(__name__)
 
@@ -96,6 +96,23 @@ async def ask(
         citation_count=len(result.citations),
         latency_ms=latency_ms,
     )
+
+    # ── Audit log ─────────────────────────────────────────────────────────────
+    await audit_service.log(
+        session,
+        tenant_id,
+        user_id,
+        "qa.ask",
+        resource_type="conversation",
+        resource_id=conversation.id,
+        metadata={
+            "document_id": str(document_id) if document_id else None,
+            "not_found": result.not_found,
+            "citation_count": len(result.citations),
+            "latency_ms": latency_ms,
+        },
+    )
+    await session.commit()
 
     # Enrich citations with document titles (single batch fetch)
     cited_doc_ids = list({c.document_id for c in result.citations})

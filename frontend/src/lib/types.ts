@@ -100,3 +100,19 @@ export interface ChatMessage {
   not_found?: boolean;
   citations?: CitationOut[];
 }
+
+export interface AuditEvent {
+  id: string;
+  user_id: string;
+  action: string;
+  resource_type: string | null;
+  resource_id: string | null;
+  ip_address: string | null;
+  user_agent: string | null;
+  created_at: string;
+}
+
+export interface AuditLogResponse {
+  items: AuditEvent[];
+  total: number;
+}

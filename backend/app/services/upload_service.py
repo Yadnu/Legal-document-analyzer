@@ -31,6 +31,7 @@ from app.models.document import DocumentStatus
 from app.repositories import document_repo
 from app.repositories.document_repo import DocumentCreateData
 from app.schemas.document import DocumentResponse, PresignedUploadResponse
+from app.services import audit_service
 
 log = structlog.get_logger(__name__)
 
@@ -160,6 +161,7 @@ class UploadService:
         session: AsyncSession,
         tenant_id: str,
         document_id: uuid.UUID,
+        user_id: str = "system",
     ) -> DocumentResponse:
         """Enqueue the SQS ingestion job and return the current document state.
 
@@ -200,7 +202,19 @@ class UploadService:
             status=doc.status,
         )
 
-        # ── 3. Return DTO ────────────────────────────────────────────────────
+        # ── 3. Audit log ──────────────────────────────────────────────────────
+        await audit_service.log(
+            session,
+            tenant_id,
+            user_id,
+            "document.upload",
+            resource_type="document",
+            resource_id=doc.id,
+            metadata={"title": doc.title, "filename": doc.original_filename},
+        )
+        await session.commit()
+
+        # ── 4. Return DTO ────────────────────────────────────────────────────
         return DocumentResponse.model_validate(doc)
 
     async def get_view_url(

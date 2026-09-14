@@ -62,3 +62,20 @@ async def get_current_tenant(
         )
     slug: str = claims.get("org_slug", "")
     return TenantContext(tenant_id=tenant_id, slug=slug)
+
+
+async def require_admin(
+    claims: dict = Depends(get_verified_claims),
+) -> str:
+    """Enforce that the caller holds the org:admin role.
+
+    Clerk encodes the role as either ``"org:admin"`` or just ``"admin"``.
+    Raises AuthError (→ 403) when the claim is absent or is not an admin role.
+    Returns the normalised role string on success.
+    """
+    raw_role: str = claims.get("org_role", "")
+    # Accept both Clerk formats: "org:admin" and the bare "admin".
+    is_admin = raw_role in ("org:admin", "admin")
+    if not is_admin:
+        raise AuthError("This endpoint requires the org:admin role.")
+    return raw_role

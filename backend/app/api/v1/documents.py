@@ -67,6 +67,7 @@ async def request_upload_url(
 async def confirm_upload(
     document_id: uuid.UUID,
     tenant: TenantContext = Depends(get_current_tenant),
+    user: UserContext = Depends(get_current_user),
     session: AsyncSession = Depends(get_rls_db),
 ) -> DocumentResponse:
     """Enqueue the ingestion job after the browser PUT to S3 completes.
@@ -77,6 +78,7 @@ async def confirm_upload(
         session=session,
         tenant_id=tenant.tenant_id,
         document_id=document_id,
+        user_id=user.user_id,
     )
 
 
