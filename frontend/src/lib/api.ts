@@ -110,6 +110,49 @@ export async function getAuditLog(params?: {
   return apiFetch(`/api/audit-log${query}`);
 }
 
+// ── Comments ───────────────────────────────────────────────────────────────
+
+export async function listComments(
+  docId: string,
+  chunkId: string
+): Promise<import("./types").CommentListResponse> {
+  return apiFetch(
+    `/api/documents/${docId}/chunks/${chunkId}/comments`
+  );
+}
+
+export async function createComment(
+  docId: string,
+  chunkId: string,
+  body: string
+): Promise<import("./types").ClauseComment> {
+  return apiFetch(
+    `/api/documents/${docId}/chunks/${chunkId}/comments`,
+    { method: "POST", body: JSON.stringify({ body }) }
+  );
+}
+
+export async function patchComment(
+  commentId: string,
+  patch: { body?: string; is_resolved?: boolean }
+): Promise<import("./types").ClauseComment> {
+  return apiFetch(`/api/comments/${commentId}`, {
+    method: "PATCH",
+    body: JSON.stringify(patch),
+  });
+}
+
+export async function deleteComment(commentId: string): Promise<void> {
+  const res = await fetch(`/api/comments/${commentId}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!res.ok && res.status !== 204) {
+    const text = await res.text().catch(() => res.statusText);
+    throw new Error(`${res.status}: ${text}`);
+  }
+}
+
 // ── Query ──────────────────────────────────────────────────────────────────
 
 export async function askQuestion(body: QueryRequest): Promise<QueryResponse> {

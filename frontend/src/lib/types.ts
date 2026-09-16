@@ -116,3 +116,18 @@ export interface AuditLogResponse {
   items: AuditEvent[];
   total: number;
 }
+
+export interface ClauseComment {
+  id: string;
+  document_id: string;
+  chunk_id: string;
+  user_id: string;
+  body: string;
+  is_resolved: boolean;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface CommentListResponse {
+  items: ClauseComment[];
+}

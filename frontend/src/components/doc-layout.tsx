@@ -10,6 +10,7 @@ import { PdfViewer } from "./pdf-viewer";
 import { ChatPanel } from "./chat-panel";
 import { SummaryCard } from "./summary-card";
 import { CrossRefPanel } from "./cross-ref-panel";
+import { CommentThread } from "./comment-thread";
 
 interface DocLayoutProps {
   documentId: string;
@@ -102,6 +103,16 @@ export function DocLayout({ documentId, initialCitation }: DocLayoutProps) {
                 documentId={documentId}
                 citation={activeCitation}
                 onJumpToRef={(ref) => setActiveCitation(ref)}
+              />
+            </div>
+          )}
+
+          {/* Comment thread — visible only when a citation is active */}
+          {activeCitation && (
+            <div className="shrink-0 overflow-y-auto max-h-[40%] border-b border-surface-card">
+              <CommentThread
+                documentId={documentId}
+                citation={activeCitation}
               />
             </div>
           )}
