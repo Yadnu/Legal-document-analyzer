@@ -1,0 +1,66 @@
+[
+  {
+    "id": "q1",
+    "question": "What is the effective date of the agreement?",
+    "expected_chunk_sections": ["1", "1.1", "effective date", "recitals"],
+    "expected_answer_keywords": ["effective", "date", "agreement"],
+    "notes": "Tests retrieval of the opening recital / definitions clause."
+  },
+  {
+    "id": "q2",
+    "question": "Who are the parties to the contract?",
+    "expected_chunk_sections": ["1", "parties", "recitals", "preamble"],
+    "expected_answer_keywords": ["party", "parties", "agreement", "between"],
+    "notes": "Tests party identification from the opening clause."
+  },
+  {
+    "id": "q3",
+    "question": "What is the payment amount and schedule?",
+    "expected_chunk_sections": ["3", "4", "payment", "fees", "compensation"],
+    "expected_answer_keywords": ["payment", "amount", "schedule", "due", "invoice"],
+    "notes": "Tests retrieval of payment terms — usually a dense clause."
+  },
+  {
+    "id": "q4",
+    "question": "What are the termination rights?",
+    "expected_chunk_sections": [
+      "8", "9", "termination", "terminate", "cancellation"
+    ],
+    "expected_answer_keywords": ["terminat", "notice", "days", "written"],
+    "notes": "Tests retrieval of termination / cancellation clause."
+  },
+  {
+    "id": "q5",
+    "question": "What law governs this agreement?",
+    "expected_chunk_sections": [
+      "12", "13", "governing law", "jurisdiction", "applicable law"
+    ],
+    "expected_answer_keywords": ["govern", "law", "jurisdiction", "state", "courts"],
+    "notes": "Tests retrieval of the governing law / jurisdiction clause."
+  },
+  {
+    "id": "q6",
+    "question": "Is there a limitation of liability clause, and what is the cap?",
+    "expected_chunk_sections": [
+      "10", "11", "liability", "limitation", "damages", "cap"
+    ],
+    "expected_answer_keywords": ["liabilit", "cap", "limit", "damages", "exceed"],
+    "notes": "Tests retrieval of liability limitation language."
+  },
+  {
+    "id": "q7",
+    "question": "What is the term length of the agreement?",
+    "expected_chunk_sections": ["2", "3", "term", "duration", "period"],
+    "expected_answer_keywords": ["term", "year", "month", "renew", "expire"],
+    "notes": "Tests retrieval of the contract duration clause."
+  },
+  {
+    "id": "q8",
+    "question": "Does the contract include a non-disclosure or confidentiality clause?",
+    "expected_chunk_sections": [
+      "6", "7", "confidential", "nda", "non-disclosure", "proprietary"
+    ],
+    "expected_answer_keywords": ["confidential", "disclosure", "proprietary", "secret"],
+    "notes": "Tests retrieval of NDA / confidentiality provisions."
+  }
+]
