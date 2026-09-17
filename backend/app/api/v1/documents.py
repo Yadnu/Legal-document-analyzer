@@ -21,13 +21,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.deps import get_current_tenant, get_current_user, require_admin
 from app.core.exceptions import NotFoundError
 from app.db.session import get_rls_db
-from app.repositories import document_repo
+from app.repositories import document_repo, org_repo
 from app.schemas.auth import TenantContext, UserContext
 from app.schemas.cross_ref import ChunkRefsResponse
 from app.schemas.document import (
     DocumentResponse,
     DocumentSummary,
     PresignedUploadResponse,
+    QuotaResponse,
     UploadRequestBody,
     ViewUrlResponse,
 )
@@ -168,6 +169,22 @@ async def list_documents(
     """Return all documents for the current tenant, newest first."""
     docs = await document_repo.list_for_tenant(session, tenant.tenant_id)
     return [DocumentSummary.model_validate(d) for d in docs]
+
+
+@router.get("/quota", response_model=QuotaResponse)
+async def get_quota(
+    tenant: TenantContext = Depends(get_current_tenant),
+    session: AsyncSession = Depends(get_rls_db),
+) -> QuotaResponse:
+    """Return current quota usage for the tenant."""
+    org = await org_repo.get_for_tenant(session, tenant.tenant_id)
+    doc_count = await document_repo.count_for_tenant(session, tenant.tenant_id)
+    return QuotaResponse(
+        doc_count=doc_count,
+        doc_quota=org.max_documents if org else 50,
+        qa_used=org.monthly_qa_used if org else 0,
+        qa_quota=org.monthly_qa_quota if org else 500,
+    )
 
 
 @router.delete("/{document_id}", status_code=204)

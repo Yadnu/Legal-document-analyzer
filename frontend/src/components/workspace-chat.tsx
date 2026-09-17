@@ -117,6 +117,20 @@ export function WorkspaceChat() {
         50
       );
     },
+    onError(err: Error) {
+      const isQuota = err.message.startsWith("429");
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          content: isQuota
+            ? "Monthly Q&A quota reached. Your quota resets on the 1st of next month."
+            : "Something went wrong — please try again.",
+          not_found: true,
+        },
+      ]);
+    },
   });
 
   function handleSubmit(e: React.FormEvent) {

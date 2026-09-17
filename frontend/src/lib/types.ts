@@ -131,3 +131,10 @@ export interface ClauseComment {
 export interface CommentListResponse {
   items: ClauseComment[];
 }
+
+export interface QuotaResponse {
+  doc_count: number;
+  doc_quota: number;
+  qa_used: number;
+  qa_quota: number;
+}

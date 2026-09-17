@@ -62,3 +62,12 @@ class DocumentSummary(BaseModel):
     title: str
     status: str
     created_at: datetime
+
+
+class QuotaResponse(BaseModel):
+    """Quota usage for the current tenant."""
+
+    doc_count: int
+    doc_quota: int
+    qa_used: int
+    qa_quota: int

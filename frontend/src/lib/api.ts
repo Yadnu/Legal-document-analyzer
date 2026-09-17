@@ -153,6 +153,12 @@ export async function deleteComment(commentId: string): Promise<void> {
   }
 }
 
+// ── Quota ──────────────────────────────────────────────────────────────────
+
+export async function getQuota(): Promise<import("./types").QuotaResponse> {
+  return apiFetch<import("./types").QuotaResponse>("/api/quota");
+}
+
 // ── Query ──────────────────────────────────────────────────────────────────
 
 export async function askQuestion(body: QueryRequest): Promise<QueryResponse> {

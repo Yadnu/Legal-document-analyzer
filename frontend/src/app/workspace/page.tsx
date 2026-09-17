@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { DocumentList } from "@/components/document-list";
 import { WorkspaceChat } from "@/components/workspace-chat";
+import { QuotaBar } from "@/components/quota-bar";
 import { Scale, Info } from "lucide-react";
 
 export const metadata = {
@@ -18,6 +19,9 @@ export default function WorkspacePage() {
           <span className="font-display text-lg font-semibold text-ink">
             Legal Document Navigator
           </span>
+          <div className="ml-auto">
+            <QuotaBar />
+          </div>
         </div>
       </header>
 

@@ -55,10 +55,18 @@ export function UploadButton() {
       setStage("idle");
       setError(null);
       void queryClient.invalidateQueries({ queryKey: ["documents"] });
+      void queryClient.invalidateQueries({ queryKey: ["quota"] });
     },
     onError: (err: Error) => {
       setStage("idle");
-      setError(err.message);
+      // Surface quota-exceeded errors with a clear message.
+      if (err.message.startsWith("429")) {
+        setError(
+          "Document quota reached. Delete an existing document or upgrade your plan."
+        );
+      } else {
+        setError(err.message);
+      }
     },
   });
 
