@@ -25,10 +25,15 @@ from botocore.exceptions import ClientError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
-from app.core.exceptions import AwsError, NotFoundError, ValidationError
+from app.core.exceptions import (
+    AwsError,
+    NotFoundError,
+    QuotaExceededError,
+    ValidationError,
+)
 from app.infra.aws import get_s3_client, get_sqs_client
 from app.models.document import DocumentStatus
-from app.repositories import document_repo
+from app.repositories import document_repo, org_repo
 from app.repositories.document_repo import DocumentCreateData
 from app.schemas.document import DocumentResponse, PresignedUploadResponse
 from app.services import audit_service
@@ -98,10 +103,20 @@ class UploadService:
                 f"File size {size_bytes:,} bytes exceeds the {max_mb} MB limit."
             )
 
-        # ── 3. Derive idempotency key ────────────────────────────────────────
+        # ── 3. Doc-quota check ───────────────────────────────────────────────
+        org = await org_repo.get_for_tenant(session, tenant_id)
+        if org is not None:
+            doc_count = await document_repo.count_for_tenant(session, tenant_id)
+            if doc_count >= org.max_documents:
+                raise QuotaExceededError(
+                    f"Document quota reached ({doc_count}/{org.max_documents}). "
+                    "Delete existing documents or upgrade your plan."
+                )
+
+        # ── 4. Derive idempotency key ────────────────────────────────────────
         idem_key = _idempotency_key(tenant_id, filename, size_bytes)
 
-        # ── 4. Idempotency check ─────────────────────────────────────────────
+        # ── 5. Idempotency check ─────────────────────────────────────────────
         existing = await document_repo.get_by_idempotency_key(
             session, tenant_id, idem_key
         )
@@ -121,13 +136,13 @@ class UploadService:
                 expires_in=settings.presigned_url_expires_seconds,
             )
 
-        # ── 5. Generate S3 key ───────────────────────────────────────────────
+        # ── 6. Generate S3 key ───────────────────────────────────────────────
         s3_key = f"{tenant_id}/{uuid.uuid4()}/{filename}"
 
-        # ── 6. Generate presigned URL ────────────────────────────────────────
+        # ── 7. Generate presigned URL ────────────────────────────────────────
         upload_url = await self._presign(s3_key, content_type, size_bytes)
 
-        # ── 7. Persist Document row ──────────────────────────────────────────
+        # ── 8. Persist Document row ──────────────────────────────────────────
         data = DocumentCreateData(
             title=_derive_title(filename),
             original_filename=filename,

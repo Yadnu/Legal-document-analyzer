@@ -18,7 +18,7 @@ import uuid
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.deps import get_current_tenant, get_current_user
+from app.core.deps import get_current_tenant, get_current_user, require_admin
 from app.core.exceptions import NotFoundError
 from app.db.session import get_rls_db
 from app.repositories import document_repo
@@ -168,3 +168,22 @@ async def list_documents(
     """Return all documents for the current tenant, newest first."""
     docs = await document_repo.list_for_tenant(session, tenant.tenant_id)
     return [DocumentSummary.model_validate(d) for d in docs]
+
+
+@router.delete("/{document_id}", status_code=204)
+async def delete_document(
+    document_id: uuid.UUID,
+    tenant: TenantContext = Depends(get_current_tenant),
+    _role: str = Depends(require_admin),
+    session: AsyncSession = Depends(get_rls_db),
+) -> None:
+    """Permanently delete a document and its associated data.
+
+    Requires the **org:admin** role.  The physical S3 object is NOT deleted
+    here — a background cleanup job handles orphaned S3 keys.
+    """
+    doc = await document_repo.get_by_id(session, tenant.tenant_id, document_id)
+    if doc is None:
+        raise NotFoundError(f"Document {document_id} not found.")
+    await session.delete(doc)
+    await session.commit()

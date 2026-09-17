@@ -8,9 +8,9 @@ import uuid
 import structlog
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.exceptions import NotFoundError, ValidationError
+from app.core.exceptions import NotFoundError, QuotaExceededError, ValidationError
 from app.models.document import DocumentStatus
-from app.repositories import conversation_repo, document_repo, message_repo
+from app.repositories import conversation_repo, document_repo, message_repo, org_repo
 from app.schemas.query import CitationOut, QueryResponse
 from app.services import audit_service, generation_service, retrieval_service
 
@@ -33,6 +33,15 @@ async def ask(
     if not question:
 
         raise ValidationError("question must not be empty.")
+
+    # ── Q&A quota check ───────────────────────────────────────────────────────
+    org = await org_repo.get_for_tenant(session, tenant_id)
+    if org is not None and org.monthly_qa_used >= org.monthly_qa_quota:
+        raise QuotaExceededError(
+            f"Monthly Q&A quota reached "
+            f"({org.monthly_qa_used}/{org.monthly_qa_quota}). "
+            "Quota resets on the 1st of next month."
+        )
 
     if document_id is not None:
 
@@ -112,6 +121,8 @@ async def ask(
             "latency_ms": latency_ms,
         },
     )
+    # Increment the monthly Q&A counter (best-effort; don't block on failure).
+    await org_repo.increment_qa_used(session, tenant_id)
     await session.commit()
 
     # Enrich citations with document titles (single batch fetch)

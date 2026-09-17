@@ -53,6 +53,19 @@ def build_scheduler(
         coalesce=True,  # collapse missed ticks into one run
     )
 
+    scheduler.add_job(
+        _reset_monthly_qa,
+        trigger="cron",
+        day=1,
+        hour=0,
+        minute=0,
+        args=[session_factory],
+        id="monthly_qa_reset",
+        name="Monthly Q&A quota reset",
+        max_instances=1,
+        coalesce=True,
+    )
+
     return scheduler
 
 
@@ -70,3 +83,18 @@ async def _run_reminders(
     except Exception as exc:
         # Log but don't raise — a scheduler job should never crash the worker.
         log.error("reminder_job_failed", error=str(exc), exc_info=True)
+
+
+async def _reset_monthly_qa(
+    session_factory: async_sessionmaker,  # type: ignore[type-arg]
+) -> None:
+    """Cron callback: reset monthly_qa_used to 0 for every organization."""
+    log.info("monthly_qa_reset_start")
+    try:
+        from app.repositories.org_repo import reset_monthly_qa_used
+
+        async with session_factory() as session:
+            count = await reset_monthly_qa_used(session)
+        log.info("monthly_qa_reset_done", orgs_reset=count)
+    except Exception as exc:
+        log.error("monthly_qa_reset_failed", error=str(exc), exc_info=True)
