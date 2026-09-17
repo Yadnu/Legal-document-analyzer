@@ -129,6 +129,29 @@ async def list_for_tenant(
     return list(result.scalars().all())
 
 
+async def count_for_tenant(
+    session: AsyncSession,
+    tenant_id: str,
+) -> int:
+    """Return the total number of non-failed documents for this tenant.
+
+    Used by the upload service to enforce the per-tenant document quota.
+    Only PROCESSING and READY documents count toward the limit; FAILED ones
+    are excluded so a failed upload doesn't permanently consume a slot.
+    """
+    from sqlalchemy import func
+
+    result = await session.execute(
+        select(func.count())
+        .select_from(Document)
+        .where(
+            col(Document.tenant_id) == tenant_id,
+            col(Document.status).in_([DocumentStatus.PROCESSING, DocumentStatus.READY]),
+        )
+    )
+    return result.scalar_one()
+
+
 async def get_many_by_ids(
     session: AsyncSession,
     tenant_id: str,

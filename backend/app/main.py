@@ -10,11 +10,13 @@ from app.core.exceptions import (
     AuthError,
     AwsError,
     NotFoundError,
+    QuotaExceededError,
     TenantMissingError,
     ValidationError,
     auth_error_handler,
     aws_error_handler,
     not_found_error_handler,
+    quota_exceeded_error_handler,
     tenant_missing_error_handler,
     validation_error_handler,
 )
@@ -47,6 +49,7 @@ def create_app() -> FastAPI:
     app.add_exception_handler(ValidationError, validation_error_handler)  # type: ignore[arg-type]
     app.add_exception_handler(NotFoundError, not_found_error_handler)  # type: ignore[arg-type]
     app.add_exception_handler(AwsError, aws_error_handler)  # type: ignore[arg-type]
+    app.add_exception_handler(QuotaExceededError, quota_exceeded_error_handler)  # type: ignore[arg-type]
 
     app.include_router(health.router, prefix="/api/v1")
     app.include_router(me.router, prefix="/api/v1")

@@ -22,3 +22,6 @@ class Organization(TenantModel, table=True):
     max_documents: int = Field(default=50, nullable=False)
     max_members: int = Field(default=5, nullable=False)
     logo_url: str | None = Field(default=None)
+    # Per-tenant Q&A quotas (reset on the 1st of every month by the scheduler)
+    monthly_qa_quota: int = Field(default=500, nullable=False)
+    monthly_qa_used: int = Field(default=0, nullable=False)

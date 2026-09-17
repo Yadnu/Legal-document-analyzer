@@ -50,6 +50,17 @@ class AwsError(Exception):
         super().__init__(detail)
 
 
+class QuotaExceededError(Exception):
+    """Raised when a per-tenant quota is exceeded (→ 429 Too Many Requests).
+
+    Examples: document count limit reached, monthly Q&A quota exhausted.
+    """
+
+    def __init__(self, detail: str = "Quota exceeded") -> None:
+        self.detail = detail
+        super().__init__(detail)
+
+
 # ---------------------------------------------------------------------------
 # FastAPI exception handlers
 # ---------------------------------------------------------------------------
@@ -91,4 +102,13 @@ async def aws_error_handler(request: Request, exc: AwsError) -> JSONResponse:
     return JSONResponse(
         status_code=502,
         content={"error": "Bad Gateway", "detail": exc.detail},
+    )
+
+
+async def quota_exceeded_error_handler(
+    request: Request, exc: "QuotaExceededError"
+) -> JSONResponse:
+    return JSONResponse(
+        status_code=429,
+        content={"error": "Too Many Requests", "detail": exc.detail},
     )
