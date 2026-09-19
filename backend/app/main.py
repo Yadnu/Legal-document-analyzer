@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.v1 import audit, comments, documents, health, me, query
+from app.api.v1 import audit, comments, documents, health, me, obligations, query
 from app.core.config import settings
 from app.core.exceptions import (
     AuthError,
@@ -57,6 +57,7 @@ def create_app() -> FastAPI:
     app.include_router(query.router, prefix="/api/v1")
     app.include_router(audit.router, prefix="/api/v1")
     app.include_router(comments.router, prefix="/api/v1")
+    app.include_router(obligations.router, prefix="/api/v1")
 
     return app
 
