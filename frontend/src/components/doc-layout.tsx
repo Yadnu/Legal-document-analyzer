@@ -11,6 +11,7 @@ import { ChatPanel } from "./chat-panel";
 import { SummaryCard } from "./summary-card";
 import { CrossRefPanel } from "./cross-ref-panel";
 import { CommentThread } from "./comment-thread";
+import { ObligationList } from "./obligation-list";
 
 interface DocLayoutProps {
   documentId: string;
@@ -116,6 +117,18 @@ export function DocLayout({ documentId, initialCitation }: DocLayoutProps) {
               />
             </div>
           )}
+
+          {/* Obligation list — always visible, scoped to this document */}
+          <div className="shrink-0 overflow-y-auto max-h-[40%] border-b border-surface-card">
+            <div className="px-4 pt-3 pb-1">
+              <p className="text-xs font-semibold text-ink-muted uppercase tracking-wide">
+                Obligations
+              </p>
+            </div>
+            <div className="px-4 pb-3">
+              <ObligationList docId={documentId} />
+            </div>
+          </div>
 
           {/* Chat panel */}
           <ChatPanel

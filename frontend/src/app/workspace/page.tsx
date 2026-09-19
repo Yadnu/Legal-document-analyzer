@@ -19,6 +19,26 @@ export default function WorkspacePage() {
           <span className="font-display text-lg font-semibold text-ink">
             Legal Document Navigator
           </span>
+          <nav className="ml-6 flex items-center gap-1 text-sm">
+            <a
+              href="/workspace"
+              className="px-3 py-1 rounded-lg bg-surface-card text-ink font-medium"
+            >
+              Workspace
+            </a>
+            <a
+              href="/workspace/obligations"
+              className="px-3 py-1 rounded-lg text-ink-muted hover:text-ink hover:bg-surface-card transition-colors"
+            >
+              Obligations
+            </a>
+            <a
+              href="/workspace/settings"
+              className="px-3 py-1 rounded-lg text-ink-muted hover:text-ink hover:bg-surface-card transition-colors"
+            >
+              Settings
+            </a>
+          </nav>
           <div className="ml-auto">
             <QuotaBar />
           </div>

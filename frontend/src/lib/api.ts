@@ -159,6 +159,65 @@ export async function getQuota(): Promise<import("./types").QuotaResponse> {
   return apiFetch<import("./types").QuotaResponse>("/api/quota");
 }
 
+// ── Obligations ────────────────────────────────────────────────────────────
+
+export async function listDocumentObligations(
+  docId: string,
+  includeResolved = true
+): Promise<import("./types").ObligationListResponse> {
+  return apiFetch(
+    `/api/documents/${docId}/obligations?include_resolved=${includeResolved}`
+  );
+}
+
+export async function listTenantObligations(params?: {
+  include_resolved?: boolean;
+  obligation_type?: string;
+  limit?: number;
+  offset?: number;
+}): Promise<import("./types").ObligationListResponse> {
+  const qs = new URLSearchParams();
+  if (params?.include_resolved != null)
+    qs.set("include_resolved", String(params.include_resolved));
+  if (params?.obligation_type) qs.set("obligation_type", params.obligation_type);
+  if (params?.limit != null) qs.set("limit", String(params.limit));
+  if (params?.offset != null) qs.set("offset", String(params.offset));
+  const query = qs.toString() ? `?${qs.toString()}` : "";
+  return apiFetch(`/api/obligations${query}`);
+}
+
+export async function extractObligations(
+  docId: string
+): Promise<import("./types").ObligationListResponse> {
+  return apiFetch(`/api/documents/${docId}/obligations/extract`, {
+    method: "POST",
+  });
+}
+
+export async function resolveObligation(
+  obligationId: string
+): Promise<import("./types").Obligation> {
+  return apiFetch(`/api/obligations/${obligationId}/resolve`, {
+    method: "POST",
+  });
+}
+
+export async function patchObligation(
+  obligationId: string,
+  patch: {
+    description?: string;
+    obligation_type?: string;
+    deadline?: string | null;
+    reminder_days_before?: number;
+    assigned_to?: string | null;
+  }
+): Promise<import("./types").Obligation> {
+  return apiFetch(`/api/obligations/${obligationId}`, {
+    method: "PATCH",
+    body: JSON.stringify(patch),
+  });
+}
+
 // ── Query ──────────────────────────────────────────────────────────────────
 
 export async function askQuestion(body: QueryRequest): Promise<QueryResponse> {

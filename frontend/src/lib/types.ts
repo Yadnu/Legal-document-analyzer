@@ -138,3 +138,31 @@ export interface QuotaResponse {
   qa_used: number;
   qa_quota: number;
 }
+
+// ── Obligations ───────────────────────────────────────────────────────────
+
+export type ObligationType =
+  | "payment"
+  | "notice"
+  | "renewal"
+  | "termination"
+  | "other";
+
+export interface Obligation {
+  id: string;
+  document_id: string;
+  chunk_id: string | null;
+  description: string;
+  obligation_type: ObligationType | null;
+  deadline: string | null;
+  reminder_days_before: number;
+  reminder_sent_at: string | null;
+  is_resolved: boolean;
+  assigned_to: string | null;
+  created_at: string;
+}
+
+export interface ObligationListResponse {
+  items: Obligation[];
+  total: number;
+}
