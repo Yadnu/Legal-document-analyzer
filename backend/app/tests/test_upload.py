@@ -25,7 +25,12 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
-from app.core.deps import get_current_tenant, get_current_user
+from app.core.deps import (
+    OrgRole,
+    get_current_role,
+    get_current_tenant,
+    get_current_user,
+)
 from app.db.rls import set_tenant_context
 from app.db.session import get_rls_db
 from app.main import create_app
@@ -103,6 +108,7 @@ async def authed_client(
     app = create_app()
     app.dependency_overrides[get_current_user] = lambda: FAKE_USER
     app.dependency_overrides[get_current_tenant] = lambda: FAKE_TENANT
+    app.dependency_overrides[get_current_role] = lambda: OrgRole.EDITOR
 
     async def override_db() -> AsyncGenerator[AsyncSession, None]:
         yield tenant_session

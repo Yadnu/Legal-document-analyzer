@@ -18,6 +18,17 @@ class TenantMissingError(Exception):
         super().__init__(detail)
 
 
+class ForbiddenError(Exception):
+    """Raised when an authenticated caller lacks the required org role (→ 403).
+
+    Distinct from AuthError: the identity is valid, the permission is not.
+    """
+
+    def __init__(self, detail: str = "Insufficient permissions") -> None:
+        self.detail = detail
+        super().__init__(detail)
+
+
 class ValidationError(Exception):
     """Raised when user-supplied input fails business-rule validation (→ 422).
 
@@ -75,6 +86,15 @@ async def auth_error_handler(request: Request, exc: AuthError) -> JSONResponse:
 
 async def tenant_missing_error_handler(
     request: Request, exc: TenantMissingError
+) -> JSONResponse:
+    return JSONResponse(
+        status_code=403,
+        content={"error": "Forbidden", "detail": exc.detail},
+    )
+
+
+async def forbidden_error_handler(
+    request: Request, exc: ForbiddenError
 ) -> JSONResponse:
     return JSONResponse(
         status_code=403,

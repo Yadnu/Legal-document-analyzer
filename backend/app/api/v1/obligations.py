@@ -17,7 +17,7 @@ import uuid
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.deps import get_current_tenant, get_current_user
+from app.core.deps import OrgRole, get_current_tenant, get_current_user, require_editor
 from app.core.exceptions import NotFoundError
 from app.db.session import get_rls_db
 from app.repositories.document_repo import get_by_id as get_document
@@ -67,11 +67,13 @@ async def extract_obligations(
     doc_id: uuid.UUID,
     tenant: TenantContext = Depends(get_current_tenant),
     user: UserContext = Depends(get_current_user),
+    _role: OrgRole = Depends(require_editor),
     session: AsyncSession = Depends(get_rls_db),
 ) -> ObligationListResponse:
     """Trigger Bedrock obligation extraction for a document.
 
     Existing obligations for the document are replaced on each call.
+    Requires write access — viewers are rejected with 403.
     """
     items = await obligation_service.extract_for_document(
         session,

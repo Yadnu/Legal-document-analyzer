@@ -9,12 +9,14 @@ from app.core.config import settings
 from app.core.exceptions import (
     AuthError,
     AwsError,
+    ForbiddenError,
     NotFoundError,
     QuotaExceededError,
     TenantMissingError,
     ValidationError,
     auth_error_handler,
     aws_error_handler,
+    forbidden_error_handler,
     not_found_error_handler,
     quota_exceeded_error_handler,
     tenant_missing_error_handler,
@@ -46,6 +48,7 @@ def create_app() -> FastAPI:
 
     app.add_exception_handler(AuthError, auth_error_handler)  # type: ignore[arg-type]
     app.add_exception_handler(TenantMissingError, tenant_missing_error_handler)  # type: ignore[arg-type]
+    app.add_exception_handler(ForbiddenError, forbidden_error_handler)  # type: ignore[arg-type]
     app.add_exception_handler(ValidationError, validation_error_handler)  # type: ignore[arg-type]
     app.add_exception_handler(NotFoundError, not_found_error_handler)  # type: ignore[arg-type]
     app.add_exception_handler(AwsError, aws_error_handler)  # type: ignore[arg-type]

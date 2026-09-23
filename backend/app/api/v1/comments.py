@@ -8,7 +8,8 @@ PATCH  /comments/{comment_id}
 DELETE /comments/{comment_id}
 
 Authorization rules (enforced here, not in the DB):
-  - Any authenticated org member can GET and POST.
+  - Any authenticated org member can GET.
+  - POST requires write access (viewers are read-only).
   - PATCH and DELETE require either:
       a) the caller is the comment author (user_id matches), OR
       b) the caller holds the org:admin role.
@@ -18,11 +19,17 @@ from __future__ import annotations
 
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.deps import get_current_tenant, get_current_user, get_verified_claims
-from app.core.exceptions import NotFoundError
+from app.core.deps import (
+    OrgRole,
+    get_current_role,
+    get_current_tenant,
+    get_current_user,
+    require_editor,
+)
+from app.core.exceptions import ForbiddenError, NotFoundError
 from app.db.session import get_rls_db
 from app.repositories import comment_repo
 from app.repositories.document_repo import get_by_id as get_document
@@ -43,26 +50,20 @@ router = APIRouter(tags=["comments"])
 # ---------------------------------------------------------------------------
 
 
-def _is_admin(claims: dict) -> bool:
-    role: str = claims.get("org_role", "")
-    return role in ("org:admin", "admin")
-
-
 async def _require_author_or_admin(
     tenant_id: str,
     comment_id: uuid.UUID,
     user_id: str,
-    claims: dict,
+    role: OrgRole,
     session: AsyncSession,
 ) -> None:
     """Raise 403 if the caller is neither the author nor an admin."""
     comment = await comment_repo.get(session, tenant_id, comment_id)
     if comment is None:
         raise NotFoundError(f"Comment {comment_id} not found.")
-    if comment.user_id != user_id and not _is_admin(claims):
-        raise HTTPException(
-            status_code=403,
-            detail="Only the comment author or an org admin can perform this action.",
+    if comment.user_id != user_id and role is not OrgRole.ADMIN:
+        raise ForbiddenError(
+            "Only the comment author or an org admin can perform this action."
         )
 
 
@@ -104,9 +105,13 @@ async def create_comment(
     body: CommentCreate,
     tenant: TenantContext = Depends(get_current_tenant),
     user: UserContext = Depends(get_current_user),
+    _role: OrgRole = Depends(require_editor),
     session: AsyncSession = Depends(get_rls_db),
 ) -> CommentOut:
-    """Post a new comment on a clause."""
+    """Post a new comment on a clause.
+
+    Requires write access — viewers are rejected with 403.
+    """
     doc = await get_document(session, tenant.tenant_id, doc_id)
     if doc is None:
         raise NotFoundError(f"Document {doc_id} not found.")
@@ -140,7 +145,7 @@ async def patch_comment(
     body: CommentPatch,
     tenant: TenantContext = Depends(get_current_tenant),
     user: UserContext = Depends(get_current_user),
-    claims: dict = Depends(get_verified_claims),
+    role: OrgRole = Depends(get_current_role),
     session: AsyncSession = Depends(get_rls_db),
 ) -> CommentOut:
     """Edit the body or resolve/unresolve a comment.
@@ -148,7 +153,7 @@ async def patch_comment(
     Requires the caller to be the comment author **or** an org admin.
     """
     await _require_author_or_admin(
-        tenant.tenant_id, comment_id, user.user_id, claims, session
+        tenant.tenant_id, comment_id, user.user_id, role, session
     )
 
     updated = None
@@ -177,12 +182,12 @@ async def delete_comment(
     comment_id: uuid.UUID,
     tenant: TenantContext = Depends(get_current_tenant),
     user: UserContext = Depends(get_current_user),
-    claims: dict = Depends(get_verified_claims),
+    role: OrgRole = Depends(get_current_role),
     session: AsyncSession = Depends(get_rls_db),
 ) -> None:
     """Hard-delete a comment. Author or admin only."""
     await _require_author_or_admin(
-        tenant.tenant_id, comment_id, user.user_id, claims, session
+        tenant.tenant_id, comment_id, user.user_id, role, session
     )
 
     deleted = await comment_repo.delete(session, tenant.tenant_id, comment_id)

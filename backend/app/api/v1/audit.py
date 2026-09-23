@@ -7,7 +7,7 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.deps import get_current_tenant, require_admin
+from app.core.deps import OrgRole, get_current_tenant, require_admin
 from app.db.session import get_rls_db
 from app.repositories import audit_repo
 from app.schemas.audit import AuditEventOut, AuditLogResponse
@@ -26,7 +26,7 @@ async def list_audit_events(
     limit: int = Query(default=100, ge=1, le=500),
     offset: int = Query(default=0, ge=0),
     tenant: TenantContext = Depends(get_current_tenant),
-    _role: str = Depends(require_admin),
+    _role: OrgRole = Depends(require_admin),
     session: AsyncSession = Depends(get_rls_db),
 ) -> AuditLogResponse:
     """Return the tenant's audit trail, newest first.

@@ -18,7 +18,13 @@ import uuid
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.deps import get_current_tenant, get_current_user, require_admin
+from app.core.deps import (
+    OrgRole,
+    get_current_tenant,
+    get_current_user,
+    require_admin,
+    require_editor,
+)
 from app.core.exceptions import NotFoundError
 from app.db.session import get_rls_db
 from app.repositories import document_repo, org_repo
@@ -44,11 +50,13 @@ async def request_upload_url(
     body: UploadRequestBody,
     tenant: TenantContext = Depends(get_current_tenant),
     user: UserContext = Depends(get_current_user),
+    _role: OrgRole = Depends(require_editor),
     session: AsyncSession = Depends(get_rls_db),
 ) -> PresignedUploadResponse:
     """Validate the upload request, persist a Document row, and return a presigned URL.
 
     The client must PUT the file to ``upload_url`` before calling the confirm endpoint.
+    Requires write access — viewers are rejected with 403.
     """
     return await upload_service.request_upload(
         session=session,
@@ -69,11 +77,13 @@ async def confirm_upload(
     document_id: uuid.UUID,
     tenant: TenantContext = Depends(get_current_tenant),
     user: UserContext = Depends(get_current_user),
+    _role: OrgRole = Depends(require_editor),
     session: AsyncSession = Depends(get_rls_db),
 ) -> DocumentResponse:
     """Enqueue the ingestion job after the browser PUT to S3 completes.
 
     Returns the document DTO so the client can begin polling ``status``.
+    Requires write access — viewers are rejected with 403.
     """
     return await upload_service.confirm_upload(
         session=session,
@@ -191,7 +201,7 @@ async def get_quota(
 async def delete_document(
     document_id: uuid.UUID,
     tenant: TenantContext = Depends(get_current_tenant),
-    _role: str = Depends(require_admin),
+    _role: OrgRole = Depends(require_admin),
     session: AsyncSession = Depends(get_rls_db),
 ) -> None:
     """Permanently delete a document and its associated data.
