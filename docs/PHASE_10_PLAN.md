@@ -75,9 +75,9 @@ POST   /obligations/{id}/resolve                Mark resolved
 - Edit modal: change deadline, assignee, mark resolved
 
 ### Done criteria
-- [ ] Extract produces typed obligations with deadlines from real docs
-- [ ] CRUD endpoints work and are tenant-scoped
-- [ ] UI shows upcoming deadlines sorted by date
+- [x] Extract produces typed obligations with deadlines from real docs
+- [x] CRUD endpoints work and are tenant-scoped
+- [x] UI shows upcoming deadlines sorted by date
 
 ---
 
@@ -108,9 +108,9 @@ async def send_due_reminders(session: AsyncSession) -> int
 to `settings`.
 
 ### Done criteria
-- [ ] Scheduler fires every N minutes
-- [ ] Obligations within the reminder window get an email (or log entry in dev)
-- [ ] `reminder_sent_at` is stamped; no duplicate sends
+- [x] Scheduler fires every N minutes
+- [x] Obligations within the reminder window get an email (or log entry in dev)
+- [x] `reminder_sent_at` is stamped; no duplicate sends
 
 ---
 
@@ -143,9 +143,9 @@ Returns `list[AuditEventOut]`; admin-only (checked against Clerk org role).
 - Table: timestamp, user, action, resource
 
 ### Done criteria
-- [ ] Upload, Q&A, and obligation resolve each produce an audit row
-- [ ] `GET /audit-log` returns tenant-scoped events only
-- [ ] UI renders the audit table
+- [x] Upload, Q&A, and obligation resolve each produce an audit row
+- [x] `GET /audit-log` returns tenant-scoped events only
+- [x] UI renders the audit table
 
 ---
 
@@ -188,9 +188,9 @@ DELETE /comments/{id}     (author or admin only)
 - Resolved comments shown greyed-out
 
 ### Done criteria
-- [ ] Comments are tenant-scoped and chunk-linked
-- [ ] UI shows the thread for the active citation
-- [ ] Any org member can comment; only author/admin can delete
+- [x] Comments are tenant-scoped and chunk-linked
+- [x] UI shows the thread for the active citation
+- [x] Editors and admins can comment; only the author or an admin can delete. Viewers are read-only.
 
 ---
 
@@ -228,9 +228,9 @@ ALTER TABLE organizations ADD COLUMN monthly_qa_used integer DEFAULT 0;
 - 402 / 429 error handling in upload + chat
 
 ### Done criteria
-- [ ] `viewer` cannot upload or comment
-- [ ] Upload is rejected with 429 when over quota
-- [ ] Q&A is rejected when monthly Q&A quota exhausted
+- [x] `viewer` cannot upload or comment
+- [x] Upload is rejected with 429 when over quota
+- [x] Q&A is rejected when monthly Q&A quota exhausted
 
 ---
 
@@ -263,8 +263,12 @@ the live retrieval+generation stack and reports:
 
 ### Done criteria
 - [ ] Script runs end-to-end without errors against a seeded test DB
-- [ ] Reports recall@5 and faithfulness score per question
+- [x] Reports recall@k and faithfulness score per question
 - [ ] JSON report is saved as a CI artifact
+
+The eval script writes recall and faithfulness into its JSON report. It has not
+been executed against a seeded database in CI, and `.github/workflows/ci.yml`
+does not upload that report as an artifact.
 
 ---
 
