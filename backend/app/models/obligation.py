@@ -1,6 +1,7 @@
 import uuid
 from datetime import datetime
 
+from sqlalchemy import DateTime
 from sqlmodel import Field
 
 from app.models.base import TenantModel
@@ -30,9 +31,16 @@ class Obligation(TenantModel, table=True):
         default=None,
         description="e.g. 'payment', 'notice', 'renewal', 'termination'",
     )
-    deadline: datetime | None = Field(default=None, index=True)
+    deadline: datetime | None = Field(
+        default=None,
+        index=True,
+        sa_type=DateTime(timezone=True),  # type: ignore[arg-type]
+    )
     reminder_days_before: int = Field(default=7, nullable=False)
-    reminder_sent_at: datetime | None = Field(default=None)
+    reminder_sent_at: datetime | None = Field(
+        default=None,
+        sa_type=DateTime(timezone=True),  # type: ignore[arg-type]
+    )
     is_resolved: bool = Field(default=False, nullable=False)
     assigned_to: str | None = Field(
         default=None,
