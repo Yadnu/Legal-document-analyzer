@@ -219,7 +219,7 @@ def _print_table(results: list[dict]) -> None:
     print(f"{'ID':<6} {'Recall':>7} {'Relvnc':>7} {'Faith':>6} {'ms':>6}  Question")
     print("-" * 72)
     for r in results:
-        recall_sym = "✓" if r["recall_at_k"] else "✗"
+        recall_sym = "Y" if r["recall_at_k"] else "N"
         relevance = f"{r['keyword_relevance']:.2f}"
         faith = (
             str(r["faithfulness_score"])
@@ -393,14 +393,15 @@ async def main() -> int:
             top_k=args.top_k,
         )
 
-    _print_table(results)
-
-    # Write JSON report
+    # Write the report before printing so a console encoding error cannot
+    # drop the artifact.
     if args.output:
         out_path = Path(args.output)
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_text(json.dumps(results, indent=2, default=str))
         log.info("eval_report_written", path=str(out_path))
+
+    _print_table(results)
 
     # Return 1 if any recall failed, 0 otherwise
     all_pass = all(r["recall_at_k"] for r in results)

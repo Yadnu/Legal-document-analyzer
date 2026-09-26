@@ -262,13 +262,13 @@ the live retrieval+generation stack and reports:
 **CI job:** `eval` workflow (manual trigger only, not on every push)
 
 ### Done criteria
-- [ ] Script runs end-to-end without errors against a seeded test DB
+- [x] Script runs end-to-end without errors against a seeded test DB
 - [x] Reports recall@k and faithfulness score per question
-- [ ] JSON report is saved as a CI artifact
+- [x] JSON report is saved as a CI artifact
 
-The eval script writes recall and faithfulness into its JSON report. It has not
-been executed against a seeded database in CI, and `.github/workflows/ci.yml`
-does not upload that report as an artifact.
+`--seed` inserts one clause per golden question, then the harness writes
+`results/eval.json`. The `rag-eval` job in `.github/workflows/ci.yml` runs only
+on manual dispatch and uploads that file as the `rag-eval-report` artifact.
 
 ---
 
