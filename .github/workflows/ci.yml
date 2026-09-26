@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 jobs:
   backend-lint:
@@ -114,3 +115,68 @@ jobs:
         run: pnpm lint
       - name: TypeScript type check
         run: pnpm type-check
+
+  # Manual only. Seeds a golden document, runs the harness, and keeps the
+  # JSON report even when recall is below the pass bar.
+  rag-eval:
+    name: RAG eval
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_DB: legaldb_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      DATABASE_URL: postgresql+asyncpg://legaluser:legalpass@localhost:5432/legaldb_test
+      CORS_ORIGINS: '["http://localhost:3000"]'
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_DEFAULT_REGION: us-east-1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - name: Install dependencies
+        run: uv sync --dev
+      - name: Bootstrap non-superuser app role
+        env:
+          PGPASSWORD: postgres
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-client
+          psql -h localhost -U postgres -d legaldb_test <<'SQL'
+          CREATE EXTENSION IF NOT EXISTS vector;
+          CREATE ROLE legaluser LOGIN PASSWORD 'legalpass'
+            NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE;
+          GRANT ALL ON SCHEMA public TO legaluser;
+          GRANT CREATE ON SCHEMA public TO legaluser;
+          ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO legaluser;
+          ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO legaluser;
+          SQL
+      - name: Apply migrations
+        run: uv run alembic upgrade head
+      - name: Run seeded RAG eval
+        run: >
+          uv run python scripts/eval_rag.py
+          --seed
+          --tenant-id org_eval_ci
+          --output results/eval.json
+      - name: Upload eval report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rag-eval-report
+          path: backend/results/eval.json
+          if-no-files-found: error
