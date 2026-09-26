@@ -249,6 +249,77 @@ def _print_table(results: list[dict]) -> None:
     print(f"  Avg latency: {avg_ms:.0f} ms\n")
 
 
+async def seed_eval_document(
+    session: AsyncSession,
+    tenant_id: str,
+    questions: list[dict],
+) -> uuid.UUID:
+    """Insert a ready document with one clause per golden question.
+
+    Each clause carries an expected section number and heading, and its text
+    repeats the question and answer keywords so sparse retrieval and the local
+    reranker can find it without a live embedding provider.
+    """
+    from app.ingestion.chunker import ChunkData
+    from app.ingestion.embedder import embed_texts
+    from app.models.document import DocumentStatus
+    from app.repositories import chunk_repo, document_repo
+    from app.repositories.document_repo import DocumentCreateData
+
+    doc = await document_repo.create(
+        session,
+        tenant_id,
+        DocumentCreateData(
+            title="Eval Golden Agreement",
+            original_filename="eval_golden.pdf",
+            content_type="application/pdf",
+            size_bytes=4096,
+            s3_key=f"{tenant_id}/{uuid.uuid4()}/eval_golden.pdf",
+            idempotency_key=f"eval_{uuid.uuid4().hex}",
+            uploaded_by="user_eval",
+        ),
+    )
+    await document_repo.set_status(session, tenant_id, doc.id, DocumentStatus.READY)
+
+    chunks: list[ChunkData] = []
+    for index, item in enumerate(questions, start=1):
+        expected: list[str] = item.get("expected_chunk_sections") or [str(index)]
+        keywords: list[str] = item.get("expected_answer_keywords") or []
+        section = next((part for part in expected if part[:1].isdigit()), expected[0])
+        heading = next(
+            (part for part in expected if not part[:1].isdigit()),
+            expected[0],
+        )
+        content = (
+            f"{item['question']} {heading}. {' '.join(keywords)}. "
+            f"Section {section} of the agreement."
+        )
+        chunks.append(
+            ChunkData(
+                content=content,
+                section_number=section,
+                heading=heading,
+                page=index,
+                cross_refs=[],
+                token_count=len(content.split()),
+            )
+        )
+
+    embeddings = await embed_texts([chunk.content for chunk in chunks])
+    await chunk_repo.upsert_chunks(
+        session,
+        tenant_id,
+        doc.id,
+        chunks,
+        embeddings,
+        settings.embedding_model,
+        settings.embedding_model_version,
+    )
+    await session.commit()
+    log.info("eval_seeded", document_id=str(doc.id), chunk_count=len(chunks))
+    return doc.id
+
+
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
@@ -261,9 +332,14 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--tenant-id", required=True, help="Clerk org_id of the tenant")
     parser.add_argument(
         "--document-id",
-        required=True,
+        default=None,
         type=uuid.UUID,
         help="UUID of a READY document to evaluate against",
+    )
+    parser.add_argument(
+        "--seed",
+        action="store_true",
+        help="Insert a ready document whose clauses match the golden questions",
     )
     parser.add_argument(
         "--golden-file",
@@ -294,7 +370,11 @@ async def main() -> int:
         log.error("golden_file_not_found", path=str(golden_path))
         return 2
     questions: list[dict] = json.loads(golden_path.read_text())
-    log.info("eval_start", questions=len(questions), document_id=str(args.document_id))
+    if not args.seed and args.document_id is None:
+        log.error("eval_missing_document", hint="pass --document-id or --seed")
+        return 2
+
+    log.info("eval_start", questions=len(questions), seed=args.seed)
 
     # DB session
     engine = create_async_engine(settings.database_url, echo=False)
@@ -302,10 +382,13 @@ async def main() -> int:
 
     async with factory() as session:
         await set_tenant_context(session, args.tenant_id)
+        document_id = args.document_id
+        if args.seed:
+            document_id = await seed_eval_document(session, args.tenant_id, questions)
         results = await run_eval(
             session,
             args.tenant_id,
-            args.document_id,
+            document_id,
             questions,
             top_k=args.top_k,
         )
