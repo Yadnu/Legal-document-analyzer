@@ -21,3 +21,13 @@ repos:
       - id: prettier
         types_or: [ts, tsx, json, css, markdown]
         files: ^frontend/
+
+  - repo: local
+    hooks:
+      - id: frontend-context-graph
+        name: Rebuild frontend context graph and block new token violations
+        entry: npm
+        language: system
+        args: ["--prefix", "frontend", "run", "context:build", "--", "--check"]
+        pass_filenames: false
+        files: ^frontend/(src/|tailwind\.config\.ts|context/decisions\.yaml)
