@@ -1,0 +1,27 @@
+---
+description: Keep frontend edits on the context graph, its tokens, and its design decisions.
+globs: frontend/**/*.{ts,tsx,css}
+alwaysApply: false
+---
+
+# Frontend context graph
+
+Before editing or creating a file under `frontend/`, from the `frontend/` directory run:
+
+```bash
+npm run context -- src/components/example.tsx
+```
+
+Use the path you are about to change. Follow every decision in that output. Treat rules marked `needs review` as binding until a person clears them in `frontend/context/decisions.yaml`. Use only the tokens the output lists.
+
+- Reuse a component already named in the graph before creating a new one.
+- After the edit, run `npm run context:build` and fix any new entries in `frontend/context/violations.json`.
+- When a conversation settles a design decision, add it to `frontend/context/decisions.yaml` (`id`, `title`, `rule`, `rationale`, `applies_to`, `needs_review`). Do not leave it only in chat history.
+
+```tsx
+// Bad: palette color and an arbitrary type size
+<p className="text-red-600 text-[10px]">Overdue</p>
+
+// Good: theme tokens
+<p className="text-status-failed text-xs">Overdue</p>
+```
