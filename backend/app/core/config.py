@@ -95,5 +95,10 @@ class Settings(BaseSettings):
     # How often (minutes) the worker checks for due obligation reminders.
     reminder_check_interval_minutes: int = 60
 
+    # ── Workspace invites ─────────────────────────────────────────────────────
+    # Public origin used in invite emails. No trailing slash.
+    app_base_url: str = "http://localhost:3000"
+    invite_ttl_days: int = 7
+
 
 settings = Settings()

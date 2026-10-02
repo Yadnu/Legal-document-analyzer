@@ -45,6 +45,14 @@ async def get_verified_claims(
     return await verify_token(credentials.credentials)
 
 
+def _claim_str(claims: dict, *keys: str) -> str | None:
+    for key in keys:
+        value = claims.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    return None
+
+
 async def get_current_user(
     claims: dict = Depends(get_verified_claims),
 ) -> UserContext:
@@ -52,7 +60,14 @@ async def get_current_user(
     user_id: str | None = claims.get("sub")
     if not user_id:
         raise AuthError("Token is missing the 'sub' claim")
-    return UserContext(user_id=user_id)
+    email = _claim_str(claims, "email", "email_address", "primary_email")
+    if email is not None:
+        email = email.lower()
+    return UserContext(
+        user_id=user_id,
+        email=email,
+        full_name=_claim_str(claims, "name", "full_name"),
+    )
 
 
 async def get_current_tenant(
