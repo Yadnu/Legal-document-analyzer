@@ -15,12 +15,20 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
 _TENANT_KEY = "tenant_id"
+_INVITE_KEY = "invite_token_hash"
 
 
 def _apply_tenant_on_connection(connection, tenant_id: str) -> None:
     connection.execute(
         text("SELECT set_config('app.current_tenant_id', :tid, false)"),
         {"tid": tenant_id},
+    )
+
+
+def _apply_invite_on_connection(connection, token_hash: str) -> None:
+    connection.execute(
+        text("SELECT set_config('app.invite_token_hash', :token_hash, false)"),
+        {"token_hash": token_hash},
     )
 
 
@@ -31,6 +39,9 @@ def _reapply_tenant_after_begin(
     tenant_id = session.info.get(_TENANT_KEY)
     if tenant_id is not None:
         _apply_tenant_on_connection(connection, tenant_id)
+    token_hash = session.info.get(_INVITE_KEY)
+    if token_hash:
+        _apply_invite_on_connection(connection, token_hash)
 
 
 async def set_tenant_context(session: AsyncSession, tenant_id: str) -> None:
@@ -42,7 +53,26 @@ async def set_tenant_context(session: AsyncSession, tenant_id: str) -> None:
     )
 
 
+async def set_invite_token(session: AsyncSession, token_hash: str) -> None:
+    """Allow a single invite-row lookup by secret token hash.
+
+    Used only while redeeming an invite, before the caller belongs to the
+    workspace. The hash is a capability, not a tenant id from the request.
+    """
+    session.info[_INVITE_KEY] = token_hash
+    await session.execute(
+        text("SELECT set_config('app.invite_token_hash', :token_hash, false)"),
+        {"token_hash": token_hash},
+    )
+
+
 async def clear_tenant_context(session: AsyncSession) -> None:
-    """Reset the session variable before the connection returns to the pool."""
+    """Reset session variables before the connection returns to the pool."""
     session.info.pop(_TENANT_KEY, None)
-    await session.execute(text("SELECT set_config('app.current_tenant_id', '', false)"))
+    session.info.pop(_INVITE_KEY, None)
+    await session.execute(
+        text(
+            "SELECT set_config('app.current_tenant_id', '', false), "
+            "set_config('app.invite_token_hash', '', false)"
+        )
+    )
