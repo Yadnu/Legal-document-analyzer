@@ -19,6 +19,21 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
         yield session
 
 
+async def get_invite_db() -> AsyncGenerator[AsyncSession, None]:
+    """DB session for redeeming an invite.
+
+    The caller is authenticated but may not belong to the workspace yet, so
+    this session does not take a tenant from the JWT. The service sets an
+    invite-token lookup, then the tenant stored on the invite row.
+    """
+    async with AsyncSessionLocal() as session:
+        try:
+            yield session
+        finally:
+            with suppress(Exception):
+                await clear_tenant_context(session)
+
+
 async def get_rls_db(
     tenant: TenantContext = Depends(get_current_tenant),
 ) -> AsyncGenerator[AsyncSession, None]:
