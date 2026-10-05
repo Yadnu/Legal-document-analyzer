@@ -11,6 +11,7 @@ from app.models.obligation import Obligation
 from app.models.organization import Organization
 from app.models.summary import DocumentSummaryCard
 from app.models.user import User
+from app.models.workspace_invite import WorkspaceInvite
 
 __all__ = [
     "AuditEvent",
@@ -25,4 +26,5 @@ __all__ = [
     "Obligation",
     "Organization",
     "User",
+    "WorkspaceInvite",
 ]

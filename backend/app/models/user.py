@@ -16,7 +16,7 @@ class User(TenantModel, table=True):
     clerk_user_id: str = Field(nullable=False, index=True)
     email: str = Field(nullable=False, index=True)
     full_name: str | None = Field(default=None)
-    # Role within the organization: "admin" | "member"
+    # Role within the organization: "admin" | "editor" | "viewer"
     role: str = Field(default="member", nullable=False)
     is_active: bool = Field(default=True, nullable=False)
     last_seen_at: str | None = Field(default=None)
