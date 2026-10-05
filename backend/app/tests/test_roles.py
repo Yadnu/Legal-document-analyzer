@@ -132,6 +132,33 @@ async def test_viewer_cannot_delete_document() -> None:
     assert resp.status_code == 403, resp.text
 
 
+async def test_viewer_cannot_invite() -> None:
+    async with _client_as(OrgRole.VIEWER) as client:
+        resp = await client.post(
+            "/api/v1/workspace/invites",
+            json={"email": "new@example.com", "role": "editor"},
+        )
+    assert resp.status_code == 403, resp.text
+
+
+async def test_editor_cannot_invite() -> None:
+    async with _client_as(OrgRole.EDITOR) as client:
+        resp = await client.post(
+            "/api/v1/workspace/invites",
+            json={"email": "new@example.com", "role": "editor"},
+        )
+    assert resp.status_code == 403, resp.text
+
+
+async def test_editor_cannot_change_member_role() -> None:
+    async with _client_as(OrgRole.EDITOR) as client:
+        resp = await client.patch(
+            "/api/v1/workspace/members/user_other",
+            json={"role": "viewer"},
+        )
+    assert resp.status_code == 403, resp.text
+
+
 async def test_editor_cannot_read_audit_log() -> None:
     """Editors have write access but are not admins."""
     async with _client_as(OrgRole.EDITOR) as client:
