@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legal-document-navigator.local/context/graph.schema.json",
+  "title": "Frontend context graph",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "nodes", "edges"],
+  "properties": {
+    "version": { "type": "integer", "const": 1 },
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/node" }
+    },
+    "edges": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/edge" }
+    }
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "summary"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": {
+          "enum": [
+            "page",
+            "layout",
+            "component",
+            "hook",
+            "util",
+            "token",
+            "decision"
+          ]
+        },
+        "path": { "type": "string" },
+        "summary": { "type": "string" },
+        "summaryOrigin": { "enum": ["auto", "human"] },
+        "props": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "exports": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "needsReview": { "type": "boolean" },
+        "title": { "type": "string" },
+        "rationale": { "type": "string" }
+      }
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to", "type"],
+      "properties": {
+        "from": { "type": "string" },
+        "to": { "type": "string" },
+        "type": {
+          "enum": [
+            "imports",
+            "renders",
+            "uses_token",
+            "constrained_by",
+            "extends"
+          ]
+        }
+      }
+    }
+  }
+}

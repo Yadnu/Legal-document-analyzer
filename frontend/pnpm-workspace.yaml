@@ -3,4 +3,6 @@ packages:
 
 allowBuilds:
   "@clerk/shared": true
+  esbuild: true
+  playwright: true
   unrs-resolver: true

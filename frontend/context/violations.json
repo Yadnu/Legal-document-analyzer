@@ -1,0 +1,473 @@
+{
+  "violations": [
+    {
+      "file": "src/app/globals.css",
+      "kind": "hardcoded-color",
+      "line": 24,
+      "message": "Hardcoded color rgba(212, 168, 67, 0.04). Use surface, ink, gold, or status tokens.",
+      "value": "rgba(212, 168, 67, 0.04)"
+    },
+    {
+      "file": "src/app/globals.css",
+      "kind": "hardcoded-color",
+      "line": 91,
+      "message": "Hardcoded color rgba(212, 168, 67, 0.2). Use surface, ink, gold, or status tokens.",
+      "value": "rgba(212, 168, 67, 0.2)"
+    },
+    {
+      "file": "src/components/audit-log-table.tsx",
+      "kind": "hardcoded-color",
+      "line": 19,
+      "message": "Hardcoded color bg-emerald-500/15. Use surface, ink, gold, or status tokens.",
+      "value": "bg-emerald-500/15"
+    },
+    {
+      "file": "src/components/audit-log-table.tsx",
+      "kind": "hardcoded-color",
+      "line": 19,
+      "message": "Hardcoded color text-emerald-700. Use surface, ink, gold, or status tokens.",
+      "value": "text-emerald-700"
+    },
+    {
+      "file": "src/components/audit-log-table.tsx",
+      "kind": "hardcoded-color",
+      "line": 20,
+      "message": "Hardcoded color bg-blue-500/15. Use surface, ink, gold, or status tokens.",
+      "value": "bg-blue-500/15"
+    },
+    {
+      "file": "src/components/audit-log-table.tsx",
+      "kind": "hardcoded-color",
+      "line": 20,
+      "message": "Hardcoded color text-blue-700. Use surface, ink, gold, or status tokens.",
+      "value": "text-blue-700"
+    },
+    {
+      "file": "src/components/audit-log-table.tsx",
+      "kind": "hardcoded-color",
+      "line": 21,
+      "message": "Hardcoded color bg-purple-500/15. Use surface, ink, gold, or status tokens.",
+      "value": "bg-purple-500/15"
+    },
+    {
+      "file": "src/components/audit-log-table.tsx",
+      "kind": "hardcoded-color",
+      "line": 21,
+      "message": "Hardcoded color text-purple-700. Use surface, ink, gold, or status tokens.",
+      "value": "text-purple-700"
+    },
+    {
+      "file": "src/components/audit-log-table.tsx",
+      "kind": "hardcoded-color",
+      "line": 22,
+      "message": "Hardcoded color bg-red-500/15. Use surface, ink, gold, or status tokens.",
+      "value": "bg-red-500/15"
+    },
+    {
+      "file": "src/components/audit-log-table.tsx",
+      "kind": "hardcoded-color",
+      "line": 22,
+      "message": "Hardcoded color text-red-700. Use surface, ink, gold, or status tokens.",
+      "value": "text-red-700"
+    },
+    {
+      "file": "src/components/audit-log-table.tsx",
+      "kind": "hardcoded-color",
+      "line": 104,
+      "message": "Hardcoded color bg-red-50. Use surface, ink, gold, or status tokens.",
+      "value": "bg-red-50"
+    },
+    {
+      "file": "src/components/audit-log-table.tsx",
+      "kind": "hardcoded-color",
+      "line": 104,
+      "message": "Hardcoded color text-red-600. Use surface, ink, gold, or status tokens.",
+      "value": "text-red-600"
+    },
+    {
+      "file": "src/components/comment-thread.tsx",
+      "kind": "hardcoded-font-size",
+      "line": 67,
+      "message": "Arbitrary font size text-[9px]. Use the type scale (text-xs, text-sm, text-base).",
+      "value": "text-[9px]"
+    },
+    {
+      "file": "src/components/comment-thread.tsx",
+      "kind": "hardcoded-font-size",
+      "line": 71,
+      "message": "Arbitrary font size text-[10px]. Use the type scale (text-xs, text-sm, text-base).",
+      "value": "text-[10px]"
+    },
+    {
+      "file": "src/components/comment-thread.tsx",
+      "kind": "unknown-token",
+      "line": 110,
+      "message": "Undefined token text-status-red. It is not declared in tailwind.config.ts.",
+      "value": "text-status-red"
+    },
+    {
+      "file": "src/components/comment-thread.tsx",
+      "kind": "hardcoded-font-size",
+      "line": 196,
+      "message": "Arbitrary font size text-[10px]. Use the type scale (text-xs, text-sm, text-base).",
+      "value": "text-[10px]"
+    },
+    {
+      "file": "src/components/comment-thread.tsx",
+      "kind": "hardcoded-font-size",
+      "line": 200,
+      "message": "Arbitrary font size text-[10px]. Use the type scale (text-xs, text-sm, text-base).",
+      "value": "text-[10px]"
+    },
+    {
+      "file": "src/components/comment-thread.tsx",
+      "kind": "unknown-token",
+      "line": 214,
+      "message": "Undefined token text-status-red/70. It is not declared in tailwind.config.ts.",
+      "value": "text-status-red/70"
+    },
+    {
+      "file": "src/components/comment-thread.tsx",
+      "kind": "hardcoded-font-size",
+      "line": 265,
+      "message": "Arbitrary font size text-[10px]. Use the type scale (text-xs, text-sm, text-base).",
+      "value": "text-[10px]"
+    },
+    {
+      "file": "src/components/comment-thread.tsx",
+      "kind": "unknown-token",
+      "line": 265,
+      "message": "Undefined token text-status-red. It is not declared in tailwind.config.ts.",
+      "value": "text-status-red"
+    },
+    {
+      "file": "src/components/cross-ref-panel.tsx",
+      "kind": "hardcoded-font-size",
+      "line": 48,
+      "message": "Arbitrary font size text-[10px]. Use the type scale (text-xs, text-sm, text-base).",
+      "value": "text-[10px]"
+    },
+    {
+      "file": "src/components/cross-ref-panel.tsx",
+      "kind": "hardcoded-font-size",
+      "line": 59,
+      "message": "Arbitrary font size text-[10px]. Use the type scale (text-xs, text-sm, text-base).",
+      "value": "text-[10px]"
+    },
+    {
+      "file": "src/components/cross-ref-panel.tsx",
+      "kind": "hardcoded-font-size",
+      "line": 73,
+      "message": "Arbitrary font size text-[10px]. Use the type scale (text-xs, text-sm, text-base).",
+      "value": "text-[10px]"
+    },
+    {
+      "file": "src/components/cross-ref-panel.tsx",
+      "kind": "unknown-token",
+      "line": 104,
+      "message": "Undefined token text-status-red/60. It is not declared in tailwind.config.ts.",
+      "value": "text-status-red/60"
+    },
+    {
+      "file": "src/components/cross-ref-panel.tsx",
+      "kind": "hardcoded-font-size",
+      "line": 117,
+      "message": "Arbitrary font size text-[10px]. Use the type scale (text-xs, text-sm, text-base).",
+      "value": "text-[10px]"
+    },
+    {
+      "file": "src/components/cross-ref-panel.tsx",
+      "kind": "hardcoded-font-size",
+      "line": 120,
+      "message": "Arbitrary font size text-[10px]. Use the type scale (text-xs, text-sm, text-base).",
+      "value": "text-[10px]"
+    },
+    {
+      "file": "src/components/obligation-list.tsx",
+      "kind": "hardcoded-color",
+      "line": 25,
+      "message": "Hardcoded color bg-emerald-500/15. Use surface, ink, gold, or status tokens.",
+      "value": "bg-emerald-500/15"
+    },
+    {
+      "file": "src/components/obligation-list.tsx",
+      "kind": "hardcoded-color",
+      "line": 25,
+      "message": "Hardcoded color text-emerald-700. Use surface, ink, gold, or status tokens.",
+      "value": "text-emerald-700"
+    },
+    {
+      "file": "src/components/obligation-list.tsx",
+      "kind": "hardcoded-color",
+      "line": 26,
+      "message": "Hardcoded color bg-blue-500/15. Use surface, ink, gold, or status tokens.",
+      "value": "bg-blue-500/15"
+    },
+    {
+      "file": "src/components/obligation-list.tsx",
+      "kind": "hardcoded-color",
+      "line": 26,
+      "message": "Hardcoded color text-blue-700. Use surface, ink, gold, or status tokens.",
+      "value": "text-blue-700"
+    },
+    {
+      "file": "src/components/obligation-list.tsx",
+      "kind": "hardcoded-color",
+      "line": 27,
+      "message": "Hardcoded color bg-purple-500/15. Use surface, ink, gold, or status tokens.",
+      "value": "bg-purple-500/15"
+    },
+    {
+      "file": "src/components/obligation-list.tsx",
+      "kind": "hardcoded-color",
+      "line": 27,
+      "message": "Hardcoded color text-purple-700. Use surface, ink, gold, or status tokens.",
+      "value": "text-purple-700"
+    },
+    {
+      "file": "src/components/obligation-list.tsx",
+      "kind": "hardcoded-color",
+      "line": 28,
+      "message": "Hardcoded color bg-red-500/15. Use surface, ink, gold, or status tokens.",
+      "value": "bg-red-500/15"
+    },
+    {
+      "file": "src/components/obligation-list.tsx",
+      "kind": "hardcoded-color",
+      "line": 28,
+      "message": "Hardcoded color text-red-700. Use surface, ink, gold, or status tokens.",
+      "value": "text-red-700"
+    },
+    {
+      "file": "src/components/obligation-list.tsx",
+      "kind": "hardcoded-color",
+      "line": 90,
+      "message": "Hardcoded color text-red-600. Use surface, ink, gold, or status tokens.",
+      "value": "text-red-600"
+    },
+    {
+      "file": "src/components/obligation-list.tsx",
+      "kind": "hardcoded-color",
+      "line": 102,
+      "message": "Hardcoded color text-emerald-500. Use surface, ink, gold, or status tokens.",
+      "value": "text-emerald-500"
+    },
+    {
+      "file": "src/components/obligation-list.tsx",
+      "kind": "hardcoded-color",
+      "line": 108,
+      "message": "Hardcoded color hover:text-emerald-600. Use surface, ink, gold, or status tokens.",
+      "value": "hover:text-emerald-600"
+    },
+    {
+      "file": "src/components/obligation-list.tsx",
+      "kind": "hardcoded-color",
+      "line": 191,
+      "message": "Hardcoded color text-white. Use surface, ink, gold, or status tokens.",
+      "value": "text-white"
+    },
+    {
+      "file": "src/components/obligation-list.tsx",
+      "kind": "hardcoded-color",
+      "line": 205,
+      "message": "Hardcoded color bg-red-50. Use surface, ink, gold, or status tokens.",
+      "value": "bg-red-50"
+    },
+    {
+      "file": "src/components/obligation-list.tsx",
+      "kind": "hardcoded-color",
+      "line": 205,
+      "message": "Hardcoded color text-red-600. Use surface, ink, gold, or status tokens.",
+      "value": "text-red-600"
+    },
+    {
+      "file": "src/components/obligation-list.tsx",
+      "kind": "hardcoded-color",
+      "line": 213,
+      "message": "Hardcoded color bg-red-50. Use surface, ink, gold, or status tokens.",
+      "value": "bg-red-50"
+    },
+    {
+      "file": "src/components/obligation-list.tsx",
+      "kind": "hardcoded-color",
+      "line": 213,
+      "message": "Hardcoded color text-red-600. Use surface, ink, gold, or status tokens.",
+      "value": "text-red-600"
+    },
+    {
+      "file": "src/components/obligations-dashboard.tsx",
+      "kind": "hardcoded-color",
+      "line": 12,
+      "message": "Hardcoded color bg-emerald-500/15. Use surface, ink, gold, or status tokens.",
+      "value": "bg-emerald-500/15"
+    },
+    {
+      "file": "src/components/obligations-dashboard.tsx",
+      "kind": "hardcoded-color",
+      "line": 12,
+      "message": "Hardcoded color text-emerald-700. Use surface, ink, gold, or status tokens.",
+      "value": "text-emerald-700"
+    },
+    {
+      "file": "src/components/obligations-dashboard.tsx",
+      "kind": "hardcoded-color",
+      "line": 13,
+      "message": "Hardcoded color bg-blue-500/15. Use surface, ink, gold, or status tokens.",
+      "value": "bg-blue-500/15"
+    },
+    {
+      "file": "src/components/obligations-dashboard.tsx",
+      "kind": "hardcoded-color",
+      "line": 13,
+      "message": "Hardcoded color text-blue-700. Use surface, ink, gold, or status tokens.",
+      "value": "text-blue-700"
+    },
+    {
+      "file": "src/components/obligations-dashboard.tsx",
+      "kind": "hardcoded-color",
+      "line": 14,
+      "message": "Hardcoded color bg-purple-500/15. Use surface, ink, gold, or status tokens.",
+      "value": "bg-purple-500/15"
+    },
+    {
+      "file": "src/components/obligations-dashboard.tsx",
+      "kind": "hardcoded-color",
+      "line": 14,
+      "message": "Hardcoded color text-purple-700. Use surface, ink, gold, or status tokens.",
+      "value": "text-purple-700"
+    },
+    {
+      "file": "src/components/obligations-dashboard.tsx",
+      "kind": "hardcoded-color",
+      "line": 15,
+      "message": "Hardcoded color bg-red-500/15. Use surface, ink, gold, or status tokens.",
+      "value": "bg-red-500/15"
+    },
+    {
+      "file": "src/components/obligations-dashboard.tsx",
+      "kind": "hardcoded-color",
+      "line": 15,
+      "message": "Hardcoded color text-red-700. Use surface, ink, gold, or status tokens.",
+      "value": "text-red-700"
+    },
+    {
+      "file": "src/components/obligations-dashboard.tsx",
+      "kind": "hardcoded-color",
+      "line": 107,
+      "message": "Hardcoded color bg-red-50. Use surface, ink, gold, or status tokens.",
+      "value": "bg-red-50"
+    },
+    {
+      "file": "src/components/obligations-dashboard.tsx",
+      "kind": "hardcoded-color",
+      "line": 107,
+      "message": "Hardcoded color text-red-600. Use surface, ink, gold, or status tokens.",
+      "value": "text-red-600"
+    },
+    {
+      "file": "src/components/obligations-dashboard.tsx",
+      "kind": "hardcoded-color",
+      "line": 181,
+      "message": "Hardcoded color text-red-600. Use surface, ink, gold, or status tokens.",
+      "value": "text-red-600"
+    },
+    {
+      "file": "src/components/obligations-dashboard.tsx",
+      "kind": "hardcoded-color",
+      "line": 190,
+      "message": "Hardcoded color text-emerald-600. Use surface, ink, gold, or status tokens.",
+      "value": "text-emerald-600"
+    },
+    {
+      "file": "src/components/pdf-renderer.tsx",
+      "kind": "hardcoded-color",
+      "line": 76,
+      "message": "Hardcoded color shadow-[0_8px_40px_rgba(0,0,0,0.6)]. Use surface, ink, gold, or status tokens.",
+      "value": "shadow-[0_8px_40px_rgba(0,0,0,0.6)]"
+    },
+    {
+      "file": "src/components/pdf-renderer.tsx",
+      "kind": "hardcoded-color",
+      "line": 85,
+      "message": "Hardcoded color rgba(212,168,67,0.40). Use surface, ink, gold, or status tokens.",
+      "value": "rgba(212,168,67,0.40)"
+    },
+    {
+      "file": "src/components/pdf-renderer.tsx",
+      "kind": "hardcoded-color",
+      "line": 88,
+      "message": "Hardcoded color rgba(212,168,67,0.25). Use surface, ink, gold, or status tokens.",
+      "value": "rgba(212,168,67,0.25)"
+    },
+    {
+      "file": "src/components/pdf-viewer.tsx",
+      "kind": "hardcoded-color",
+      "line": 184,
+      "message": "Hardcoded color #0d1117. Use surface, ink, gold, or status tokens.",
+      "value": "#0d1117"
+    },
+    {
+      "file": "src/components/pdf-viewer.tsx",
+      "kind": "hardcoded-color",
+      "line": 184,
+      "message": "Hardcoded color #0f1419. Use surface, ink, gold, or status tokens.",
+      "value": "#0f1419"
+    },
+    {
+      "file": "src/components/quota-bar.tsx",
+      "kind": "hardcoded-font-size",
+      "line": 28,
+      "message": "Arbitrary font size text-[10px]. Use the type scale (text-xs, text-sm, text-base).",
+      "value": "text-[10px]"
+    },
+    {
+      "file": "src/components/summary-card.tsx",
+      "kind": "hardcoded-color",
+      "line": 48,
+      "message": "Hardcoded color hover:bg-white/5. Use surface, ink, gold, or status tokens.",
+      "value": "hover:bg-white/5"
+    },
+    {
+      "file": "src/components/summary-card.tsx",
+      "kind": "unknown-token",
+      "line": 64,
+      "message": "Undefined token text-ink-base. It is not declared in tailwind.config.ts.",
+      "value": "text-ink-base"
+    },
+    {
+      "file": "src/components/summary-card.tsx",
+      "kind": "hardcoded-font-size",
+      "line": 90,
+      "message": "Arbitrary font size text-[10px]. Use the type scale (text-xs, text-sm, text-base).",
+      "value": "text-[10px]"
+    },
+    {
+      "file": "src/components/summary-card.tsx",
+      "kind": "hardcoded-font-size",
+      "line": 97,
+      "message": "Arbitrary font size text-[10px]. Use the type scale (text-xs, text-sm, text-base).",
+      "value": "text-[10px]"
+    },
+    {
+      "file": "src/components/summary-card.tsx",
+      "kind": "unknown-token",
+      "line": 137,
+      "message": "Undefined token text-status-red/80. It is not declared in tailwind.config.ts.",
+      "value": "text-status-red/80"
+    },
+    {
+      "file": "src/components/summary-card.tsx",
+      "kind": "hardcoded-font-size",
+      "line": 161,
+      "message": "Arbitrary font size text-[10px]. Use the type scale (text-xs, text-sm, text-base).",
+      "value": "text-[10px]"
+    },
+    {
+      "file": "src/components/summary-card.tsx",
+      "kind": "hardcoded-font-size",
+      "line": 178,
+      "message": "Arbitrary font size text-[10px]. Use the type scale (text-xs, text-sm, text-base).",
+      "value": "text-[10px]"
+    }
+  ]
+}

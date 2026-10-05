@@ -1,0 +1,3883 @@
+{
+  "edges": [
+    {
+      "from": "component:AcceptInvite",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:AcceptInvite",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:AcceptInvite",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:AcceptInvite",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:AcceptInvite",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:AcceptInvite",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:AcceptInvite",
+      "to": "token:class.btn-primary",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AcceptInvite",
+      "to": "token:class.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AcceptInvite",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AcceptInvite",
+      "to": "token:color.ink",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AcceptInvite",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AcceptInvite",
+      "to": "token:color.status.failed",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AcceptInvite",
+      "to": "token:font.display",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AcceptInvite",
+      "to": "token:font.mono",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AcceptInvite",
+      "to": "util:lib/api",
+      "type": "imports"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "token:color.ink",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "token:color.ink.faint",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "token:color.status.failed",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "token:color.status.processing",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "token:color.status.ready",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "token:color.surface",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "token:color.surface.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "token:font.mono",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "util:lib/api",
+      "type": "imports"
+    },
+    {
+      "from": "component:AuditLogTable",
+      "to": "util:lib/types",
+      "type": "imports"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "token:class.btn-primary",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "token:class.citation-chip",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "token:class.citation-chip-active",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "token:color.ink",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "token:color.ink.faint",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "token:color.status.failed",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "token:color.surface",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "token:color.surface.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "token:font.display",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "token:font.sans",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "util:lib/api",
+      "type": "imports"
+    },
+    {
+      "from": "component:ChatPanel",
+      "to": "util:lib/types",
+      "type": "imports"
+    },
+    {
+      "from": "component:CommentThread",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:CommentThread",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:CommentThread",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:CommentThread",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:CommentThread",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:CommentThread",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:CommentThread",
+      "to": "token:class.btn-primary",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:CommentThread",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:CommentThread",
+      "to": "token:color.ink",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:CommentThread",
+      "to": "token:color.ink.faint",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:CommentThread",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:CommentThread",
+      "to": "token:color.status.ready",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:CommentThread",
+      "to": "token:color.surface",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:CommentThread",
+      "to": "token:color.surface.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:CommentThread",
+      "to": "util:lib/api",
+      "type": "imports"
+    },
+    {
+      "from": "component:CommentThread",
+      "to": "util:lib/types",
+      "type": "imports"
+    },
+    {
+      "from": "component:CrossRefPanel",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:CrossRefPanel",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:CrossRefPanel",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:CrossRefPanel",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:CrossRefPanel",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:CrossRefPanel",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:CrossRefPanel",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:CrossRefPanel",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:CrossRefPanel",
+      "to": "token:color.surface.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:CrossRefPanel",
+      "to": "token:font.mono",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:CrossRefPanel",
+      "to": "util:lib/api",
+      "type": "imports"
+    },
+    {
+      "from": "component:CrossRefPanel",
+      "to": "util:lib/types",
+      "type": "imports"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "component:ChatPanel",
+      "type": "imports"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "component:ChatPanel",
+      "type": "renders"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "component:CommentThread",
+      "type": "imports"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "component:CommentThread",
+      "type": "renders"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "component:CrossRefPanel",
+      "type": "imports"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "component:CrossRefPanel",
+      "type": "renders"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "component:ObligationList",
+      "type": "imports"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "component:ObligationList",
+      "type": "renders"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "component:PdfViewer",
+      "type": "imports"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "component:PdfViewer",
+      "type": "renders"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "component:SummaryCard",
+      "type": "imports"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "component:SummaryCard",
+      "type": "renders"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "decision:disclaimer-visible",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "token:class.btn-ghost",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "token:class.disclaimer-bar",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "token:class.status-badge",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "token:color.ink",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "token:color.ink.faint",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "token:color.status.ready",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "token:color.surface",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "token:color.surface.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "token:font.display",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "util:lib/api",
+      "type": "imports"
+    },
+    {
+      "from": "component:DocLayout",
+      "to": "util:lib/types",
+      "type": "imports"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "component:UploadButton",
+      "type": "imports"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "component:UploadButton",
+      "type": "renders"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "token:animation.pulse-slow",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "token:class.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "token:class.disclaimer-bar",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "token:class.status-badge",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "token:color.ink",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "token:color.status.failed",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "token:color.status.processing",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "token:color.status.ready",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "token:color.surface.hover",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "token:font.display",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "token:font.mono",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "util:lib/api",
+      "type": "imports"
+    },
+    {
+      "from": "component:DocumentList",
+      "to": "util:lib/types",
+      "type": "imports"
+    },
+    {
+      "from": "component:ObligationList",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ObligationList",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ObligationList",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ObligationList",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ObligationList",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ObligationList",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ObligationList",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ObligationList",
+      "to": "token:color.ink",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ObligationList",
+      "to": "token:color.ink.faint",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ObligationList",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ObligationList",
+      "to": "token:color.surface.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ObligationList",
+      "to": "util:lib/api",
+      "type": "imports"
+    },
+    {
+      "from": "component:ObligationList",
+      "to": "util:lib/types",
+      "type": "imports"
+    },
+    {
+      "from": "component:ObligationsDashboard",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ObligationsDashboard",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ObligationsDashboard",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ObligationsDashboard",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ObligationsDashboard",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ObligationsDashboard",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:ObligationsDashboard",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ObligationsDashboard",
+      "to": "token:color.ink",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ObligationsDashboard",
+      "to": "token:color.ink.faint",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ObligationsDashboard",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ObligationsDashboard",
+      "to": "token:color.surface",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ObligationsDashboard",
+      "to": "token:color.surface.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ObligationsDashboard",
+      "to": "token:font.mono",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:ObligationsDashboard",
+      "to": "util:lib/api",
+      "type": "imports"
+    },
+    {
+      "from": "component:ObligationsDashboard",
+      "to": "util:lib/types",
+      "type": "imports"
+    },
+    {
+      "from": "component:PdfRenderer",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:PdfRenderer",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:PdfRenderer",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:PdfRenderer",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:PdfRenderer",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:PdfRenderer",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:PdfRenderer",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:PdfRenderer",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:PdfRenderer",
+      "to": "token:color.status.failed",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:PdfRenderer",
+      "to": "util:lib/types",
+      "type": "imports"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "component:PdfRenderer",
+      "type": "imports"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "component:PdfRenderer",
+      "type": "renders"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "token:class.btn-ghost",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "token:color.ink.faint",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "token:color.surface",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "token:color.surface.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "token:color.surface.deep",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "token:font.mono",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "token:font.sans",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "token:shadow.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "util:lib/api",
+      "type": "imports"
+    },
+    {
+      "from": "component:PdfViewer",
+      "to": "util:lib/types",
+      "type": "imports"
+    },
+    {
+      "from": "component:Providers",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:Providers",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:Providers",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:Providers",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:Providers",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:Providers",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:QuotaBar",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:QuotaBar",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:QuotaBar",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:QuotaBar",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:QuotaBar",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:QuotaBar",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:QuotaBar",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:QuotaBar",
+      "to": "token:color.ink.faint",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:QuotaBar",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:QuotaBar",
+      "to": "token:color.status.failed",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:QuotaBar",
+      "to": "util:lib/api",
+      "type": "imports"
+    },
+    {
+      "from": "component:SummaryCard",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:SummaryCard",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:SummaryCard",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:SummaryCard",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:SummaryCard",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:SummaryCard",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:SummaryCard",
+      "to": "token:class.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:SummaryCard",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:SummaryCard",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:SummaryCard",
+      "to": "token:color.surface.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:SummaryCard",
+      "to": "token:font.mono",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:SummaryCard",
+      "to": "util:lib/api",
+      "type": "imports"
+    },
+    {
+      "from": "component:SummaryCard",
+      "to": "util:lib/types",
+      "type": "imports"
+    },
+    {
+      "from": "component:UploadButton",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:UploadButton",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:UploadButton",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:UploadButton",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:UploadButton",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:UploadButton",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:UploadButton",
+      "to": "token:class.btn-primary",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:UploadButton",
+      "to": "token:color.status.failed",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:UploadButton",
+      "to": "token:font.mono",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:UploadButton",
+      "to": "util:lib/api",
+      "type": "imports"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "token:class.btn-primary",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "token:class.citation-chip",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "token:class.citation-chip-active",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "token:color.ink",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "token:color.ink.faint",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "token:color.surface",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "token:color.surface.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "token:font.display",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "token:font.sans",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "util:lib/api",
+      "type": "imports"
+    },
+    {
+      "from": "component:WorkspaceChat",
+      "to": "util:lib/types",
+      "type": "imports"
+    },
+    {
+      "from": "component:WorkspaceHeader",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceHeader",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceHeader",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceHeader",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceHeader",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceHeader",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceHeader",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceHeader",
+      "to": "token:color.ink",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceHeader",
+      "to": "token:color.ink.faint",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceHeader",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceHeader",
+      "to": "token:color.surface",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceHeader",
+      "to": "token:color.surface.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceHeader",
+      "to": "token:font.display",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "token:class.btn-ghost",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "token:class.btn-primary",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "token:class.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "token:class.status-badge",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "token:color.ink",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "token:color.ink.faint",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "token:color.status.failed",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "token:color.surface",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "token:color.surface.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "token:font.display",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "token:font.mono",
+      "type": "uses_token"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "util:lib/api",
+      "type": "imports"
+    },
+    {
+      "from": "component:WorkspaceMembers",
+      "to": "util:lib/types",
+      "type": "imports"
+    },
+    {
+      "from": "layout:root",
+      "to": "component:Providers",
+      "type": "imports"
+    },
+    {
+      "from": "layout:root",
+      "to": "component:Providers",
+      "type": "renders"
+    },
+    {
+      "from": "layout:root",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "layout:root",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "layout:root",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "layout:root",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "layout:root",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "layout:root",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "token:color.ink",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "token:color.ink.faint",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "token:color.status.failed",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "token:color.status.ready",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "token:color.surface.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "token:color.surface.deep",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "token:font.display",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "token:font.mono",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "token:font.sans",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:dev/context-canvas/[view]",
+      "to": "token:shadow.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:home",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:home",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:home",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:home",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:home",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:home",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:invite/[token]",
+      "to": "component:AcceptInvite",
+      "type": "imports"
+    },
+    {
+      "from": "page:invite/[token]",
+      "to": "component:AcceptInvite",
+      "type": "renders"
+    },
+    {
+      "from": "page:invite/[token]",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:invite/[token]",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:invite/[token]",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:invite/[token]",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:invite/[token]",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:invite/[token]",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:invite/[token]",
+      "to": "token:class.disclaimer-bar",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:invite/[token]",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:invite/[token]",
+      "to": "token:color.ink",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:invite/[token]",
+      "to": "token:color.ink.faint",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:invite/[token]",
+      "to": "token:color.surface",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:invite/[token]",
+      "to": "token:font.display",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:not-found",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:not-found",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:not-found",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:not-found",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:not-found",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:not-found",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:not-found",
+      "to": "token:class.btn-ghost",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:not-found",
+      "to": "token:color.ink",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:not-found",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:not-found",
+      "to": "token:font.display",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:sign-in/[[...sign-in]]",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:sign-in/[[...sign-in]]",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:sign-in/[[...sign-in]]",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:sign-in/[[...sign-in]]",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:sign-in/[[...sign-in]]",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:sign-in/[[...sign-in]]",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:sign-up/[[...sign-up]]",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:sign-up/[[...sign-up]]",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:sign-up/[[...sign-up]]",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:sign-up/[[...sign-up]]",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:sign-up/[[...sign-up]]",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:sign-up/[[...sign-up]]",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace",
+      "to": "component:DocumentList",
+      "type": "imports"
+    },
+    {
+      "from": "page:workspace",
+      "to": "component:DocumentList",
+      "type": "renders"
+    },
+    {
+      "from": "page:workspace",
+      "to": "component:QuotaBar",
+      "type": "imports"
+    },
+    {
+      "from": "page:workspace",
+      "to": "component:QuotaBar",
+      "type": "renders"
+    },
+    {
+      "from": "page:workspace",
+      "to": "component:WorkspaceChat",
+      "type": "imports"
+    },
+    {
+      "from": "page:workspace",
+      "to": "component:WorkspaceChat",
+      "type": "renders"
+    },
+    {
+      "from": "page:workspace",
+      "to": "component:WorkspaceHeader",
+      "type": "imports"
+    },
+    {
+      "from": "page:workspace",
+      "to": "component:WorkspaceHeader",
+      "type": "renders"
+    },
+    {
+      "from": "page:workspace",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace",
+      "to": "decision:disclaimer-visible",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace",
+      "to": "token:class.disclaimer-bar",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:workspace",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:workspace",
+      "to": "token:color.ink",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:workspace",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:workspace",
+      "to": "token:color.surface.card",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:workspace",
+      "to": "token:font.display",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:workspace/[docId]",
+      "to": "component:DocLayout",
+      "type": "imports"
+    },
+    {
+      "from": "page:workspace/[docId]",
+      "to": "component:DocLayout",
+      "type": "renders"
+    },
+    {
+      "from": "page:workspace/[docId]",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/[docId]",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/[docId]",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/[docId]",
+      "to": "decision:disclaimer-visible",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/[docId]",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/[docId]",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/[docId]",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/[docId]",
+      "to": "util:lib/types",
+      "type": "imports"
+    },
+    {
+      "from": "page:workspace/obligations",
+      "to": "component:ObligationsDashboard",
+      "type": "imports"
+    },
+    {
+      "from": "page:workspace/obligations",
+      "to": "component:ObligationsDashboard",
+      "type": "renders"
+    },
+    {
+      "from": "page:workspace/obligations",
+      "to": "component:WorkspaceHeader",
+      "type": "imports"
+    },
+    {
+      "from": "page:workspace/obligations",
+      "to": "component:WorkspaceHeader",
+      "type": "renders"
+    },
+    {
+      "from": "page:workspace/obligations",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/obligations",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/obligations",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/obligations",
+      "to": "decision:disclaimer-visible",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/obligations",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/obligations",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/obligations",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/obligations",
+      "to": "token:class.disclaimer-bar",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:workspace/obligations",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:workspace/obligations",
+      "to": "token:color.ink",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:workspace/obligations",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:workspace/obligations",
+      "to": "token:font.display",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "component:AuditLogTable",
+      "type": "imports"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "component:AuditLogTable",
+      "type": "renders"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "component:WorkspaceHeader",
+      "type": "imports"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "component:WorkspaceHeader",
+      "type": "renders"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "component:WorkspaceMembers",
+      "type": "imports"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "component:WorkspaceMembers",
+      "type": "renders"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "decision:disclaimer-visible",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "token:class.disclaimer-bar",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "token:color.gold",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "token:color.ink",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "token:color.ink.muted",
+      "type": "uses_token"
+    },
+    {
+      "from": "page:workspace/settings",
+      "to": "token:font.display",
+      "type": "uses_token"
+    },
+    {
+      "from": "token:class.btn-ghost",
+      "to": "token:color.gold",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.btn-ghost",
+      "to": "token:color.ink",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.btn-ghost",
+      "to": "token:color.ink.muted",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.btn-ghost",
+      "to": "token:color.surface.deep",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.btn-ghost",
+      "to": "token:color.surface.hover",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.btn-ghost",
+      "to": "token:font.sans",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.btn-primary",
+      "to": "token:color.gold",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.btn-primary",
+      "to": "token:color.gold.bright",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.btn-primary",
+      "to": "token:color.surface.deep",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.btn-primary",
+      "to": "token:font.sans",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.card",
+      "to": "token:color.ink.faint",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.card",
+      "to": "token:color.surface.card",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.card",
+      "to": "token:shadow.card",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.citation-chip",
+      "to": "token:color.gold",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.citation-chip",
+      "to": "token:font.mono",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.citation-chip",
+      "to": "token:shadow.gold",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.citation-chip-active",
+      "to": "token:color.gold",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.citation-chip-active",
+      "to": "token:shadow.gold",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.disclaimer-bar",
+      "to": "token:color.gold",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.disclaimer-bar",
+      "to": "token:color.ink.muted",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.highlight-mark",
+      "to": "token:color.gold",
+      "type": "extends"
+    },
+    {
+      "from": "token:class.status-badge",
+      "to": "token:font.mono",
+      "type": "extends"
+    },
+    {
+      "from": "util:lib/api",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:lib/api",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:lib/api",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:lib/api",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:lib/api",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:lib/api",
+      "to": "util:lib/types",
+      "type": "imports"
+    },
+    {
+      "from": "util:lib/backend",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:lib/backend",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:lib/backend",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:lib/backend",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:lib/backend",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:lib/types",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:lib/types",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:lib/types",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:lib/types",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:lib/types",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:middleware",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:middleware",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:middleware",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:middleware",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/audit-log",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/audit-log",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/audit-log",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/audit-log",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/audit-log",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/audit-log",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/audit-log",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/comments/[commentId]",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/comments/[commentId]",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/comments/[commentId]",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/comments/[commentId]",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/comments/[commentId]",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/comments/[commentId]",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/comments/[commentId]",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/conversations",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/conversations",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/conversations",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/conversations",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/conversations",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/conversations",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/conversations",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/documents",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/documents/[docId]",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/chunks/[chunkId]/comments",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/chunks/[chunkId]/comments",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/chunks/[chunkId]/comments",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/chunks/[chunkId]/comments",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/chunks/[chunkId]/comments",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/chunks/[chunkId]/comments",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/chunks/[chunkId]/comments",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/chunks/[chunkId]/refs",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/chunks/[chunkId]/refs",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/chunks/[chunkId]/refs",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/chunks/[chunkId]/refs",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/chunks/[chunkId]/refs",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/chunks/[chunkId]/refs",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/chunks/[chunkId]/refs",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/obligations",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/obligations",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/obligations",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/obligations",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/obligations",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/obligations",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/obligations",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/obligations/extract",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/obligations/extract",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/obligations/extract",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/obligations/extract",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/obligations/extract",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/obligations/extract",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/obligations/extract",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/summary",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/summary",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/summary",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/summary",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/summary",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/summary",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/summary",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/view-url",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/view-url",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/view-url",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/view-url",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/view-url",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/view-url",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/documents/[docId]/view-url",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/obligations",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/obligations/[obligationId]",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations/[obligationId]",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations/[obligationId]",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations/[obligationId]",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations/[obligationId]",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations/[obligationId]",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations/[obligationId]",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/obligations/[obligationId]/resolve",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations/[obligationId]/resolve",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations/[obligationId]/resolve",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations/[obligationId]/resolve",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations/[obligationId]/resolve",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations/[obligationId]/resolve",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/obligations/[obligationId]/resolve",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/query",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/query",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/query",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/query",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/query",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/query",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/query",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/quota",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/quota",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/quota",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/quota",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/quota",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/quota",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/quota",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/upload/confirm/[docId]",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/upload/confirm/[docId]",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/upload/confirm/[docId]",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/upload/confirm/[docId]",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/upload/confirm/[docId]",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/upload/confirm/[docId]",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/upload/confirm/[docId]",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/upload/presign",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/upload/presign",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/upload/presign",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/upload/presign",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/upload/presign",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/upload/presign",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/upload/presign",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/workspace",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/workspace/invites",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/workspace/invites/[inviteId]",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites/[inviteId]",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites/[inviteId]",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites/[inviteId]",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites/[inviteId]",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites/[inviteId]",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites/[inviteId]",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/workspace/invites/accept",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites/accept",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites/accept",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites/accept",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites/accept",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites/accept",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/invites/accept",
+      "to": "util:lib/backend",
+      "type": "imports"
+    },
+    {
+      "from": "util:route/api/workspace/members/[userId]",
+      "to": "decision:calm-readable-legal-ui",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/members/[userId]",
+      "to": "decision:client-data-through-bff",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/members/[userId]",
+      "to": "decision:dark-gold-reading-room",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/members/[userId]",
+      "to": "decision:reuse-existing-components",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/members/[userId]",
+      "to": "decision:theme-tokens-only",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/members/[userId]",
+      "to": "decision:type-roles",
+      "type": "constrained_by"
+    },
+    {
+      "from": "util:route/api/workspace/members/[userId]",
+      "to": "util:lib/backend",
+      "type": "imports"
+    }
+  ],
+  "nodes": [
+    {
+      "exports": ["AcceptInvite"],
+      "id": "component:AcceptInvite",
+      "path": "src/components/accept-invite.tsx",
+      "props": ["token"],
+      "summary": "Redeems an invite token and activates that workspace.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "exports": ["AuditLogTable"],
+      "id": "component:AuditLogTable",
+      "path": "src/components/audit-log-table.tsx",
+      "summary": "Paginated audit-event table with an action filter.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "exports": ["ChatPanel"],
+      "id": "component:ChatPanel",
+      "path": "src/components/chat-panel.tsx",
+      "props": [
+        "documentId",
+        "onCitationClick",
+        "onQuestionConsumed",
+        "pendingQuestion"
+      ],
+      "summary": "Document-scoped Q&A panel with clause citations.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "exports": ["CommentThread"],
+      "id": "component:CommentThread",
+      "path": "src/components/comment-thread.tsx",
+      "props": ["citation", "currentUserId", "documentId"],
+      "summary": "Clause comment thread with post, resolve, and delete.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "exports": ["CrossRefPanel"],
+      "id": "component:CrossRefPanel",
+      "path": "src/components/cross-ref-panel.tsx",
+      "props": ["citation", "documentId", "onJumpToRef"],
+      "summary": "Lists cross-references for the active clause.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "exports": ["DocLayout"],
+      "id": "component:DocLayout",
+      "path": "src/components/doc-layout.tsx",
+      "props": ["documentId", "initialCitation"],
+      "summary": "Document workspace shell with the PDF, summary, chat, comments, and obligations.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "exports": ["DocumentList"],
+      "id": "component:DocumentList",
+      "path": "src/components/document-list.tsx",
+      "summary": "Lists uploaded documents with processing status and upload.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "exports": ["ObligationList"],
+      "id": "component:ObligationList",
+      "path": "src/components/obligation-list.tsx",
+      "props": ["docId"],
+      "summary": "Per-document obligations table with extract and resolve.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "exports": ["ObligationsDashboard"],
+      "id": "component:ObligationsDashboard",
+      "path": "src/components/obligations-dashboard.tsx",
+      "summary": "Tenant-wide obligations table with type filters.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "exports": ["PdfRenderer"],
+      "id": "component:PdfRenderer",
+      "path": "src/components/pdf-renderer.tsx",
+      "props": [
+        "activeCitation",
+        "onLoadSuccess",
+        "pageNumber",
+        "scale",
+        "url"
+      ],
+      "summary": "react-pdf page renderer with citation highlight overlays.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "exports": ["PdfViewer"],
+      "id": "component:PdfViewer",
+      "path": "src/components/pdf-viewer.tsx",
+      "props": ["activeCitation", "documentId", "onExplainClause"],
+      "summary": "PDF pager, zoom, and clause selection.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "exports": ["Providers"],
+      "id": "component:Providers",
+      "path": "src/components/providers.tsx",
+      "props": ["children"],
+      "summary": "TanStack Query client provider for the app.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "exports": ["QuotaBar"],
+      "id": "component:QuotaBar",
+      "path": "src/components/quota-bar.tsx",
+      "summary": "Shows storage and question quota for the tenant.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "exports": ["SummaryCard"],
+      "id": "component:SummaryCard",
+      "path": "src/components/summary-card.tsx",
+      "props": ["documentId", "onJumpToChunk"],
+      "summary": "Shows extracted key clauses for one document.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "exports": ["UploadButton"],
+      "id": "component:UploadButton",
+      "path": "src/components/upload-button.tsx",
+      "summary": "Requests a presigned URL and uploads a file straight to storage.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "exports": ["WorkspaceChat"],
+      "id": "component:WorkspaceChat",
+      "path": "src/components/workspace-chat.tsx",
+      "summary": "Cross-document question panel with citation chips.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "exports": ["WorkspaceHeader"],
+      "id": "component:WorkspaceHeader",
+      "path": "src/components/workspace-header.tsx",
+      "props": ["active", "trailing"],
+      "summary": "Shared workspace chrome with navigation and the organization switcher.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "exports": ["WorkspaceMembers"],
+      "id": "component:WorkspaceMembers",
+      "path": "src/components/workspace-members.tsx",
+      "summary": "Lists members and pending invites, and lets an admin manage them.",
+      "summaryOrigin": "auto",
+      "type": "component"
+    },
+    {
+      "id": "decision:calm-readable-legal-ui",
+      "needsReview": false,
+      "path": "context/decisions.yaml",
+      "rationale": "People use this product to read long contracts. The interface should recede so clauses and citations stay legible.",
+      "summary": "Keep the interface calm and readable for dense legal documents. Use text-sm or text-xs for chrome, comfortable line height, and full-viewport reading layouts. Do not add loud marketing sections, extra accent colors, or decorative motion.",
+      "title": "Calm, high-readability UI",
+      "type": "decision"
+    },
+    {
+      "id": "decision:client-data-through-bff",
+      "needsReview": true,
+      "path": "context/decisions.yaml",
+      "rationale": "Inferred from the current split between lib/api.ts and lib/backend.ts. Confirm this remains the only data path.",
+      "summary": "Client components read and write server data through TanStack Query and src/lib/api.ts. Do not fetch inside useEffect, and do not call FastAPI from the browser. Route handlers call FastAPI only through src/lib/backend.ts.",
+      "title": "Client data goes through the BFF",
+      "type": "decision"
+    },
+    {
+      "id": "decision:dark-gold-reading-room",
+      "needsReview": true,
+      "path": "context/decisions.yaml",
+      "rationale": "Inferred from tailwind.config.ts and the workspace screens. Confirm before treating the palette roles as settled.",
+      "summary": "Use the dark surface scale for page backgrounds and cards, parchment ink for text, and gold only for brand, citations, focus, and primary actions.",
+      "title": "Dark surfaces with a gold accent",
+      "type": "decision"
+    },
+    {
+      "id": "decision:disclaimer-visible",
+      "needsReview": true,
+      "path": "context/decisions.yaml",
+      "rationale": "Inferred from the workspace disclaimer and the product mission. Confirm which routes must show it.",
+      "summary": "Workspace screens keep a visible disclaimer that the product helps people understand their documents and is not legal advice. Use the disclaimer-bar class.",
+      "title": "Comprehension disclaimer stays visible",
+      "type": "decision"
+    },
+    {
+      "id": "decision:reuse-existing-components",
+      "needsReview": false,
+      "path": "context/decisions.yaml",
+      "rationale": "Parallel widgets drift apart, especially tables, chat, and status badges.",
+      "summary": "Reuse a component already in the graph before adding a new one. Prefer DocumentList, ChatPanel, WorkspaceChat, PdfViewer, ObligationList, ObligationsDashboard, and the shared classes btn-primary, btn-ghost, card, citation-chip, and disclaimer-bar when they cover the need.",
+      "title": "Reuse existing components",
+      "type": "decision"
+    },
+    {
+      "id": "decision:theme-tokens-only",
+      "needsReview": false,
+      "path": "context/decisions.yaml",
+      "rationale": "One token set keeps the reading theme consistent, and the context graph can catch drift.",
+      "summary": "Style UI only with tokens from tailwind.config.ts and component classes in globals.css (surface, ink, gold, status, font-display, font-sans, font-mono, shadow-gold, shadow-card, btn-primary, btn-ghost, card, and the other component classes). Do not use Tailwind palette colors, arbitrary font sizes, arbitrary spacing, hex, or rgb values.",
+      "title": "Theme tokens only",
+      "type": "decision"
+    },
+    {
+      "id": "decision:type-roles",
+      "needsReview": true,
+      "path": "context/decisions.yaml",
+      "rationale": "Inferred from current headings, body copy, and citation chips. Confirm the role split.",
+      "summary": "Use font-display (Fraunces) for titles, font-sans (Outfit) for interface text, and font-mono (JetBrains Mono) for citations, timestamps, and status metadata.",
+      "title": "Display, sans, and mono roles",
+      "type": "decision"
+    },
+    {
+      "exports": ["RootLayout"],
+      "id": "layout:root",
+      "path": "src/app/layout.tsx",
+      "props": ["children"],
+      "summary": "Root layout that wraps the app in Clerk and the query provider.",
+      "summaryOrigin": "auto",
+      "type": "layout"
+    },
+    {
+      "exports": ["ContextCanvasPage"],
+      "id": "page:dev/context-canvas/[view]",
+      "path": "src/app/dev/context-canvas/[view]/page.tsx",
+      "props": ["params", "searchParams"],
+      "summary": "Dev-only LinkedIn artboard of the context graph. Returns 404 in production.",
+      "summaryOrigin": "auto",
+      "type": "page"
+    },
+    {
+      "exports": ["HomePage"],
+      "id": "page:home",
+      "path": "src/app/page.tsx",
+      "summary": "Redirects the index route to the workspace.",
+      "summaryOrigin": "auto",
+      "type": "page"
+    },
+    {
+      "exports": ["InvitePage"],
+      "id": "page:invite/[token]",
+      "path": "src/app/invite/[token]/page.tsx",
+      "props": ["params"],
+      "summary": "Accepts a workspace invite and switches into that organization.",
+      "summaryOrigin": "auto",
+      "type": "page"
+    },
+    {
+      "exports": ["NotFound"],
+      "id": "page:not-found",
+      "path": "src/app/not-found.tsx",
+      "summary": "Not-found screen in the reading theme.",
+      "summaryOrigin": "auto",
+      "type": "page"
+    },
+    {
+      "exports": ["SignInPage"],
+      "id": "page:sign-in/[[...sign-in]]",
+      "path": "src/app/sign-in/[[...sign-in]]/page.tsx",
+      "summary": "Clerk sign-in screen.",
+      "summaryOrigin": "auto",
+      "type": "page"
+    },
+    {
+      "exports": ["SignUpPage"],
+      "id": "page:sign-up/[[...sign-up]]",
+      "path": "src/app/sign-up/[[...sign-up]]/page.tsx",
+      "summary": "Clerk sign-up screen.",
+      "summaryOrigin": "auto",
+      "type": "page"
+    },
+    {
+      "exports": ["WorkspacePage"],
+      "id": "page:workspace",
+      "path": "src/app/workspace/page.tsx",
+      "summary": "Workspace home with the document list, quota, and cross-document chat.",
+      "summaryOrigin": "auto",
+      "type": "page"
+    },
+    {
+      "exports": ["DocumentPage", "generateMetadata"],
+      "id": "page:workspace/[docId]",
+      "path": "src/app/workspace/[docId]/page.tsx",
+      "props": ["params", "searchParams"],
+      "summary": "Opens one document and can highlight a citation from the query string.",
+      "summaryOrigin": "auto",
+      "type": "page"
+    },
+    {
+      "exports": ["ObligationsPage"],
+      "id": "page:workspace/obligations",
+      "path": "src/app/workspace/obligations/page.tsx",
+      "summary": "Tenant-wide obligations screen.",
+      "summaryOrigin": "auto",
+      "type": "page"
+    },
+    {
+      "exports": ["SettingsPage"],
+      "id": "page:workspace/settings",
+      "path": "src/app/workspace/settings/page.tsx",
+      "summary": "Settings screen that shows the audit log.",
+      "summaryOrigin": "human",
+      "type": "page"
+    },
+    {
+      "id": "token:animation.pulse-slow",
+      "path": "tailwind.config.ts",
+      "summary": "Animation pulse-slow (pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite).",
+      "type": "token"
+    },
+    {
+      "id": "token:class.btn-ghost",
+      "path": "src/app/globals.css",
+      "summary": "Component class btn-ghost.",
+      "type": "token"
+    },
+    {
+      "id": "token:class.btn-primary",
+      "path": "src/app/globals.css",
+      "summary": "Component class btn-primary.",
+      "type": "token"
+    },
+    {
+      "id": "token:class.card",
+      "path": "src/app/globals.css",
+      "summary": "Component class card.",
+      "type": "token"
+    },
+    {
+      "id": "token:class.citation-chip",
+      "path": "src/app/globals.css",
+      "summary": "Component class citation-chip.",
+      "type": "token"
+    },
+    {
+      "id": "token:class.citation-chip-active",
+      "path": "src/app/globals.css",
+      "summary": "Component class citation-chip-active.",
+      "type": "token"
+    },
+    {
+      "id": "token:class.disclaimer-bar",
+      "path": "src/app/globals.css",
+      "summary": "Component class disclaimer-bar.",
+      "type": "token"
+    },
+    {
+      "id": "token:class.highlight-mark",
+      "path": "src/app/globals.css",
+      "summary": "Component class highlight-mark.",
+      "type": "token"
+    },
+    {
+      "id": "token:class.status-badge",
+      "path": "src/app/globals.css",
+      "summary": "Component class status-badge.",
+      "type": "token"
+    },
+    {
+      "id": "token:color.gold",
+      "path": "tailwind.config.ts",
+      "summary": "Color gold (#d4a843).",
+      "type": "token"
+    },
+    {
+      "id": "token:color.gold.bright",
+      "path": "tailwind.config.ts",
+      "summary": "Color gold-bright (#e8c05a).",
+      "type": "token"
+    },
+    {
+      "id": "token:color.gold.dim",
+      "path": "tailwind.config.ts",
+      "summary": "Color gold-dim (#a07830).",
+      "type": "token"
+    },
+    {
+      "id": "token:color.gold.glow",
+      "path": "tailwind.config.ts",
+      "summary": "Color gold-glow (rgba(212,168,67,0.15)).",
+      "type": "token"
+    },
+    {
+      "id": "token:color.ink",
+      "path": "tailwind.config.ts",
+      "summary": "Color ink (#e6e1d3).",
+      "type": "token"
+    },
+    {
+      "id": "token:color.ink.faint",
+      "path": "tailwind.config.ts",
+      "summary": "Color ink-faint (#4a5568).",
+      "type": "token"
+    },
+    {
+      "id": "token:color.ink.muted",
+      "path": "tailwind.config.ts",
+      "summary": "Color ink-muted (#8b949e).",
+      "type": "token"
+    },
+    {
+      "id": "token:color.status.failed",
+      "path": "tailwind.config.ts",
+      "summary": "Color status-failed (#f85149).",
+      "type": "token"
+    },
+    {
+      "id": "token:color.status.processing",
+      "path": "tailwind.config.ts",
+      "summary": "Color status-processing (#d4a843).",
+      "type": "token"
+    },
+    {
+      "id": "token:color.status.ready",
+      "path": "tailwind.config.ts",
+      "summary": "Color status-ready (#3fb950).",
+      "type": "token"
+    },
+    {
+      "id": "token:color.surface",
+      "path": "tailwind.config.ts",
+      "summary": "Color surface (#161b22).",
+      "type": "token"
+    },
+    {
+      "id": "token:color.surface.card",
+      "path": "tailwind.config.ts",
+      "summary": "Color surface-card (#1c2331).",
+      "type": "token"
+    },
+    {
+      "id": "token:color.surface.deep",
+      "path": "tailwind.config.ts",
+      "summary": "Color surface-deep (#0d1117).",
+      "type": "token"
+    },
+    {
+      "id": "token:color.surface.hover",
+      "path": "tailwind.config.ts",
+      "summary": "Color surface-hover (#21293a).",
+      "type": "token"
+    },
+    {
+      "id": "token:font.display",
+      "path": "tailwind.config.ts",
+      "summary": "Font display (Fraunces, Georgia, serif).",
+      "type": "token"
+    },
+    {
+      "id": "token:font.mono",
+      "path": "tailwind.config.ts",
+      "summary": "Font mono (JetBrains Mono, monospace).",
+      "type": "token"
+    },
+    {
+      "id": "token:font.sans",
+      "path": "tailwind.config.ts",
+      "summary": "Font sans (Outfit, system-ui, sans-serif).",
+      "type": "token"
+    },
+    {
+      "id": "token:shadow.card",
+      "path": "tailwind.config.ts",
+      "summary": "Shadow card (0 1px 3px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.2)).",
+      "type": "token"
+    },
+    {
+      "id": "token:shadow.gold",
+      "path": "tailwind.config.ts",
+      "summary": "Shadow gold (0 0 0 1px rgba(212,168,67,0.4), 0 4px 20px rgba(212,168,67,0.1)).",
+      "type": "token"
+    },
+    {
+      "exports": [
+        "acceptInvite",
+        "askQuestion",
+        "changeMemberRole",
+        "confirmUpload",
+        "createComment",
+        "createInvite",
+        "deleteComment",
+        "extractObligations",
+        "getAuditLog",
+        "getChunkRefs",
+        "getDocument",
+        "getDocumentSummary",
+        "getQuota",
+        "getViewUrl",
+        "getWorkspace",
+        "listComments",
+        "listConversations",
+        "listDocumentObligations",
+        "listDocuments",
+        "listTenantObligations",
+        "patchComment",
+        "patchObligation",
+        "putFileToS3",
+        "removeMember",
+        "requestPresignedUpload",
+        "resolveObligation",
+        "revokeInvite"
+      ],
+      "id": "util:lib/api",
+      "path": "src/lib/api.ts",
+      "summary": "Browser helpers that call the Next.js BFF, never FastAPI directly.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["backendFetch"],
+      "id": "util:lib/backend",
+      "path": "src/lib/backend.ts",
+      "summary": "Server-side FastAPI fetch that attaches the Clerk session token.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": [
+        "AuditEvent",
+        "AuditLogResponse",
+        "ChatMessage",
+        "ChunkRefsResponse",
+        "CitationOut",
+        "ClauseComment",
+        "CommentListResponse",
+        "ConversationSummary",
+        "DocumentResponse",
+        "DocumentStatus",
+        "DocumentSummary",
+        "DocumentSummaryCard",
+        "InviteAccepted",
+        "Obligation",
+        "ObligationListResponse",
+        "ObligationType",
+        "PresignedUploadResponse",
+        "QueryRequest",
+        "QueryResponse",
+        "QuotaResponse",
+        "ResolvedRef",
+        "SummaryField",
+        "ViewUrlResponse",
+        "WorkspaceInvite",
+        "WorkspaceMember",
+        "WorkspaceRole",
+        "WorkspaceSnapshot"
+      ],
+      "id": "util:lib/types",
+      "path": "src/lib/types.ts",
+      "summary": "Response types shared by the BFF routes and client helpers.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["config", "default"],
+      "id": "util:middleware",
+      "path": "src/middleware.ts",
+      "summary": "Clerk gate that protects every route except sign-in, sign-up, and health.",
+      "summaryOrigin": "human",
+      "type": "util"
+    },
+    {
+      "exports": ["GET"],
+      "id": "util:route/api/audit-log",
+      "path": "src/app/api/audit-log/route.ts",
+      "summary": "BFF route handler for /api/audit-log.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["DELETE", "PATCH"],
+      "id": "util:route/api/comments/[commentId]",
+      "path": "src/app/api/comments/[commentId]/route.ts",
+      "summary": "BFF route handler for /api/comments/[commentId].",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["GET"],
+      "id": "util:route/api/conversations",
+      "path": "src/app/api/conversations/route.ts",
+      "summary": "BFF route handler for /api/conversations.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["GET"],
+      "id": "util:route/api/documents",
+      "path": "src/app/api/documents/route.ts",
+      "summary": "BFF route handler for /api/documents.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["GET"],
+      "id": "util:route/api/documents/[docId]",
+      "path": "src/app/api/documents/[docId]/route.ts",
+      "summary": "BFF route handler for /api/documents/[docId].",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["GET", "POST"],
+      "id": "util:route/api/documents/[docId]/chunks/[chunkId]/comments",
+      "path": "src/app/api/documents/[docId]/chunks/[chunkId]/comments/route.ts",
+      "summary": "BFF route handler for /api/documents/[docId]/chunks/[chunkId]/comments.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["GET"],
+      "id": "util:route/api/documents/[docId]/chunks/[chunkId]/refs",
+      "path": "src/app/api/documents/[docId]/chunks/[chunkId]/refs/route.ts",
+      "summary": "BFF route handler for /api/documents/[docId]/chunks/[chunkId]/refs.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["GET", "POST"],
+      "id": "util:route/api/documents/[docId]/obligations",
+      "path": "src/app/api/documents/[docId]/obligations/route.ts",
+      "summary": "BFF route handler for /api/documents/[docId]/obligations.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["POST"],
+      "id": "util:route/api/documents/[docId]/obligations/extract",
+      "path": "src/app/api/documents/[docId]/obligations/extract/route.ts",
+      "summary": "BFF route handler for /api/documents/[docId]/obligations/extract.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["GET"],
+      "id": "util:route/api/documents/[docId]/summary",
+      "path": "src/app/api/documents/[docId]/summary/route.ts",
+      "summary": "BFF route handler for /api/documents/[docId]/summary.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["GET"],
+      "id": "util:route/api/documents/[docId]/view-url",
+      "path": "src/app/api/documents/[docId]/view-url/route.ts",
+      "summary": "BFF route handler for /api/documents/[docId]/view-url.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["GET"],
+      "id": "util:route/api/obligations",
+      "path": "src/app/api/obligations/route.ts",
+      "summary": "BFF route handler for /api/obligations.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["PATCH"],
+      "id": "util:route/api/obligations/[obligationId]",
+      "path": "src/app/api/obligations/[obligationId]/route.ts",
+      "summary": "BFF route handler for /api/obligations/[obligationId].",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["POST"],
+      "id": "util:route/api/obligations/[obligationId]/resolve",
+      "path": "src/app/api/obligations/[obligationId]/resolve/route.ts",
+      "summary": "BFF route handler for /api/obligations/[obligationId]/resolve.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["POST"],
+      "id": "util:route/api/query",
+      "path": "src/app/api/query/route.ts",
+      "summary": "BFF route handler for /api/query.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["GET"],
+      "id": "util:route/api/quota",
+      "path": "src/app/api/quota/route.ts",
+      "summary": "BFF route handler for /api/quota.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["POST"],
+      "id": "util:route/api/upload/confirm/[docId]",
+      "path": "src/app/api/upload/confirm/[docId]/route.ts",
+      "summary": "BFF route handler for /api/upload/confirm/[docId].",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["POST"],
+      "id": "util:route/api/upload/presign",
+      "path": "src/app/api/upload/presign/route.ts",
+      "summary": "BFF route handler for /api/upload/presign.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["GET"],
+      "id": "util:route/api/workspace",
+      "path": "src/app/api/workspace/route.ts",
+      "summary": "BFF route handler for /api/workspace.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["POST"],
+      "id": "util:route/api/workspace/invites",
+      "path": "src/app/api/workspace/invites/route.ts",
+      "summary": "BFF route handler for /api/workspace/invites.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["DELETE"],
+      "id": "util:route/api/workspace/invites/[inviteId]",
+      "path": "src/app/api/workspace/invites/[inviteId]/route.ts",
+      "summary": "BFF route handler for /api/workspace/invites/[inviteId].",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["POST"],
+      "id": "util:route/api/workspace/invites/accept",
+      "path": "src/app/api/workspace/invites/accept/route.ts",
+      "summary": "BFF route handler for /api/workspace/invites/accept.",
+      "summaryOrigin": "auto",
+      "type": "util"
+    },
+    {
+      "exports": ["DELETE", "PATCH"],
+      "id": "util:route/api/workspace/members/[userId]",
+      "path": "src/app/api/workspace/members/[userId]/route.ts",
+      "summary": "BFF route handler for /api/workspace/members/[userId].",
+      "summaryOrigin": "auto",
+      "type": "util"
+    }
+  ],
+  "version": 1
+}

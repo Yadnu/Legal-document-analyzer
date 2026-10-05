@@ -1,0 +1,101 @@
+# Human-authored design decisions for the frontend context graph.
+# needs_review: true means the rule was inferred from the current UI and still needs confirmation.
+# applies_to globs are relative to frontend/.
+decisions:
+  - id: calm-readable-legal-ui
+    title: Calm, high-readability UI
+    needs_review: false
+    applies_to:
+      - "src/**"
+    rule: >
+      Keep the interface calm and readable for dense legal documents. Use text-sm
+      or text-xs for chrome, comfortable line height, and full-viewport reading
+      layouts. Do not add loud marketing sections, extra accent colors, or
+      decorative motion.
+    rationale: >
+      People use this product to read long contracts. The interface should recede
+      so clauses and citations stay legible.
+
+  - id: theme-tokens-only
+    title: Theme tokens only
+    needs_review: false
+    applies_to:
+      - "src/**"
+      - "tailwind.config.ts"
+    rule: >
+      Style UI only with tokens from tailwind.config.ts and component classes in
+      globals.css (surface, ink, gold, status, font-display, font-sans, font-mono,
+      shadow-gold, shadow-card, btn-primary, btn-ghost, card, and the other
+      component classes). Do not use Tailwind palette colors, arbitrary font sizes,
+      arbitrary spacing, hex, or rgb values.
+    rationale: >
+      One token set keeps the reading theme consistent, and the context graph can
+      catch drift.
+
+  - id: reuse-existing-components
+    title: Reuse existing components
+    needs_review: false
+    applies_to:
+      - "src/components/**"
+      - "src/app/**"
+    rule: >
+      Reuse a component already in the graph before adding a new one. Prefer
+      DocumentList, ChatPanel, WorkspaceChat, PdfViewer, ObligationList,
+      ObligationsDashboard, and the shared classes btn-primary, btn-ghost, card,
+      citation-chip, and disclaimer-bar when they cover the need.
+    rationale: >
+      Parallel widgets drift apart, especially tables, chat, and status badges.
+
+  - id: dark-gold-reading-room
+    title: Dark surfaces with a gold accent
+    needs_review: true
+    applies_to:
+      - "src/**"
+    rule: >
+      Use the dark surface scale for page backgrounds and cards, parchment ink for
+      text, and gold only for brand, citations, focus, and primary actions.
+    rationale: >
+      Inferred from tailwind.config.ts and the workspace screens. Confirm before
+      treating the palette roles as settled.
+
+  - id: type-roles
+    title: Display, sans, and mono roles
+    needs_review: true
+    applies_to:
+      - "src/**"
+    rule: >
+      Use font-display (Fraunces) for titles, font-sans (Outfit) for interface
+      text, and font-mono (JetBrains Mono) for citations, timestamps, and status
+      metadata.
+    rationale: >
+      Inferred from current headings, body copy, and citation chips. Confirm the
+      role split.
+
+  - id: disclaimer-visible
+    title: Comprehension disclaimer stays visible
+    needs_review: true
+    applies_to:
+      - "src/app/workspace/**"
+      - "src/components/doc-layout.tsx"
+    rule: >
+      Workspace screens keep a visible disclaimer that the product helps people
+      understand their documents and is not legal advice. Use the disclaimer-bar
+      class.
+    rationale: >
+      Inferred from the workspace disclaimer and the product mission. Confirm
+      which routes must show it.
+
+  - id: client-data-through-bff
+    title: Client data goes through the BFF
+    needs_review: true
+    applies_to:
+      - "src/components/**"
+      - "src/app/**"
+      - "src/lib/**"
+    rule: >
+      Client components read and write server data through TanStack Query and
+      src/lib/api.ts. Do not fetch inside useEffect, and do not call FastAPI from
+      the browser. Route handlers call FastAPI only through src/lib/backend.ts.
+    rationale: >
+      Inferred from the current split between lib/api.ts and lib/backend.ts.
+      Confirm this remains the only data path.

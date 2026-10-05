@@ -9,6 +9,9 @@
     "lint": "next lint",
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
+    "context:build": "tsx scripts/context/build-graph.ts",
+    "context": "tsx scripts/context/query.ts",
+    "context:export": "tsx scripts/context/export-canvas.ts",
     "postinstall": "node -e \"const fs=require('fs');const src='./node_modules/pdfjs-dist/build/pdf.worker.min.mjs';const dst='./public/pdf.worker.min.mjs';if(fs.existsSync(src)){fs.mkdirSync('./public',{recursive:true});fs.copyFileSync(src,dst);}\" "
   },
   "dependencies": {
@@ -38,7 +41,11 @@
     "@typescript-eslint/parser": "^6",
     "eslint": "^8",
     "eslint-config-next": "14.2.18",
+    "playwright": "^1.63.0",
     "prettier": "^3",
-    "typescript": "^5"
+    "ts-morph": "^28.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "yaml": "^2.9.1"
   }
 }
