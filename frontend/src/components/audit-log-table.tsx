@@ -20,6 +20,11 @@ const ACTION_COLOURS: Record<string, string> = {
   "qa.ask": "bg-blue-500/15 text-blue-700",
   "obligation.resolved": "bg-purple-500/15 text-purple-700",
   "document.deleted": "bg-red-500/15 text-red-700",
+  "member.invited": "bg-gold/15 text-gold",
+  "member.joined": "bg-status-ready/15 text-status-ready",
+  "member.invite_revoked": "bg-status-processing/15 text-status-processing",
+  "member.role_changed": "bg-gold/10 text-gold",
+  "member.removed": "bg-status-failed/15 text-status-failed",
 };
 
 function ActionBadge({ action }: { action: string }) {

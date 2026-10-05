@@ -1,7 +1,9 @@
 export const dynamic = "force-dynamic";
 
 import { AuditLogTable } from "@/components/audit-log-table";
-import { Scale, Shield } from "lucide-react";
+import { WorkspaceHeader } from "@/components/workspace-header";
+import { WorkspaceMembers } from "@/components/workspace-members";
+import { Info, Shield } from "lucide-react";
 
 export const metadata = {
   title: "Settings — Legal Document Navigator",
@@ -10,15 +12,13 @@ export const metadata = {
 export default function SettingsPage() {
   return (
     <div className="h-screen flex flex-col overflow-hidden">
-      {/* Header */}
-      <header className="border-b border-ink-faint/20 bg-surface/80 backdrop-blur-sm shrink-0">
-        <div className="px-6 h-14 flex items-center gap-3">
-          <Scale size={20} className="text-gold" />
-          <span className="font-display text-lg font-semibold text-ink">
-            Legal Document Navigator
-          </span>
-        </div>
-      </header>
+      <WorkspaceHeader active="settings" />
+
+      <div className="shrink-0 disclaimer-bar rounded-none border-x-0 border-t-0 px-6 py-1.5">
+        <Info size={12} className="text-gold shrink-0" />
+        <strong className="text-ink font-medium">Document comprehension only</strong>
+        {" — "}this tool helps you understand your documents. It is not legal advice.
+      </div>
 
       <div className="flex-1 overflow-y-auto p-8 max-w-5xl mx-auto w-full">
         {/* Page title */}
@@ -29,10 +29,21 @@ export default function SettingsPage() {
               Settings
             </h1>
             <p className="text-sm text-ink-muted mt-0.5">
-              Workspace configuration and audit trail.
+              People in this workspace, and the audit trail.
             </p>
           </div>
         </div>
+
+        <section className="mb-12">
+          <h2 className="font-display text-base font-semibold text-ink mb-2">
+            People
+          </h2>
+          <p className="text-sm text-ink-muted mb-5">
+            Invite teammates into this shared workspace and set what they can do.
+            Admins manage membership. Everyone else can see who is here.
+          </p>
+          <WorkspaceMembers />
+        </section>
 
         {/* Audit log section */}
         <section>

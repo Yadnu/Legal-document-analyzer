@@ -226,3 +226,59 @@ export async function askQuestion(body: QueryRequest): Promise<QueryResponse> {
     body: JSON.stringify(body),
   });
 }
+
+// ── Workspace members and invites ──────────────────────────────────────────
+
+export async function getWorkspace(): Promise<import("./types").WorkspaceSnapshot> {
+  return apiFetch("/api/workspace");
+}
+
+export async function createInvite(body: {
+  email: string;
+  role: import("./types").WorkspaceRole;
+}): Promise<import("./types").WorkspaceInvite> {
+  return apiFetch("/api/workspace/invites", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}
+
+export async function revokeInvite(inviteId: string): Promise<void> {
+  const res = await fetch(`/api/workspace/invites/${inviteId}`, {
+    method: "DELETE",
+  });
+  if (!res.ok && res.status !== 204) {
+    const text = await res.text().catch(() => res.statusText);
+    throw new Error(`${res.status}: ${text}`);
+  }
+}
+
+export async function acceptInvite(
+  token: string
+): Promise<import("./types").InviteAccepted> {
+  return apiFetch("/api/workspace/invites/accept", {
+    method: "POST",
+    body: JSON.stringify({ token }),
+  });
+}
+
+export async function changeMemberRole(
+  userId: string,
+  role: import("./types").WorkspaceRole
+): Promise<import("./types").WorkspaceMember> {
+  return apiFetch(`/api/workspace/members/${encodeURIComponent(userId)}`, {
+    method: "PATCH",
+    body: JSON.stringify({ role }),
+  });
+}
+
+export async function removeMember(userId: string): Promise<void> {
+  const res = await fetch(
+    `/api/workspace/members/${encodeURIComponent(userId)}`,
+    { method: "DELETE" }
+  );
+  if (!res.ok && res.status !== 204) {
+    const text = await res.text().catch(() => res.statusText);
+    throw new Error(`${res.status}: ${text}`);
+  }
+}

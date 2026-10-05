@@ -162,6 +162,44 @@ export interface Obligation {
   created_at: string;
 }
 
+export type WorkspaceRole = "admin" | "editor" | "viewer";
+
+export interface WorkspaceMember {
+  user_id: string;
+  email: string;
+  full_name: string | null;
+  role: WorkspaceRole;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface WorkspaceInvite {
+  id: string;
+  email: string;
+  role: WorkspaceRole;
+  status: string;
+  invited_by: string;
+  expires_at: string;
+  created_at: string;
+  invite_url?: string;
+}
+
+export interface WorkspaceSnapshot {
+  name: string;
+  slug: string;
+  caller_role: WorkspaceRole;
+  max_members: number;
+  seat_count: number;
+  members: WorkspaceMember[];
+  invites: WorkspaceInvite[];
+}
+
+export interface InviteAccepted {
+  tenant_id: string;
+  workspace_name: string;
+  role: WorkspaceRole;
+}
+
 export interface ObligationListResponse {
   items: Obligation[];
   total: number;
