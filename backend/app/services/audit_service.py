@@ -9,6 +9,11 @@ Canonical action strings
   qa.ask               — user sent a Q&A question
   obligation.resolved  — obligation marked as resolved
   document.deleted     — document deleted (Phase 10E)
+  member.invited       — admin created a workspace invite
+  member.invite_revoked — admin revoked a pending invite
+  member.joined        — invitee accepted and joined the workspace
+  member.role_changed  — admin changed a member's role
+  member.removed       — admin removed a member from the workspace
 
 Any string is accepted; prefer dot-separated <resource>.<verb> for consistency.
 """

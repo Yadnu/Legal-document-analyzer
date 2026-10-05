@@ -96,3 +96,59 @@ async def send_reminder_email(
             obligation_id=str(obligation.id),
             error=str(exc),
         )
+
+
+async def send_invite_email(
+    *,
+    to_address: str,
+    workspace_name: str,
+    role: str,
+    invite_url: str,
+) -> None:
+    """Send (or log) one workspace invite.
+
+    The log line omits ``invite_url`` so the token never lands in logs.
+    A failed send does not raise: the invite row already exists and the
+    admin can copy the link from the create response.
+    """
+    subject = f"[Legal Navigator] Join {workspace_name}"
+    body = (
+        f'You have been invited to the shared workspace "{workspace_name}" '
+        f"as {role}.\n\n"
+        f"Accept the invite:\n{invite_url}\n\n"
+        "If you were not expecting this, ignore this email.\n\n"
+        "Legal Document Navigator — understand your documents, not legal advice."
+    )
+    if not settings.ses_enabled:
+        log.info(
+            "ses_invite_stub",
+            to=to_address,
+            workspace=workspace_name,
+            role=role,
+        )
+        return
+
+    import aioboto3
+    from botocore.exceptions import BotoCoreError, ClientError
+
+    from app.infra.aws import _client_kwargs  # type: ignore[attr-defined]
+
+    session = aioboto3.Session()
+    try:
+        async with session.client("ses", **_client_kwargs()) as ses:  # type: ignore[attr-defined]
+            await ses.send_email(
+                Source=settings.ses_from_address,
+                Destination={"ToAddresses": [to_address]},
+                Message={
+                    "Subject": {"Data": subject, "Charset": "UTF-8"},
+                    "Body": {"Text": {"Data": body, "Charset": "UTF-8"}},
+                },
+            )
+        log.info("ses_invite_sent", to=to_address, workspace=workspace_name, role=role)
+    except (ClientError, BotoCoreError) as exc:
+        log.error(
+            "ses_invite_failed",
+            to=to_address,
+            workspace=workspace_name,
+            error=str(exc),
+        )
