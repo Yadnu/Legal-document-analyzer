@@ -19,13 +19,26 @@ from sqlmodel import col
 
 from app.core.config import settings
 from app.infra.storage import download_document
+from app.infra.textract import read_scanned_pdf
 from app.ingestion.chunker import chunk_elements, chunks_to_texts
 from app.ingestion.embedder import embed_texts
-from app.ingestion.parser import ParseError, parse_pdf
+from app.ingestion.parser import ParsedElement, ParseError, ScannedPdfError, parse_pdf
 from app.models.document import Document
 from app.repositories import chunk_repo, document_repo
 
 log = structlog.get_logger(__name__)
+
+
+async def parse_uploaded_pdf(data: bytes, s3_key: str) -> list[ParsedElement]:
+    """Parse a PDF, falling back to Textract when it has no text layer.
+
+    Encrypted and unreadable files still fail. Only a scan is sent to Textract.
+    """
+    try:
+        return parse_pdf(data)
+    except ScannedPdfError:
+        log.info("ingestion_scanned_pdf")
+        return await read_scanned_pdf(s3_key)
 
 
 async def ingest(
@@ -71,7 +84,7 @@ async def ingest(
 
     # ── 3. Parse ─────────────────────────────────────────────────────────────
     try:
-        elements = parse_pdf(data)
+        elements = await parse_uploaded_pdf(data, s3_key)
     except ParseError as exc:
         raise RuntimeError(f"Parse failed: {exc}") from exc
 
