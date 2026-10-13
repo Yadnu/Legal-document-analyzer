@@ -1,8 +1,8 @@
 """PDF parser — converts raw PDF bytes into structured ``ParsedElement`` objects.
 
 Uses PyMuPDF (``fitz``) for fast, reliable text extraction from digital PDFs.
-Scanned documents (image-only PDFs) are detected and raise ``ParseError`` so
-the caller can route them to Amazon Textract (Phase 5+).
+Scanned documents (image-only PDFs) raise ``ScannedPdfError`` so the caller
+can route them to Amazon Textract.
 
 The module is a **pure function** — no I/O, no external dependencies beyond
 PyMuPDF.  This makes it straightforward to unit-test with fixture bytes.
@@ -19,7 +19,11 @@ import fitz  # type: ignore  # PyMuPDF
 
 
 class ParseError(Exception):
-    """Raised when the document cannot be parsed (e.g. scanned, encrypted)."""
+    """Raised when the document cannot be parsed (encrypted, unreadable, or empty)."""
+
+
+class ScannedPdfError(ParseError):
+    """The PDF opened, but it has no text layer. Textract can read it."""
 
 
 # ---------------------------------------------------------------------------
@@ -73,8 +77,8 @@ def parse_pdf(data: bytes) -> list[ParsedElement]:
     4. Tag each block as heading / list_item / narrative.
     5. Propagate the nearest heading and parsed section_number downward.
 
-    Raises ``ParseError`` if the document is encrypted, has no extractable
-    text (likely scanned), or is otherwise unreadable.
+    Raises ``ScannedPdfError`` when the file opens but has no text layer.
+    Raises ``ParseError`` if the document is encrypted or otherwise unreadable.
     """
     try:
         doc: Any = fitz.open(stream=data, filetype="pdf")
@@ -100,7 +104,7 @@ def parse_pdf(data: bytes) -> list[ParsedElement]:
                         raw_blocks.append((page_num, size, text))
 
     if not raw_blocks:
-        raise ParseError(
+        raise ScannedPdfError(
             "No extractable text found. The PDF may be scanned or image-based."
         )
 
@@ -143,4 +147,58 @@ def parse_pdf(data: bytes) -> list[ParsedElement]:
         )
 
     doc.close()
+    return elements
+
+
+def _is_plain_heading(text: str) -> bool:
+    """Heading check for text that has no font size.
+
+    The shared section pattern is case-insensitive, so its all-caps branch
+    would mark ordinary sentences as headings. This check is stricter.
+    """
+    if re.match(r"^(?:article|section)\s+\S+", text, re.IGNORECASE):
+        return True
+    if re.match(r"^\d+(?:\.\d+){0,3}\.?\s+\S", text):
+        return True
+    letters = [char for char in text if char.isalpha()]
+    return bool(letters) and len(text) <= 80 and all(char.isupper() for char in letters)
+
+
+def elements_from_lines(lines: list[tuple[int, str]]) -> list[ParsedElement]:
+    """Tag plain text lines the same way a digital PDF is tagged.
+
+    Textract does not return font sizes, so a line is a heading only when it
+    matches a section pattern. Later lines keep that section until the next one.
+    """
+    elements: list[ParsedElement] = []
+    current_heading: str | None = None
+    current_section: str | None = None
+
+    for page_num, text in lines:
+        cleaned = text.strip()
+        if not cleaned:
+            continue
+        if _is_plain_heading(cleaned):
+            element_type = "heading"
+            current_heading = cleaned
+            match = re.match(
+                r"^(\d+(?:\.\d+){0,3}|(?:article|section)\s+\S+)",
+                cleaned,
+                re.IGNORECASE,
+            )
+            current_section = match.group(1) if match else None
+        elif _LIST_RE.match(cleaned):
+            element_type = "list_item"
+        else:
+            element_type = "narrative"
+
+        elements.append(
+            ParsedElement(
+                text=cleaned,
+                element_type=element_type,
+                page=page_num,
+                section_number=current_section,
+                heading=current_heading,
+            )
+        )
     return elements
