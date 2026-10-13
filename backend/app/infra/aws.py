@@ -85,3 +85,13 @@ async def get_bedrock_runtime_client() -> AsyncIterator[Any]:
         **_client_kwargs(),
     ) as client:
         yield client
+
+
+@asynccontextmanager
+async def get_textract_client() -> AsyncIterator[Any]:
+    """Async context manager that yields an aioboto3 Textract client."""
+    async with _session.client(  # type: ignore
+        "textract",
+        **_client_kwargs(),
+    ) as client:
+        yield client

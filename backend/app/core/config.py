@@ -51,6 +51,11 @@ class Settings(BaseSettings):
     # Optional LlamaParse API key. When set the worker uses LlamaParse instead
     # of the local PyMuPDF parser.
     llama_parse_api_key: str = ""
+    # Image-only PDFs are sent to Amazon Textract when this is true.
+    # Leave false in dev and CI so a scan fails fast instead of calling AWS.
+    textract_enabled: bool = False
+    textract_poll_interval_seconds: float = 2.0
+    textract_timeout_seconds: float = 180.0
 
     # ── Ingestion — Embeddings ────────────────────────────────────────────────
     # Voyage AI API key. When set the worker calls the Voyage AI endpoint.
